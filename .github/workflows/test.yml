@@ -1,0 +1,35 @@
+name: Test
+
+on:
+  # No `paths:` filter on pull_request, on purpose. `test` is a required status
+  # check, so it must report on every PR. A PR whose changed files matched no
+  # path filter (e.g. docs- or image-only) would leave the check pending forever
+  # and could never be merged.
+  pull_request:
+  push:
+    branches:
+      - main
+    paths:
+      - 'docs/collections/data/**'
+      - 'docs/api/**'
+      - 'docs/event-model/**'
+      - 'scripts/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/**'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - run: npm ci
+
+      - name: Bundle and validate OpenAPI specs
+        run: npm run specs:bundle

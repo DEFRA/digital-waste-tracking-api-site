@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Create movement request",
+  "description": "Payload for POST /beta-2/movements.",
+  "type": "object",
+  "properties": {
+    "producer": {
+      "$ref": "../common/producer/producer.schema.json"
+    },
+    "intendedCarriers": {
+      "type": "array",
+      "items": {
+        "$ref": "../common/carrier.schema.json"
+      },
+      "minItems": 1,
+      "description": "The carriers intended to transport the waste. At least one is required."
+    },
+    "intendedReceivers": {
+      "type": "array",
+      "items": {
+        "$ref": "../common/receiver/receiver.schema.json"
+      },
+      "minItems": 1,
+      "description": "The intended receivers of the waste. At least one is required."
+    },
+    "wasteItems": {
+      "$ref": "../common/waste-item/waste-items.schema.json",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "treatments": {
+            "not": {},
+            "description": "Not accepted when creating a movement yet"
+          }
+        }
+      }
+    },
+    "brokerOrDealer": {
+      "$ref": "../common/broker-or-dealer/broker-or-dealer.schema.json"
+    },
+    "supportingReferences": {
+      "$ref": "../common/supporting-references.schema.json"
+    },
+    "specialHandlingRequirements": {
+      "$ref": "../common/special-handling-requirements.schema.json"
+    }
+  },
+  "required": [
+    "producer",
+    "intendedCarriers",
+    "intendedReceivers",
+    "wasteItems"
+  ],
+  "additionalProperties": false
+}

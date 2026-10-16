@@ -1,0 +1,21 @@
+{
+  "name": "digital-waste-tracking-api-site",
+  "private": true,
+  "type": "module",
+  "description": "Digital Waste Tracking API public documentation site",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "format": "prettier --write \"**/*.{js,json,md,yaml,yml}\"",
+    "format:check": "prettier --check \"**/*.{js,json,md,yaml,yml}\"",
+    "schemas:sync": "bash scripts/sync-schemas.sh",
+    "specs:bundle": "node scripts/bundle-specs.js"
+  },
+  "devDependencies": {
+    "@apidevtools/json-schema-ref-parser": "^16.0.3",
+    "@seriousme/openapi-schema-validator": "^2.11.0",
+    "js-yaml": "^4.3.2",
+    "prettier": "3.8.4"
+  }
+}
