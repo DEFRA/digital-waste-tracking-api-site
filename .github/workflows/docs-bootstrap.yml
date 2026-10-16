@@ -31,6 +31,16 @@ jobs:
 
       - run: pip install mkdocs-material mike mkdocs-swagger-ui-tag
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      - name: Bundle OpenAPI specs
+        run: npm run specs:bundle
+
       - name: Initialize mike on gh-pages
         run: |
           mike deploy --push preview
