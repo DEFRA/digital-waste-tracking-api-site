@@ -33,7 +33,3 @@ Versions are managed with [mike](https://github.com/jimporter/mike) on the `gh-p
 `docs-bootstrap.yml` initialises `gh-pages` once, for a new repo.
 
 Problem-type URIs returned by the API (`PROBLEM_DETAILS_TYPE_BASE` in `waste-movement-backend` and `waste-movement-external-api`) point at `/preview/problems/` on this site, so don't rename or remove those pages without updating the services.
-
-## Confluence
-
-`confluence-sync.yml` publishes `docs/software-provider-integration-guidance.md` to Confluence on push to `main`. It needs the `CONFLUENCE_USER` and `CONFLUENCE_API_TOKEN` repo secrets.
