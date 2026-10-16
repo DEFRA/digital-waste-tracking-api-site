@@ -116,7 +116,7 @@
             "type": "string",
             "format": "uri",
             "description": "Stable URI identifying the problem kind.",
-            "example": "https://defra.github.io/digital-waste-tracking-api-docs/preview/problems/bad-request"
+            "example": "https://defra.github.io/digital-waste-tracking-api-site/preview/problems/bad-request"
           },
           "title": {
             "type": "string",
@@ -144,7 +144,8 @@
             },
             "description": "Field-level problems. Present on 400 responses; omitted otherwise."
           }
-        }
+        },
+        "additionalProperties": false
       },
       "createMovementResponse": {
         "$ref": "./creation/create-movement-response.schema.json"
