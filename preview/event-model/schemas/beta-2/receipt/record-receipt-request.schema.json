@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Record receipt request",
+  "description": "Payload for POST /beta-2/deliveries/{deliveryId}/receipt.",
+  "type": "object",
+  "properties": {
+    "carrier": {
+      "$ref": "../common/carrier.schema.json"
+    },
+    "receiver": {
+      "$ref": "../common/receiver/receiver.schema.json"
+    },
+    "physicalDetails": {
+      "$ref": "../common/waste-item/physical-details.schema.json",
+      "description": "The physical form, containers and total weight of the waste received."
+    },
+    "treatments": {
+      "$ref": "../common/waste-item/treatments.schema.json",
+      "description": "The disposal or recovery operations applied to the waste received. At least one is required."
+    },
+    "brokerOrDealer": {
+      "$ref": "../common/broker-or-dealer/broker-or-dealer.schema.json"
+    },
+    "supportingReferences": {
+      "$ref": "../common/supporting-references.schema.json"
+    }
+  },
+  "required": ["carrier", "receiver", "physicalDetails", "treatments"],
+  "additionalProperties": false
+}
