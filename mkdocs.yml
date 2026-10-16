@@ -5,8 +5,8 @@ remote_branch: gh-pages
 theme:
   name: material
   custom_dir: tech_docs_template
-  logo: logos/moj.png
-  favicon: favicons/moj.ico
+  logo: logos/defra.png
+  favicon: favicons/defra.ico
   features:
     - announce.dismiss
     - navigation.tabs
