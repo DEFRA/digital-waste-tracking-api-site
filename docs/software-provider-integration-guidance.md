@@ -30,7 +30,7 @@
 
 ![DWT events](./images/dwt-api-delivery-roadmap-milestone-1.png)
 
-**[API roadmap – full view](./images/dwt-api-delivery-roadmap-16-10-26.png)**
+**[API roadmap – full view](./images/dwt-api-delivery-roadmap-19-10-26.png)**
 
 <br>
 
