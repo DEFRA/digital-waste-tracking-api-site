@@ -15,7 +15,6 @@
 - [4. Business rules and data reconciliation](#4-business-rules-and-data-reconciliation)
   - [4.1 Collection cardinality](#41-collection-cardinality)
   - [4.2 Movement-to-delivery cardinality](#42-movement-to-delivery-cardinality)
-- [5. Testing and conformance](#5-testing-and-conformance)
 - [Appendix A: glossary](#appendix-a-glossary)
 - [Appendix B: endpoint quick reference](#appendix-b-endpoint-quick-reference)
 
@@ -31,7 +30,7 @@
 
 ![DWT events](./images/dwt-api-delivery-roadmap-milestone-1.png)
 
-**[API roadmap – full view](./images/dwt-api-delivery-roadmap.png)**
+**[API roadmap – full view](./images/dwt-api-delivery-roadmap-16-10-26.png)**
 
 <br>
 
