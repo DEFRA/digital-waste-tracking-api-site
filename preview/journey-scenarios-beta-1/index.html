@@ -596,7 +596,7 @@
 <p><img alt="Single movement" src="./images/dwt-scenario-01-single-movement.png" /></p>
 <h2 id="2-several-non-hazardous-movements-delivered-together">2. Several non-hazardous movements delivered together</h2>
 <p>You can deliver several non-hazardous movements to a receiving site in one delivery. To do this, list all their Movement IDs when you call <code>POST /deliveries</code>. This returns one new Delivery ID for the whole group. The receiving site uses this Delivery ID to record the receipt, using <code>POST /deliveries/{deliveryId}/receipt</code>.</p>
-<p><img alt="Several movements, one delivery" src="../images/dwt-scenario-02-several-movements-one-delivery.png" /></p>
+<p><img alt="Several movements, one delivery" src="./images/dwt-scenario-02-several-movements-one-delivery.png" /></p>
 <h2 id="3-waste-delivered-to-more-than-one-receiving-site">3. Waste delivered to more than one receiving site</h2>
 <p>Waste from one or more movements can be split between more than one receiving site. List the Movement IDs when you call <code>POST /deliveries</code>. Each receiving site then records its own receipt against the Delivery ID, using <code>POST /deliveries/{deliveryId}/receipt</code>.</p>
 <p><img alt="Several movements, one delivery" src="../images/dwt-scenario-03-more-than-one-receiving-site.png" /></p>
