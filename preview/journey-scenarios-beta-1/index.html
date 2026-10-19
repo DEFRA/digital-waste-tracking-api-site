@@ -593,7 +593,7 @@
 <li>Record the receipt with <code>POST /deliveries/{deliveryId}/receipt</code>.</li>
 </ol>
 <p>You need a valid Movement ID to record a collection or a delivery.</p>
-<p><img alt="Single movement" src="../images/dwt-scenario-01-single-movement.png" /></p>
+<p><img alt="Single movement" src="./images/dwt-scenario-01-single-movement.png" /></p>
 <h2 id="2-several-non-hazardous-movements-delivered-together">2. Several non-hazardous movements delivered together</h2>
 <p>You can deliver several non-hazardous movements to a receiving site in one delivery. To do this, list all their Movement IDs when you call <code>POST /deliveries</code>. This returns one new Delivery ID for the whole group. The receiving site uses this Delivery ID to record the receipt, using <code>POST /deliveries/{deliveryId}/receipt</code>.</p>
 <p><img alt="Several movements, one delivery" src="../images/dwt-scenario-02-several-movements-one-delivery.png" /></p>
