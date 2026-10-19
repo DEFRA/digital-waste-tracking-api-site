@@ -31,6 +31,8 @@ nav:
   - Digital Waste Tracking:
       - About: index.md
       - Integration guidance: software-provider-integration-guidance.md
+      - Journey scenarios (beta-1): journey-scenarios-beta-1.md
+      - Receiver details reference guide: receiver-details-reference-guide.md
       - API spec (beta-2): api/openapi-beta-2.md
       - API spec (beta-1): api/openapi-beta-1.md
       - Problem types: problems/index.md
