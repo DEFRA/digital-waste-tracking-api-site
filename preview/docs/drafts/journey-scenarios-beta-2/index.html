@@ -597,7 +597,7 @@
 <li>one Delivery ID for each hazardous movement, which is the same as its initial Movement ID</li>
 </ul>
 <p>Hazardous movements cannot be grouped with other hazardous movements for receipt.</p>
-<p><img alt="Hazardous and non-hazardous together" src="../../../images/dwt-scenario-06-hazardous-and-non-hazardous-together.png" /></p>
+<p><img alt="Hazardous and non-hazardous together" src="../../images/dwt-scenario-06-hazardous-and-non-hazardous-together.png" /></p>
 <h2 id="7-movement-with-a-handover-from-carrier-to-carrier">7. Movement with a handover from carrier to carrier</h2>
 <p>A movement can have more than one collection. This lets you record waste passing from one carrier to another before it’s delivered.
 Set collectionType when you call <code>POST /movements/{movementId}/collection</code>:</p>
@@ -606,11 +606,11 @@ Set collectionType when you call <code>POST /movements/{movementId}/collection</
 <li><code>TRANSIT</code> for a collection from another vehicle</li>
 </ul>
 <p>The first collection must be <code>STATIC</code>. Every collection after that must be <code>TRANSIT</code>.</p>
-<p><img alt="Carrier to carrier handover" src="../../../images/dwt-scenario-07-carrier-to-carrier-handover.png" /></p>
+<p><img alt="Carrier to carrier handover" src="../../images/dwt-scenario-07-carrier-to-carrier-handover.png" /></p>
 <h2 id="8-linking-related-movements">8. Linking related movements</h2>
 <p>Some jobs need more than one movement, for example when waste is removed over several trips.</p>
 <p>To link these movements, add the same reference to each one when you create it with <code>POST /movements</code>.</p>
-<p><img alt="Linking related movements" src="../../../images/dwt-scenario-08-linking-related-movements.png" /></p>
+<p><img alt="Linking related movements" src="../../images/dwt-scenario-08-linking-related-movements.png" /></p>
 
 
 
