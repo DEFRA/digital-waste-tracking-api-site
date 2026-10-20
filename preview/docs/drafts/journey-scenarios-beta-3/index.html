@@ -583,13 +583,13 @@
 <p><img alt="More than one receiving site" src="../../images/dwt-scenario-03-more-than-one-receiving-site.png" /></p>
 <h2 id="4-waste-received-without-a-delivery-id">4. Waste received without a Delivery ID</h2>
 <p>A receiving site can accept waste that arrives without a Delivery ID. Record the receipt with <code>POST /receipts</code>, and explain why there’s no Delivery ID in <code>reasonForNoDeliveryId</code>. This returns a new Delivery ID for the receipt.</p>
-<p><img alt="Received without delivery ID" src="../../../images/dwt-scenario-04-received-without-delivery-id.png" /></p>
+<p><img alt="Received without delivery ID" src="../../images/dwt-scenario-04-received-without-delivery-id.png" /></p>
 <p><br></p>
 <h2 id="beta-2">Beta 2</h2>
 <h2 id="5-hazardous-movement">5. Hazardous movement</h2>
 <p>A movement is hazardous if any of its waste items has a hazardous European Waste Catalogue (EWC) code when you create it with <code>POST /movements</code>. It stays hazardous for all 4 events.</p>
 <p>When you record the delivery, <code>POST /deliveries</code> still returns a Delivery ID, however this is the same code as the initial Movement ID. Use it to record the receipt in the usual way.</p>
-<p><img alt="Hazardous movement" src="../../../images/dwt-scenario-05-hazardous-movement.png" /></p>
+<p><img alt="Hazardous movement" src="../../images/dwt-scenario-05-hazardous-movement.png" /></p>
 <h2 id="6-hazardous-and-non-hazardous-movements-delivered-together">6. Hazardous and non-hazardous movements delivered together</h2>
 <p>You can include hazardous and non-hazardous movements in the same <code>POST /deliveries</code> request. The response gives you:</p>
 <ul>
