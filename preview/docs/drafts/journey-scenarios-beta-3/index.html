@@ -562,9 +562,9 @@
 
 
 <h1 id="receipt-of-waste-journey-scenarios-beta-3">Receipt of waste: journey scenarios - Beta 3</h1>
-<p>The Digital Waste Tracking API will enable a variety of journey scenarios which will be rolled out through the various Beta incarnations. Beta 3 includes 2 new journeys added to the 8 journeys introduced in Beta 1 and Beta 2.</p>
+<p>The Digital Waste Tracking API will enable a variety of journey scenarios which will be rolled out through the various Beta incarnations. Beta 3 adds new journeys to the journeys introduced in Beta 1 and Beta 2.</p>
 <h2 id="beta-1">Beta 1</h2>
-<h2 id="1-single-non-hazardous-movement">1. Single non-hazardous movement</h2>
+<h2 id="b1a-single-non-hazardous-movement">B1A - Single non-hazardous movement</h2>
 <p>A waste movement is made up of 4 events:</p>
 <ol>
 <li>Create the movement with <code>POST /movements</code>. This returns a Movement ID.</li>
@@ -574,23 +574,23 @@
 </ol>
 <p>You need a valid Movement ID to record a collection or a delivery.</p>
 <p><img alt="Single movement" src="../../../images/dwt-scenario-01-single-movement.png" /></p>
-<h2 id="2-several-non-hazardous-movements-delivered-together">2. Several non-hazardous movements delivered together</h2>
+<h2 id="b1b-several-non-hazardous-movements-delivered-together">B1B - Several non-hazardous movements delivered together</h2>
 <p>You can deliver several non-hazardous movements to a receiving site in one delivery. To do this, list all their Movement IDs when you call <code>POST /deliveries</code>. This returns one new Delivery ID for the whole group. </p>
 <p>The receiving site uses this Delivery ID to record the receipt, using <code>POST /deliveries/{deliveryId}/receipt</code>.</p>
 <p><img alt="Several movements, one delivery" src="../../../images/dwt-scenario-02-several-movements-one-delivery.png" /></p>
-<h2 id="3-waste-delivered-to-more-than-one-receiving-site">3. Waste delivered to more than one receiving site</h2>
+<h2 id="b1c-waste-delivered-to-more-than-one-receiving-site">B1C - Waste delivered to more than one receiving site</h2>
 <p>Waste from one or more movements can be split between more than one receiving site. List the Movement IDs when you call <code>POST /deliveries</code>. Each receiving site then records its own receipt against the Delivery ID, using <code>POST /deliveries/{deliveryId}/receipt</code>.</p>
 <p><img alt="More than one receiving site" src="../../../images/dwt-scenario-03-more-than-one-receiving-site.png" /></p>
-<h2 id="4-waste-received-without-a-delivery-id">4. Waste received without a Delivery ID</h2>
+<h2 id="b1d-waste-received-without-a-delivery-id">B1D - Waste received without a Delivery ID</h2>
 <p>A receiving site can accept waste that arrives without a Delivery ID. Record the receipt with <code>POST /receipts</code>, and explain why there’s no Delivery ID in <code>reasonForNoDeliveryId</code>. This returns a new Delivery ID for the receipt.</p>
 <p><img alt="Received without delivery ID" src="../../../images/dwt-scenario-04-received-without-delivery-id.png" /></p>
 <p><br></p>
 <h2 id="beta-2">Beta 2</h2>
-<h2 id="5-hazardous-movement">5. Hazardous movement</h2>
+<h2 id="b2a-hazardous-movement">B2A - Hazardous movement</h2>
 <p>A movement is hazardous if any of its waste items has a hazardous European Waste Catalogue (EWC) code when you create it with <code>POST /movements</code>. It stays hazardous for all 4 events.</p>
 <p>When you record the delivery, <code>POST /deliveries</code> still returns a Delivery ID, however this is the same code as the initial Movement ID. Use it to record the receipt in the usual way.</p>
 <p><img alt="Hazardous movement" src="../../../images/dwt-scenario-05-hazardous-movement.png" /></p>
-<h2 id="6-hazardous-and-non-hazardous-movements-delivered-together">6. Hazardous and non-hazardous movements delivered together</h2>
+<h2 id="b2b-hazardous-and-non-hazardous-movements-delivered-together">B2B - Hazardous and non-hazardous movements delivered together</h2>
 <p>You can include hazardous and non-hazardous movements in the same <code>POST /deliveries</code> request. The response gives you:</p>
 <ul>
 <li>one new Delivery ID for all the non-hazardous movements together</li>
@@ -598,22 +598,13 @@
 </ul>
 <p>Hazardous movements cannot be grouped with other hazardous movements for receipt.</p>
 <p><img alt="Hazardous and non-hazardous together" src="../../../images/dwt-scenario-06-hazardous-and-non-hazardous-together.png" /></p>
-<h2 id="7-movement-with-a-handover-from-carrier-to-carrier">7. Movement with a handover from carrier to carrier</h2>
-<p>A movement can have more than one collection. This lets you record waste passing from one carrier to another before it’s delivered.
-Set collectionType when you call <code>POST /movements/{movementId}/collection</code>:</p>
-<ul>
-<li><code>STATIC</code> for a collection from a fixed location, such as the producer’s site</li>
-<li><code>TRANSIT</code> for a collection from another vehicle</li>
-</ul>
-<p>The first collection must be <code>STATIC</code>. Every collection after that must be <code>TRANSIT</code>.</p>
-<p><img alt="Carrier to carrier handover" src="../../../images/dwt-scenario-07-carrier-to-carrier-handover.png" /></p>
-<h2 id="8-linking-related-movements">8. Linking related movements</h2>
+<h2 id="b2d-linking-related-movements">B2D - Linking related movements</h2>
 <p>Some jobs need more than one movement, for example when waste is removed over several trips.</p>
 <p>To link these movements, add the same reference to each one when you create it with <code>POST /movements</code>.</p>
 <p><img alt="Linking related movements" src="../../../images/dwt-scenario-08-linking-related-movements.png" /></p>
 <p><br></p>
 <h2 id="beta-3">Beta 3</h2>
-<h2 id="9-permitted-updates">9. Permitted updates</h2>
+<h2 id="b3a-permitted-updates">B3A - Permitted updates</h2>
 <p>You can correct a movement, a collection or a receipt after you've recorded it. Use the <code>PUT</code> endpoint for that event:</p>
 <ul>
 <li><code>PUT /movements/{movementId}</code> to update the movement</li>
@@ -623,10 +614,19 @@ Set collectionType when you call <code>POST /movements/{movementId}/collection</
 <p>Each update creates a new version of the event (V2). The original (V1) is kept, so there's a full history of what was submitted.</p>
 <p>You cannot edit a delivery once you've recorded it. <code>PUT /deliveries/{deliveryId}</code> accepts only <code>isDeleted</code>. To correct a delivery, delete it and record a new one with <code>POST /deliveries</code>. You can only do this until a receipt has been recorded against it.</p>
 <p><img alt="Permitted updates" src="../../../images/dwt-scenario-09-permitted-updates.png" /></p>
-<h2 id="10-waste-does-not-match-its-description-at-collection">10. Waste does not match its description at collection</h2>
+<h2 id="b3b-waste-does-not-match-its-description-at-collection">B3B - Waste does not match its description at collection</h2>
 <p>Only the organisation that created a movement can change the description of its waste. You cannot change the waste description when you record a collection.</p>
 <p>If the waste does not match its description, the carrier must tell the organisation that created the movement so they can update it.</p>
 <p><img alt="Waste does not match description" src="../../../images/dwt-scenario-10-waste-does-not-match-description.png" /></p>
+<h2 id="b2c-movement-with-a-handover-from-carrier-to-carrier">B2C - Movement with a handover from carrier to carrier</h2>
+<p>A movement can have more than one collection. This lets you record waste passing from one carrier to another before it’s delivered.
+Set collectionType when you call <code>POST /movements/{movementId}/collection</code>:</p>
+<ul>
+<li><code>STATIC</code> for a collection from a fixed location, such as the producer’s site</li>
+<li><code>TRANSIT</code> for a collection from another vehicle</li>
+</ul>
+<p>The first collection must be <code>STATIC</code>. Every collection after that must be <code>TRANSIT</code>.</p>
+<p><img alt="Carrier to carrier handover" src="../../../images/dwt-scenario-07-carrier-to-carrier-handover.png" /></p>
 
 
 
