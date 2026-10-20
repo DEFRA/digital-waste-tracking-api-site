@@ -29,7 +29,7 @@ Waste from one or more movements can be split between more than one receiving si
 
 ![Several movements, one delivery](./images/dwt-scenario-03-more-than-one-receiving-site.png)
 
-## Waste received without a Delivery ID
+## 4. Waste received without a Delivery ID
 
 A receiving site can accept waste that arrives without a Delivery ID. Record the receipt with `POST /receipts`, and explain why there’s no Delivery ID in `reasonForNoDeliveryId`. This returns a new Delivery ID for the receipt.
 
