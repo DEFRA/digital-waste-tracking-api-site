@@ -1,6 +1,6 @@
 # Receipt of waste: journey scenarios - Beta 3
 
-The Digital Waste Tracking API will enable a variety of journey scenarios which will be rolled out through the various Beta incarnations. Beta 3 includes 4 new journeys added to the 8 journeys introduced in Beta 1 and Beta 2.
+The Digital Waste Tracking API will enable a variety of journey scenarios which will be rolled out through the various Beta incarnations. Beta 3 includes 2 new journeys added to the 8 journeys introduced in Beta 1 and Beta 2.
 
 ## Beta 1
 
@@ -15,7 +15,7 @@ A waste movement is made up of 4 events:
 
 You need a valid Movement ID to record a collection or a delivery.
 
-![Single movement](../images/dwt-scenario-01-single-movement.png)
+![Single movement](../../images/dwt-scenario-01-single-movement.png)
 
 ## 2. Several non-hazardous movements delivered together
 
@@ -83,3 +83,35 @@ Some jobs need more than one movement, for example when waste is removed over se
 To link these movements, add the same reference to each one when you create it with `POST /movements`.
 
 ![Linking related movements](../../images/dwt-scenario-08-linking-related-movements.png)
+
+<br>
+
+## Beta 3
+
+## 9. Permitted updates
+
+You can correct a movement, a collection or a receipt after you've recorded it. Use the `PUT` endpoint for that event:
+
+  - `PUT /movements/{movementId}` to update the movement
+  - `PUT /movements/{movementId}/collection` to update the collection
+  - `PUT /deliveries/{deliveryId}/receipt` to update the receipt
+
+Each update creates a new version of the event (V2). The original (V1) is kept, so there's a full history of what was submitted.
+
+You cannot edit a delivery once you've recorded it. `PUT /deliveries/{deliveryId}` accepts only `isDeleted`. To correct a delivery, delete it and record a new one with `POST /deliveries`. You can only do this until a receipt has been recorded against it.
+
+![Permitted updates](../../images/dwt-scenario-09-permitted-updates.png)
+
+
+## 10. Waste does not match its description at collection
+
+Only the organisation that created a movement can change the description of its waste. You cannot change the waste description when you record a collection.
+
+If the waste does not match its description, the carrier must tell the organisation that created the movement so they can update it.
+
+![Waste does not match description](../../images/dwt-scenario-10-waste-does-not-match-description.png)
+
+
+
+
+
