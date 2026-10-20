@@ -592,15 +592,19 @@
 <p><img alt="Hazardous movement" src="../../../images/dwt-scenario-05-hazardous-movement.png" /></p>
 <h2 id="6-hazardous-and-non-hazardous-movements-delivered-together">6. Hazardous and non-hazardous movements delivered together</h2>
 <p>You can include hazardous and non-hazardous movements in the same <code>POST /deliveries</code> request. The response gives you:</p>
-<p>• one new Delivery ID for all the non-hazardous movements together
-  • one Delivery ID for each hazardous movement, which is the same as its initial Movement ID</p>
+<ul>
+<li>one new Delivery ID for all the non-hazardous movements together</li>
+<li>one Delivery ID for each hazardous movement, which is the same as its initial Movement ID</li>
+</ul>
 <p>Hazardous movements cannot be grouped with other hazardous movements for receipt.</p>
 <p><img alt="Hazardous and non-hazardous together" src="../../../images/dwt-scenario-06-hazardous-and-non-hazardous-together.png" /></p>
 <h2 id="7-movement-with-a-handover-from-carrier-to-carrier">7. Movement with a handover from carrier to carrier</h2>
 <p>A movement can have more than one collection. This lets you record waste passing from one carrier to another before it’s delivered.
 Set collectionType when you call <code>POST /movements/{movementId}/collection</code>:</p>
-<p>• <code>STATIC</code> for a collection from a fixed location, such as the producer’s site
-  • <code>TRANSIT</code> for a collection from another vehicle</p>
+<ul>
+<li><code>STATIC</code> for a collection from a fixed location, such as the producer’s site</li>
+<li><code>TRANSIT</code> for a collection from another vehicle</li>
+</ul>
 <p>The first collection must be <code>STATIC</code>. Every collection after that must be <code>TRANSIT</code>.</p>
 <p><img alt="Carrier to carrier handover" src="../../../images/dwt-scenario-07-carrier-to-carrier-handover.png" /></p>
 <h2 id="8-linking-related-movements">8. Linking related movements</h2>
