@@ -55,8 +55,8 @@ When you record the delivery, `POST /deliveries` still returns a Delivery ID, ho
 
 You can include hazardous and non-hazardous movements in the same `POST /deliveries` request. The response gives you:
 
-  • one new Delivery ID for all the non-hazardous movements together
-  • one Delivery ID for each hazardous movement, which is the same as its initial Movement ID
+  - one new Delivery ID for all the non-hazardous movements together
+  - one Delivery ID for each hazardous movement, which is the same as its initial Movement ID
 
 Hazardous movements cannot be grouped with other hazardous movements for receipt.
 
@@ -68,8 +68,8 @@ Hazardous movements cannot be grouped with other hazardous movements for receipt
 A movement can have more than one collection. This lets you record waste passing from one carrier to another before it’s delivered.
 Set collectionType when you call `POST /movements/{movementId}/collection`:
 
-  • `STATIC` for a collection from a fixed location, such as the producer’s site
-  • `TRANSIT` for a collection from another vehicle
+  - `STATIC` for a collection from a fixed location, such as the producer’s site
+  - `TRANSIT` for a collection from another vehicle
 
 The first collection must be `STATIC`. Every collection after that must be `TRANSIT`.
 
