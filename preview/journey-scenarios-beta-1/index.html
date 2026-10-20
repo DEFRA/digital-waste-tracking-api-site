@@ -601,7 +601,7 @@
 <h2 id="3-waste-delivered-to-more-than-one-receiving-site">3. Waste delivered to more than one receiving site</h2>
 <p>Waste from one or more movements can be split between more than one receiving site. List the Movement IDs when you call <code>POST /deliveries</code>. Each receiving site then records its own receipt against the Delivery ID, using <code>POST /deliveries/{deliveryId}/receipt</code>.</p>
 <p><img alt="Several movements, one delivery" src="../images/dwt-scenario-03-more-than-one-receiving-site.png" /></p>
-<h2 id="waste-received-without-a-delivery-id">Waste received without a Delivery ID</h2>
+<h2 id="4-waste-received-without-a-delivery-id">4. Waste received without a Delivery ID</h2>
 <p>A receiving site can accept waste that arrives without a Delivery ID. Record the receipt with <code>POST /receipts</code>, and explain why there’s no Delivery ID in <code>reasonForNoDeliveryId</code>. This returns a new Delivery ID for the receipt.</p>
 <p><img alt="Several movements, one delivery" src="../images/dwt-scenario-04-received-without-delivery-id.png" /></p>
 
