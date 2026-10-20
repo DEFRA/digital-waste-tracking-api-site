@@ -562,7 +562,7 @@
 
 
 <h1 id="receipt-of-waste-journey-scenarios-beta-3">Receipt of waste: journey scenarios - Beta 3</h1>
-<p>The Digital Waste Tracking API will enable a variety of journey scenarios which will be rolled out through the various Beta incarnations. Beta 3 includes 4 new journeys added to the 8 journeys introduced in Beta 1 and Beta 2.</p>
+<p>The Digital Waste Tracking API will enable a variety of journey scenarios which will be rolled out through the various Beta incarnations. Beta 3 includes 2 new journeys added to the 8 journeys introduced in Beta 1 and Beta 2.</p>
 <h2 id="beta-1">Beta 1</h2>
 <h2 id="1-single-non-hazardous-movement">1. Single non-hazardous movement</h2>
 <p>A waste movement is made up of 4 events:</p>
@@ -573,7 +573,7 @@
 <li>Record the receipt with <code>POST /deliveries/{deliveryId}/receipt</code>.</li>
 </ol>
 <p>You need a valid Movement ID to record a collection or a delivery.</p>
-<p><img alt="Single movement" src="../images/dwt-scenario-01-single-movement.png" /></p>
+<p><img alt="Single movement" src="../../../images/dwt-scenario-01-single-movement.png" /></p>
 <h2 id="2-several-non-hazardous-movements-delivered-together">2. Several non-hazardous movements delivered together</h2>
 <p>You can deliver several non-hazardous movements to a receiving site in one delivery. To do this, list all their Movement IDs when you call <code>POST /deliveries</code>. This returns one new Delivery ID for the whole group. </p>
 <p>The receiving site uses this Delivery ID to record the receipt, using <code>POST /deliveries/{deliveryId}/receipt</code>.</p>
@@ -611,6 +611,22 @@ Set collectionType when you call <code>POST /movements/{movementId}/collection</
 <p>Some jobs need more than one movement, for example when waste is removed over several trips.</p>
 <p>To link these movements, add the same reference to each one when you create it with <code>POST /movements</code>.</p>
 <p><img alt="Linking related movements" src="../../../images/dwt-scenario-08-linking-related-movements.png" /></p>
+<p><br></p>
+<h2 id="beta-3">Beta 3</h2>
+<h2 id="9-permitted-updates">9. Permitted updates</h2>
+<p>You can correct a movement, a collection or a receipt after you've recorded it. Use the <code>PUT</code> endpoint for that event:</p>
+<ul>
+<li><code>PUT /movements/{movementId}</code> to update the movement</li>
+<li><code>PUT /movements/{movementId}/collection</code> to update the collection</li>
+<li><code>PUT /deliveries/{deliveryId}/receipt</code> to update the receipt</li>
+</ul>
+<p>Each update creates a new version of the event (V2). The original (V1) is kept, so there's a full history of what was submitted.</p>
+<p>You cannot edit a delivery once you've recorded it. <code>PUT /deliveries/{deliveryId}</code> accepts only <code>isDeleted</code>. To correct a delivery, delete it and record a new one with <code>POST /deliveries</code>. You can only do this until a receipt has been recorded against it.</p>
+<p><img alt="Permitted updates" src="../../../images/dwt-scenario-09-permitted-updates.png" /></p>
+<h2 id="10-waste-does-not-match-its-description-at-collection">10. Waste does not match its description at collection</h2>
+<p>Only the organisation that created a movement can change the description of its waste. You cannot change the waste description when you record a collection.</p>
+<p>If the waste does not match its description, the carrier must tell the organisation that created the movement so they can update it.</p>
+<p><img alt="Waste does not match description" src="../../../images/dwt-scenario-10-waste-does-not-match-description.png" /></p>
 
 
 
