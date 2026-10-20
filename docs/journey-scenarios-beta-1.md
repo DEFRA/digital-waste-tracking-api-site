@@ -1,6 +1,6 @@
 # Receipt of waste: journey scenarios - Beta 1
 
-The Digital Waste Tracking API will enable a variety of journey scenarios which will be rolled out through the various Beta incarnations. Beta 1 will include 3 journeys.
+The Digital Waste Tracking API will enable a variety of journey scenarios which will be rolled out through the various Beta incarnations. Beta 1 will include 4 journeys.
 
 ## 1. Single non-hazardous movement
 
@@ -17,7 +17,9 @@ You need a valid Movement ID to record a collection or a delivery.
 
 ## 2. Several non-hazardous movements delivered together
 
-You can deliver several non-hazardous movements to a receiving site in one delivery. To do this, list all their Movement IDs when you call `POST /deliveries`. This returns one new Delivery ID for the whole group. The receiving site uses this Delivery ID to record the receipt, using `POST /deliveries/{deliveryId}/receipt`.
+You can deliver several non-hazardous movements to a receiving site in one delivery. To do this, list all their Movement IDs when you call `POST /deliveries`. This returns one new Delivery ID for the whole group. 
+
+The receiving site uses this Delivery ID to record the receipt, using `POST /deliveries/{deliveryId}/receipt`.
 
 ![Several movements, one delivery](./images/dwt-scenario-02-several-movements-one-delivery.png)
 
