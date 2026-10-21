@@ -558,7 +558,6 @@
 
 <h1 id="receipt-of-waste-journey-scenarios-beta-2">Receipt of waste: journey scenarios - Beta 2</h1>
 <p>The Digital Waste Tracking API will enable a variety of journey scenarios which will be rolled out through the various Beta incarnations. Beta 2 adds new journeys to the original journeys in Beta 1.</p>
-<h2 id="beta-1">Beta 1</h2>
 <h2 id="b1a-single-non-hazardous-movement">B1A - Single non-hazardous movement</h2>
 <p>A waste movement is made up of 4 events:</p>
 <ol>
@@ -579,8 +578,6 @@
 <h2 id="b1d-waste-received-without-a-delivery-id">B1D - Waste received without a Delivery ID</h2>
 <p>A receiving site can accept waste that arrives without a Delivery ID. Record the receipt with <code>POST /receipts</code>, and explain why there’s no Delivery ID in <code>reasonForNoDeliveryId</code>. This returns a new Delivery ID for the receipt.</p>
 <p><img alt="Received without delivery ID" src="../../../images/dwt-scenario-04-received-without-delivery-id.png" /></p>
-<p><br></p>
-<h2 id="beta-2">Beta 2</h2>
 <h2 id="b2a-hazardous-movement">B2A - Hazardous movement</h2>
 <p>A movement is hazardous if any of its waste items has a hazardous European Waste Catalogue (EWC) code when you create it with <code>POST /movements</code>. It stays hazardous for all 4 events.</p>
 <p>When you record the delivery, <code>POST /deliveries</code> still returns a Delivery ID, however this is the same code as the initial Movement ID. Use it to record the receipt in the usual way.</p>
@@ -593,7 +590,7 @@
 </ul>
 <p>Hazardous movements cannot be grouped with other hazardous movements for receipt.</p>
 <p><img alt="Hazardous and non-hazardous together" src="../../../images/dwt-scenario-06-hazardous-and-non-hazardous-together.png" /></p>
-<h2 id="b2d-linking-related-movements">B2D - Linking related movements</h2>
+<h2 id="b2c-linking-related-movements">B2C - Linking related movements</h2>
 <p>Some jobs need more than one movement, for example when waste is removed over several trips.</p>
 <p>To link these movements, add the same reference to each one when you create it with <code>POST /movements</code>.</p>
 <p><img alt="Linking related movements" src="../../../images/dwt-scenario-08-linking-related-movements.png" /></p>
