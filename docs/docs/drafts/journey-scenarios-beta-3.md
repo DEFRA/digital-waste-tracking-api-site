@@ -2,7 +2,6 @@
 
 The Digital Waste Tracking API will enable a variety of journey scenarios which will be rolled out through the various Beta incarnations. Beta 3 adds new journeys to the journeys introduced in Beta 1 and Beta 2.
 
-## Beta 1
 
 ## B1A - Single non-hazardous movement
 
@@ -38,9 +37,6 @@ A receiving site can accept waste that arrives without a Delivery ID. Record the
 
 ![Received without delivery ID](../../images/dwt-scenario-04-received-without-delivery-id.png)
 
-<br>
-
-## Beta 2
 
 ## B2A - Hazardous movement
 
@@ -63,7 +59,7 @@ Hazardous movements cannot be grouped with other hazardous movements for receipt
 ![Hazardous and non-hazardous together](../../images/dwt-scenario-06-hazardous-and-non-hazardous-together.png)
 
 
-## B2D - Linking related movements
+## B2C - Linking related movements
 
 Some jobs need more than one movement, for example when waste is removed over several trips.
 
@@ -71,9 +67,6 @@ To link these movements, add the same reference to each one when you create it w
 
 ![Linking related movements](../../images/dwt-scenario-08-linking-related-movements.png)
 
-<br>
-
-## Beta 3
 
 ## B3A - Permitted updates
 
@@ -100,7 +93,7 @@ If the waste does not match its description, the carrier must tell the organisat
 
 
 
-## B2C - Movement with a handover from carrier to carrier
+## B3C - Movement with a handover from carrier to carrier
 
 A movement can have more than one collection. This lets you record waste passing from one carrier to another before it’s delivered.
 Set collectionType when you call `POST /movements/{movementId}/collection`:
