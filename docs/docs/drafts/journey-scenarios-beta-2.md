@@ -2,7 +2,6 @@
 
 The Digital Waste Tracking API will enable a variety of journey scenarios which will be rolled out through the various Beta incarnations. Beta 2 adds new journeys to the original journeys in Beta 1.
 
-## Beta 1
 
 ## B1A - Single non-hazardous movement
 
@@ -38,9 +37,6 @@ A receiving site can accept waste that arrives without a Delivery ID. Record the
 
 ![Received without delivery ID](../../images/dwt-scenario-04-received-without-delivery-id.png)
 
-<br>
-
-## Beta 2
 
 ## B2A - Hazardous movement
 
@@ -63,7 +59,7 @@ Hazardous movements cannot be grouped with other hazardous movements for receipt
 ![Hazardous and non-hazardous together](../../images/dwt-scenario-06-hazardous-and-non-hazardous-together.png)
 
 
-## B2D - Linking related movements
+## B2C - Linking related movements
 
 Some jobs need more than one movement, for example when waste is removed over several trips.
 
