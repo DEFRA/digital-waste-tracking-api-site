@@ -1,7 +1,12 @@
-# Receipt of waste: journey scenarios - Beta 2
+# Digital Waste Tracking API: journey scenarios - Beta 2
 
-The Digital Waste Tracking API will enable a variety of journey scenarios which will be rolled out through the various Beta incarnations. Beta 2 adds new journeys to the original journeys in Beta 1.
+The Digital Waste Tracking API will enable a variety of journey scenarios which will be rolled out through the various Beta incarnations. Beta 2 adds new journeys to the original journeys in Beta 1 and will be the first release of the DWT API where you can record a waste movement from start to finish, with full input validation on every request.
 
+<br>
+
+[A reminder of our original DWT API integration guidance](../../software-provider-integration-guidance.md)
+
+<br> 
 
 ## B1A - Single non-hazardous movement
 
