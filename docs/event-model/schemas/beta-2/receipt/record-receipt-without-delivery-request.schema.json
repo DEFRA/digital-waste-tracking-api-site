@@ -1,10 +1,10 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Record receipt without delivery request",
-  "description": "Payload for POST /beta-2/receipts.",
+  "description": "Payload for POST /beta-2/receipts. A consignmentNote is required when any waste item declares hazardous properties; the service checks that, as the rule spans the waste items and the consignment note.",
   "type": "object",
   "properties": {
-    "reason": {
+    "reasonForNoDeliveryId": {
       "type": "string",
       "minLength": 1,
       "description": "Mandatory explanation for why this receipt is being recorded without a Delivery ID.",
@@ -36,8 +36,12 @@
     },
     "supportingReferences": {
       "$ref": "../common/supporting-references.schema.json"
+    },
+    "consignmentNote": {
+      "$ref": "../common/consignment-note.schema.json",
+      "description": "The hazardous waste consignment note. Required when any waste item declares hazardous properties."
     }
   },
-  "required": ["reason", "carrier", "receiver", "wasteItems"],
+  "required": ["reasonForNoDeliveryId", "carrier", "receiver", "wasteItems"],
   "additionalProperties": false
 }

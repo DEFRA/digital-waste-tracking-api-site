@@ -1,8 +1,8 @@
 {
   "withReason": {
-    "summary": "Receipt with no prior delivery, with the reason why",
+    "summary": "Receipt with no prior delivery, with the reason why, of waste containing POPs",
     "value": {
-      "reason": "No delivery was recorded prior to receipt; waste received directly from the producer.",
+      "reasonForNoDeliveryId": "No delivery was recorded prior to receipt; waste received directly from the producer.",
       "carrier": {
         "organisationName": "Carrier Demo Ltd",
         "registrationNumber": "CBDU123456",
@@ -31,6 +31,27 @@
       },
       "wasteItems": [
         {
+          "classification": {
+            "wasteDescription": "Mixed municipal waste",
+            "ewcCodes": ["200301"],
+            "pops": {
+              "isPresent": true,
+              "sourceOfComponents": "OWN_TESTING",
+              "components": [
+                {
+                  "code": "PFOA",
+                  "concentration": 0.5
+                },
+                {
+                  "code": "PFOS",
+                  "concentrationThresholdOperator": "LESS_THAN"
+                }
+              ]
+            },
+            "hazardous": {
+              "isPresent": false
+            }
+          },
           "physicalDetails": {
             "form": "SOLID",
             "containerType": "DRU",
