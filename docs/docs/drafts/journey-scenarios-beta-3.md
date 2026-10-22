@@ -1,4 +1,4 @@
-# Receipt of waste: journey scenarios - Beta 3
+# Digital Waste Tracking API: journey scenarios - Beta 3
 
 The Digital Waste Tracking API will enable a variety of journey scenarios which will be rolled out through the various Beta incarnations. Beta 3 adds new journeys to the journeys introduced in Beta 1 and Beta 2.
 
