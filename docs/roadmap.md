@@ -1,6 +1,8 @@
 # Digital Waste Tracking API - Roadmap
 
-**Current status:** The first 'development milestone' of the service was BEta-1, completed in Sep/Oct 2026. This rollout tested basic API interactions in a sandbox environment to ensure proof of concept and identify potential issues. The team is currently focused on Beta-2, with key input from software providers across a range of journey scenarios to further develop and refine the service. 
+**Current status:** The first 'development milestone' of the service was Beta-1, completed in Sep/Oct 2026. This rollout tested basic API interactions in a sandbox environment to ensure proof of concept and identify potential issues. 
+
+The team is currently focused on **Beta-2**, with key input from software providers across a range of journey scenarios to further develop and refine the service. 
 
 
 ## Beta-1: Contract API test
@@ -17,7 +19,7 @@ Ability to map identifiers and events to new or existing entities in your system
 
 <br>
 
-## Beta-2: create end-to-end waste movement
+## Beta-2: Create end-to-end waste movement
 **Earliest testable service - Oct/Nov 2026**
 
 All POST endpoints amended to include full validation and conditionality against individual data items.
