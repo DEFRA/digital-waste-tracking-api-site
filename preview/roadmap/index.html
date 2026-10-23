@@ -21,7 +21,7 @@
     
     
       
-        <title>Roadmap - Digital Waste Tracking API</title>
+        <title>Digital Waste Tracking API - Roadmap - Digital Waste Tracking API</title>
       
     
     
@@ -82,6 +82,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#digital-waste-tracking-api-roadmap" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -117,7 +122,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Roadmap
+              Digital Waste Tracking API - Roadmap
             
           </span>
         </div>
@@ -551,9 +556,50 @@
   
 
 
-  <h1>Roadmap</h1>
-
-
+<h1 id="digital-waste-tracking-api-roadmap">Digital Waste Tracking API - Roadmap</h1>
+<p><strong>Current status:</strong> The first 'development milestone' of the service was BEta-1, completed in Sep/Oct 2026. This rollout tested basic API interactions in a sandbox environment to ensure proof of concept and identify potential issues. The team is currently focused on Beta-2, with key input from software providers across a range of journey scenarios to further develop and refine the service. </p>
+<h2 id="beta-1-contract-api-test">Beta-1: Contract API test</h2>
+<p><strong>Earliest integrated service - Sep/Oct 2026</strong></p>
+<p>All POST endpoints made available, with only validation against the payload structure, no individual data item validation.</p>
+<p>Ability to map identifiers and events to new or existing entities in your system.</p>
+<ol>
+<li>Acknowledge waste movement</li>
+<li>Acknowledge collection using Movement ID</li>
+<li>Acknowledge delivery (incl. array of Movement IDs)</li>
+<li>Acknowledge receipt using Delivery ID</li>
+</ol>
+<p><br></p>
+<h2 id="beta-2-create-end-to-end-waste-movement">Beta-2: create end-to-end waste movement</h2>
+<p><strong>Earliest testable service - Oct/Nov 2026</strong></p>
+<p>All POST endpoints amended to include full validation and conditionality against individual data items.</p>
+<p>Ability to map data points to the DWT schema and design for curated scenarios and validation messages.</p>
+<ol>
+<li>Report a waste movement</li>
+<li>Report a collection using Movement ID</li>
+<li>Report a delivery (incl. array of Movement IDs)</li>
+<li>Report a receipt using Delivery ID</li>
+</ol>
+<p><br></p>
+<h2 id="beta-3-update-retrieve-and-reject">Beta-3: Update, retrieve and reject</h2>
+<p><strong>Earliest usable service - Nov/Dec 2026</strong></p>
+<p>All <code>PUT</code> and <code>GET</code> endpoints made available.</p>
+<p>Ability to design amendment and retrieval processes in your system.</p>
+<ol>
+<li>Report a waste movement - UPDATE</li>
+<li>Report a collection using Movement ID - UPDATE</li>
+<li>Report a delivery (incl. array of Movement IDs) - REPORT A REJECTION</li>
+<li>Report a receipt using Delivery ID - UPDATE - REPORT A REJECTION</li>
+</ol>
+<p><br></p>
+<h2 id="beta-4-final-iterations">Beta-4: Final iterations</h2>
+<p><strong>Production-ready API - Jan 2027</strong></p>
+<p>Any final iterations and feedback that could not be deployed previously.</p>
+<ol>
+<li>Report a waste movement - UPDATE</li>
+<li>Report a collection using Movement ID - UPDATE</li>
+<li>Report a delivery (incl. array of Movement IDs) - REPORT A REJECTION</li>
+<li>Report a receipt using Delivery ID - UPDATE - REPORT A REJECTION</li>
+</ol>
 
 
 
