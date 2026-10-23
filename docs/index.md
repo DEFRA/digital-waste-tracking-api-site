@@ -6,12 +6,28 @@ To support this service, the DWT team is developing an API which will integrate 
 
 This hub includes all the current documentation relating to the API development project for software providers. It will be updated on a regular basis as the service develops. 
 
+<br>
+
 ## Current status:
 The first 'development milestone' of the service was Beta-1, completed in Sep/Oct 2026. This rollout tested basic API interactions in a sandbox environment to ensure proof of concept and identify potential issues.
 
 The team is currently focused on Beta-2, with key input from software providers across a range of journey scenarios to further develop and refine the service.
 
+<br>
+
 ## Pages:
 - [Software provider integration guidance](software-provider-integration-guidance.md)
 - [API specification (beta-2)](api/openapi-beta-2.md)
 - [Problem types](problems/index.md): the errors the API returns, and how to handle them
+
+<br>
+
+## Waste movement delivery events
+The API will support all four significant events in the waste movement cycle:
+
+- Arrange movement of waste (creation)
+- Collection of waste (collection)
+- Delivery of waste (delivery)
+- Receipt of waste (receipt)
+
+<img src="images/dwt-movement-delivery-events.png" alt="DWT events" width="600">
