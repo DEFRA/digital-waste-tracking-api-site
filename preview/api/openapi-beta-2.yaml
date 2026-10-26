@@ -378,6 +378,75 @@ components:
                   - sicCode
                   - contactDetails
                   - address
+        plannedCollectionDateTime:
+          type: string
+          format: date-time
+          description: The planned collection time, as an ISO 8601 date-time. The actual time is recorded by the Collection event.
+        collectionSite:
+          $schema: https://json-schema.org/draft/2020-12/schema
+          title: Collection site
+          description: The place the waste will be collected from. address and contactDetails are required.
+          examples:
+            - address:
+                fullAddress: 10 Industrial Way, Test City
+                postcode: TE1 2PQ
+              contactDetails:
+                emailAddress: site@example.com
+                phoneNumber: '01234567890'
+          type: object
+          properties:
+            address:
+              $schema: https://json-schema.org/draft/2020-12/schema
+              title: Address
+              description: A UK or Irish postal address. fullAddress is optional; postcode is required.
+              examples:
+                - fullAddress: 10 Industrial Way, Test City
+                  postcode: TE1 2PQ
+              type: object
+              properties:
+                fullAddress:
+                  type: string
+                  minLength: 1
+                  description: Full address line.
+                postcode:
+                  type: string
+                  pattern: ^\s*(?:(?:(([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z]\d{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y]\d{1,2})|(([A-Za-z]\d[A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y]\d?[A-Za-z])))) \d[A-Za-z]{2})))|(?:(?:[Dd]6[Ww]|[AaC-Fc-fHhKkNnPpRrTtV-Yv-y]\d{2}) ?[0-9AaC-Fc-fHhKkNnPpRrTtV-Yv-y]{4}))\s*$
+                  description: Accepts UK postcodes and Irish Eircodes.
+              required:
+                - postcode
+              additionalProperties: false
+            contactDetails:
+              $schema: https://json-schema.org/draft/2020-12/schema
+              title: Contact details
+              description: Contact details for a party. At least one of emailAddress or phoneNumber must be provided.
+              examples:
+                - emailAddress: producer@example.com
+                  phoneNumber: '01234567890'
+                - emailAddress: producer@example.com
+              type: object
+              properties:
+                emailAddress:
+                  type: string
+                  format: email
+                  description: Contact email address.
+                phoneNumber:
+                  type: string
+                  pattern: ^\s*(?=(?:\D*\d){7,15}\D*$)\+?[0-9()\-\s]+$
+                  description: Contact phone number, in a valid format.
+              anyOf:
+                - properties:
+                    emailAddress: {}
+                  required:
+                    - emailAddress
+                - properties:
+                    phoneNumber: {}
+                  required:
+                    - phoneNumber
+              additionalProperties: false
+          required:
+            - address
+            - contactDetails
+          additionalProperties: false
         intendedCarriers:
           type: array
           items:
@@ -625,15 +694,20 @@ components:
                       - '200121'
                     pops:
                       isPresent: true
-                      sourceOfComponents: GUIDANCE
+                      componentsSource: GUIDANCE
                       components:
                         - code: PFOS
-                          concentrationThresholdOperator: LESS_THAN
+                          threshold: LESS_THAN
                     hazardous:
                       isPresent: true
                       codes:
                         - HP_6
                         - HP_14
+                      componentsSource: PROVIDED_WITH_WASTE
+                      componentsNotApplicable: false
+                      components:
+                        - name: Mercury
+                          threshold: EQUAL_TO
                 type: object
                 properties:
                   wasteDescription:
@@ -656,12 +730,13 @@ components:
                     examples:
                       - isPresent: false
                       - isPresent: true
-                        sourceOfComponents: OWN_TESTING
+                        componentsSource: OWN_TESTING
                         components:
                           - code: PFOA
-                            concentration: 0.5
+                            unit: MG_PER_KG
+                            amount: 0.5
                           - code: PFOS
-                            concentrationThresholdOperator: LESS_THAN
+                            threshold: LESS_THAN
                     type: object
                     if:
                       properties:
@@ -671,15 +746,15 @@ components:
                         - isPresent
                     then:
                       properties:
-                        sourceOfComponents: {}
+                        componentsSource: {}
                         components: {}
                       required:
-                        - sourceOfComponents
+                        - componentsSource
                         - components
                       description: Required when 'isPresent' is true
                     else:
                       properties:
-                        sourceOfComponents:
+                        componentsSource:
                           not: {}
                           description: Not allowed unless 'isPresent' is true
                         components:
@@ -689,70 +764,69 @@ components:
                       isPresent:
                         type: boolean
                         description: Whether the waste item contains any persistent organic pollutants.
-                      sourceOfComponents:
+                      componentsSource:
                         type: string
                         enum:
                           - GUIDANCE
                           - PROVIDED_WITH_WASTE
                           - OWN_TESTING
-                          - NOT_PROVIDED
-                        description: 'Where the POP details came from: government guidance, provided with the waste, the receiver''s own testing or analysis, or not provided. Required when isPresent is true; not allowed otherwise.'
+                        description: 'Where the POP details came from: government guidance, provided with the waste, or the receiver''s own testing or analysis. Required when isPresent is true; not allowed otherwise.'
                       components:
                         type: array
                         minItems: 1
                         items:
                           $schema: https://json-schema.org/draft/2020-12/schema
                           title: POP component
-                          description: 'A persistent organic pollutant (POP) in a waste item: its code, and either its concentration or how its concentration compares with the threshold WM3 sets for that code, but not both. A concentration of null or an empty string is treated as not provided.'
+                          description: 'A persistent organic pollutant (POP) in a waste item: its code, and either its concentration as an amount with a unit or how its concentration compares with the threshold WM3 sets for that code, but not both.'
                           examples:
                             - code: PFOA
-                              concentration: 0.5
+                              unit: MG_PER_KG
+                              amount: 0.5
                             - code: PFOS
-                              concentrationThresholdOperator: LESS_THAN
+                              threshold: LESS_THAN
                           type: object
                           allOf:
                             - if:
                                 properties:
-                                  concentration:
-                                    type: number
+                                  amount: {}
                                 required:
-                                  - concentration
+                                  - amount
                               then:
                                 properties:
-                                  concentrationThresholdOperator:
+                                  threshold:
                                     not: {}
-                                    description: Not allowed when 'concentration' is provided
+                                    description: Not allowed when 'amount' is provided
+                                  unit: {}
+                                required:
+                                  - unit
+                                description: Required when 'amount' is provided
                               else:
                                 properties:
-                                  concentrationThresholdOperator: {}
+                                  threshold: {}
                                 required:
-                                  - concentrationThresholdOperator
-                                description: Required when 'concentration' is not provided
+                                  - threshold
+                                description: Required when 'amount' is not provided
                           properties:
                             code:
                               type: string
                               minLength: 1
                               description: The POP's code, from GET /reference-data/pop-names. Only checked for being non-empty here; the service checks it against the reference data and reports an unrecognised code as an InvalidValue error.
-                            concentration:
-                              if:
-                                type: number
-                              then:
-                                type: number
-                                exclusiveMinimum: 0
-                                description: Must be greater than 0
-                              else:
-                                enum:
-                                  - null
-                                  - ''
-                                description: Must be a number greater than 0, or null or an empty string when not provided
-                              description: 'The POP''s concentration: a number greater than 0. null or an empty string means not provided. Exactly one of ''concentration'' or ''concentrationThresholdOperator'' is required.'
-                            concentrationThresholdOperator:
+                            unit:
+                              type: string
+                              enum:
+                                - MG_PER_KG
+                              description: 'The unit of the amount: milligrams per kilogram. Required when ''amount'' is provided.'
+                            amount:
+                              type: number
+                              exclusiveMinimum: 0
+                              description: 'The POP''s concentration, in ''unit'': a number greater than 0. Exactly one of ''amount'' or ''threshold'' is required.'
+                            threshold:
                               type: string
                               enum:
                                 - LESS_THAN
                                 - EQUAL_TO
                                 - GREATER_THAN
-                              description: How the POP's concentration compares with the threshold WM3 sets for its code, when the concentration itself isn't given. The threshold value isn't sent. Exactly one of 'concentration' or 'concentrationThresholdOperator' is required.
+                              description: How the POP's concentration compares with the threshold WM3 sets for its code, when the amount itself isn't given. The threshold value isn't sent. Exactly one of 'amount' or 'threshold' is required.
                           required:
                             - code
                           additionalProperties: false
@@ -769,6 +843,19 @@ components:
                         codes:
                           - HP_4
                           - HP_8
+                        componentsSource: OWN_TESTING
+                        componentsNotApplicable: false
+                        components:
+                          - name: Mercury
+                            unit: MG_PER_KG
+                            amount: 120
+                          - name: Lead compounds
+                            threshold: GREATER_THAN
+                      - isPresent: true
+                        codes:
+                          - HP_14
+                        componentsSource: GUIDANCE
+                        componentsNotApplicable: true
                       - isPresent: false
                     type: object
                     if:
@@ -780,12 +867,49 @@ components:
                     then:
                       properties:
                         codes: {}
+                        componentsSource: {}
+                        componentsNotApplicable: {}
                       required:
                         - codes
+                        - componentsSource
+                        - componentsNotApplicable
                       description: Required when 'isPresent' is true
+                      allOf:
+                        - if:
+                            properties:
+                              componentsNotApplicable:
+                                const: false
+                            required:
+                              - componentsNotApplicable
+                          then:
+                            properties:
+                              components: {}
+                            required:
+                              - components
+                            description: Required when 'componentsNotApplicable' is false
+                        - if:
+                            properties:
+                              componentsNotApplicable:
+                                const: true
+                            required:
+                              - componentsNotApplicable
+                          then:
+                            properties:
+                              components:
+                                not: {}
+                                description: Not allowed when 'componentsNotApplicable' is true
                     else:
                       properties:
                         codes:
+                          not: {}
+                          description: Not allowed unless 'isPresent' is true
+                        componentsSource:
+                          not: {}
+                          description: Not allowed unless 'isPresent' is true
+                        componentsNotApplicable:
+                          not: {}
+                          description: Not allowed unless 'isPresent' is true
+                        components:
                           not: {}
                           description: Not allowed unless 'isPresent' is true
                     properties:
@@ -816,6 +940,75 @@ components:
                             - HP_POP
                           description: 'A hazardous property code: HP_1 to HP_15, or HP_POP.'
                         description: The hazardous property codes that apply to the waste item. At least one is required when isPresent is true; not allowed otherwise. Duplicates are accepted.
+                      componentsSource:
+                        type: string
+                        enum:
+                          - GUIDANCE
+                          - PROVIDED_WITH_WASTE
+                          - OWN_TESTING
+                        description: 'Where the hazardous component details came from: government guidance, provided with the waste, or the receiver''s own testing or analysis. Required when isPresent is true, including when componentsNotApplicable is true; not allowed otherwise.'
+                      componentsNotApplicable:
+                        type: boolean
+                        description: Whether no hazardous components need reporting for the waste item. Required when isPresent is true; not allowed otherwise. When it is true, components are not allowed; when it is false, at least one component is required.
+                      components:
+                        type: array
+                        minItems: 1
+                        items:
+                          $schema: https://json-schema.org/draft/2020-12/schema
+                          title: Hazardous component
+                          description: 'A hazardous component of a waste item: its name, and either its concentration as an amount with a unit or how its concentration compares with the relevant threshold, but not both.'
+                          examples:
+                            - name: Mercury
+                              unit: MG_PER_KG
+                              amount: 120
+                            - name: Lead compounds
+                              threshold: GREATER_THAN
+                          type: object
+                          allOf:
+                            - if:
+                                properties:
+                                  amount: {}
+                                required:
+                                  - amount
+                              then:
+                                properties:
+                                  threshold:
+                                    not: {}
+                                    description: Not allowed when 'amount' is provided
+                                  unit: {}
+                                required:
+                                  - unit
+                                description: Required when 'amount' is provided
+                              else:
+                                properties:
+                                  threshold: {}
+                                required:
+                                  - threshold
+                                description: Required when 'amount' is not provided
+                          properties:
+                            name:
+                              type: string
+                              minLength: 1
+                              description: The hazardous component's name, as free text. Not checked against any reference data.
+                            unit:
+                              type: string
+                              enum:
+                                - MG_PER_KG
+                              description: 'The unit of the amount: milligrams per kilogram. Required when ''amount'' is provided.'
+                            amount:
+                              type: number
+                              exclusiveMinimum: 0
+                              description: 'The component''s concentration, in ''unit'': a number greater than 0. Exactly one of ''amount'' or ''threshold'' is required.'
+                            threshold:
+                              type: string
+                              enum:
+                                - EQUAL_TO
+                                - GREATER_THAN
+                              description: 'How the component''s concentration compares with the relevant threshold, when the amount itself isn''t given: equal to it or greater than it. The threshold value isn''t sent. Exactly one of ''amount'' or ''threshold'' is required.'
+                          required:
+                            - name
+                          additionalProperties: false
+                        description: The hazardous components the waste item contains. At least one is required when isPresent is true and componentsNotApplicable is false; not allowed otherwise.
                     required:
                       - isPresent
                     additionalProperties: false
@@ -1021,13 +1214,17 @@ components:
                       unit: KILOGRAMS
                       isEstimate: false
               - classification:
-                  wasteDescription: Soil and stones
+                  wasteDescription: Soil and stones containing hazardous substances
                   ewcCodes:
-                    - '170504'
+                    - '170503'
                   pops:
                     isPresent: false
                   hazardous:
-                    isPresent: false
+                    isPresent: true
+                    codes:
+                      - HP_14
+                    componentsSource: GUIDANCE
+                    componentsNotApplicable: true
                 physicalDetails:
                   form: MIXED
                   containerType: LOO
@@ -1271,6 +1468,8 @@ components:
         - intendedCarriers
         - intendedReceivers
         - wasteItems
+        - plannedCollectionDateTime
+        - collectionSite
       additionalProperties: false
     recordCollectionRequest:
       $schema: https://json-schema.org/draft/2020-12/schema
@@ -1423,6 +1622,75 @@ components:
           required:
             - organisationName
             - meansOfTransport
+            - contactDetails
+          additionalProperties: false
+        actualCollectionDateTime:
+          type: string
+          format: date-time
+          description: The time the waste was collected, as an ISO 8601 date-time.
+        collectionSite:
+          $schema: https://json-schema.org/draft/2020-12/schema
+          title: Collection site
+          description: The place the waste will be collected from. address and contactDetails are required.
+          examples:
+            - address:
+                fullAddress: 10 Industrial Way, Test City
+                postcode: TE1 2PQ
+              contactDetails:
+                emailAddress: site@example.com
+                phoneNumber: '01234567890'
+          type: object
+          properties:
+            address:
+              $schema: https://json-schema.org/draft/2020-12/schema
+              title: Address
+              description: A UK or Irish postal address. fullAddress is optional; postcode is required.
+              examples:
+                - fullAddress: 10 Industrial Way, Test City
+                  postcode: TE1 2PQ
+              type: object
+              properties:
+                fullAddress:
+                  type: string
+                  minLength: 1
+                  description: Full address line.
+                postcode:
+                  type: string
+                  pattern: ^\s*(?:(?:(([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z]\d{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y]\d{1,2})|(([A-Za-z]\d[A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y]\d?[A-Za-z])))) \d[A-Za-z]{2})))|(?:(?:[Dd]6[Ww]|[AaC-Fc-fHhKkNnPpRrTtV-Yv-y]\d{2}) ?[0-9AaC-Fc-fHhKkNnPpRrTtV-Yv-y]{4}))\s*$
+                  description: Accepts UK postcodes and Irish Eircodes.
+              required:
+                - postcode
+              additionalProperties: false
+            contactDetails:
+              $schema: https://json-schema.org/draft/2020-12/schema
+              title: Contact details
+              description: Contact details for a party. At least one of emailAddress or phoneNumber must be provided.
+              examples:
+                - emailAddress: producer@example.com
+                  phoneNumber: '01234567890'
+                - emailAddress: producer@example.com
+              type: object
+              properties:
+                emailAddress:
+                  type: string
+                  format: email
+                  description: Contact email address.
+                phoneNumber:
+                  type: string
+                  pattern: ^\s*(?=(?:\D*\d){7,15}\D*$)\+?[0-9()\-\s]+$
+                  description: Contact phone number, in a valid format.
+              anyOf:
+                - properties:
+                    emailAddress: {}
+                  required:
+                    - emailAddress
+                - properties:
+                    phoneNumber: {}
+                  required:
+                    - phoneNumber
+              additionalProperties: false
+          required:
+            - address
             - contactDetails
           additionalProperties: false
         brokerOrDealer:
@@ -1617,6 +1885,8 @@ components:
       required:
         - carrier
         - dutyOfCareConfirmed
+        - actualCollectionDateTime
+        - collectionSite
       additionalProperties: false
     recordDeliveryRequest:
       $schema: https://json-schema.org/draft/2020-12/schema
@@ -2132,65 +2402,6 @@ components:
             - containerCount
             - totalWeight
           additionalProperties: false
-        hazardous:
-          description: Whether the waste received has hazardous properties, and if so which. Required, even when there are none.
-          $schema: https://json-schema.org/draft/2020-12/schema
-          title: Hazardous properties
-          examples:
-            - isPresent: true
-              codes:
-                - HP_4
-                - HP_8
-            - isPresent: false
-          type: object
-          if:
-            properties:
-              isPresent:
-                const: true
-            required:
-              - isPresent
-          then:
-            properties:
-              codes: {}
-            required:
-              - codes
-            description: Required when 'isPresent' is true
-          else:
-            properties:
-              codes:
-                not: {}
-                description: Not allowed unless 'isPresent' is true
-          properties:
-            isPresent:
-              type: boolean
-              description: Whether the waste item has any hazardous properties.
-            codes:
-              type: array
-              minItems: 1
-              items:
-                type: string
-                enum:
-                  - HP_1
-                  - HP_2
-                  - HP_3
-                  - HP_4
-                  - HP_5
-                  - HP_6
-                  - HP_7
-                  - HP_8
-                  - HP_9
-                  - HP_10
-                  - HP_11
-                  - HP_12
-                  - HP_13
-                  - HP_14
-                  - HP_15
-                  - HP_POP
-                description: 'A hazardous property code: HP_1 to HP_15, or HP_POP.'
-              description: The hazardous property codes that apply to the waste item. At least one is required when isPresent is true; not allowed otherwise. Duplicates are accepted.
-          required:
-            - isPresent
-          additionalProperties: false
         treatments:
           description: The disposal or recovery operations applied to the waste received. At least one is required.
           $schema: https://json-schema.org/draft/2020-12/schema
@@ -2451,12 +2662,11 @@ components:
         - carrier
         - receiver
         - physicalDetails
-        - hazardous
         - treatments
       additionalProperties: false
-    recordReceiptWithoutDeliveryRequest:
+    recordReceiptUndocumentedRequest:
       $schema: https://json-schema.org/draft/2020-12/schema
-      title: Record receipt without delivery request
+      title: Record undocumented receipt request
       description: Payload for POST /beta-2/receipts. A consignmentNote is required when any waste item declares hazardous properties; the service checks that, as the rule spans the waste items and the consignment note.
       type: object
       properties:
@@ -2705,15 +2915,20 @@ components:
                       - '200121'
                     pops:
                       isPresent: true
-                      sourceOfComponents: GUIDANCE
+                      componentsSource: GUIDANCE
                       components:
                         - code: PFOS
-                          concentrationThresholdOperator: LESS_THAN
+                          threshold: LESS_THAN
                     hazardous:
                       isPresent: true
                       codes:
                         - HP_6
                         - HP_14
+                      componentsSource: PROVIDED_WITH_WASTE
+                      componentsNotApplicable: false
+                      components:
+                        - name: Mercury
+                          threshold: EQUAL_TO
                 type: object
                 properties:
                   wasteDescription:
@@ -2736,12 +2951,13 @@ components:
                     examples:
                       - isPresent: false
                       - isPresent: true
-                        sourceOfComponents: OWN_TESTING
+                        componentsSource: OWN_TESTING
                         components:
                           - code: PFOA
-                            concentration: 0.5
+                            unit: MG_PER_KG
+                            amount: 0.5
                           - code: PFOS
-                            concentrationThresholdOperator: LESS_THAN
+                            threshold: LESS_THAN
                     type: object
                     if:
                       properties:
@@ -2751,15 +2967,15 @@ components:
                         - isPresent
                     then:
                       properties:
-                        sourceOfComponents: {}
+                        componentsSource: {}
                         components: {}
                       required:
-                        - sourceOfComponents
+                        - componentsSource
                         - components
                       description: Required when 'isPresent' is true
                     else:
                       properties:
-                        sourceOfComponents:
+                        componentsSource:
                           not: {}
                           description: Not allowed unless 'isPresent' is true
                         components:
@@ -2769,70 +2985,69 @@ components:
                       isPresent:
                         type: boolean
                         description: Whether the waste item contains any persistent organic pollutants.
-                      sourceOfComponents:
+                      componentsSource:
                         type: string
                         enum:
                           - GUIDANCE
                           - PROVIDED_WITH_WASTE
                           - OWN_TESTING
-                          - NOT_PROVIDED
-                        description: 'Where the POP details came from: government guidance, provided with the waste, the receiver''s own testing or analysis, or not provided. Required when isPresent is true; not allowed otherwise.'
+                        description: 'Where the POP details came from: government guidance, provided with the waste, or the receiver''s own testing or analysis. Required when isPresent is true; not allowed otherwise.'
                       components:
                         type: array
                         minItems: 1
                         items:
                           $schema: https://json-schema.org/draft/2020-12/schema
                           title: POP component
-                          description: 'A persistent organic pollutant (POP) in a waste item: its code, and either its concentration or how its concentration compares with the threshold WM3 sets for that code, but not both. A concentration of null or an empty string is treated as not provided.'
+                          description: 'A persistent organic pollutant (POP) in a waste item: its code, and either its concentration as an amount with a unit or how its concentration compares with the threshold WM3 sets for that code, but not both.'
                           examples:
                             - code: PFOA
-                              concentration: 0.5
+                              unit: MG_PER_KG
+                              amount: 0.5
                             - code: PFOS
-                              concentrationThresholdOperator: LESS_THAN
+                              threshold: LESS_THAN
                           type: object
                           allOf:
                             - if:
                                 properties:
-                                  concentration:
-                                    type: number
+                                  amount: {}
                                 required:
-                                  - concentration
+                                  - amount
                               then:
                                 properties:
-                                  concentrationThresholdOperator:
+                                  threshold:
                                     not: {}
-                                    description: Not allowed when 'concentration' is provided
+                                    description: Not allowed when 'amount' is provided
+                                  unit: {}
+                                required:
+                                  - unit
+                                description: Required when 'amount' is provided
                               else:
                                 properties:
-                                  concentrationThresholdOperator: {}
+                                  threshold: {}
                                 required:
-                                  - concentrationThresholdOperator
-                                description: Required when 'concentration' is not provided
+                                  - threshold
+                                description: Required when 'amount' is not provided
                           properties:
                             code:
                               type: string
                               minLength: 1
                               description: The POP's code, from GET /reference-data/pop-names. Only checked for being non-empty here; the service checks it against the reference data and reports an unrecognised code as an InvalidValue error.
-                            concentration:
-                              if:
-                                type: number
-                              then:
-                                type: number
-                                exclusiveMinimum: 0
-                                description: Must be greater than 0
-                              else:
-                                enum:
-                                  - null
-                                  - ''
-                                description: Must be a number greater than 0, or null or an empty string when not provided
-                              description: 'The POP''s concentration: a number greater than 0. null or an empty string means not provided. Exactly one of ''concentration'' or ''concentrationThresholdOperator'' is required.'
-                            concentrationThresholdOperator:
+                            unit:
+                              type: string
+                              enum:
+                                - MG_PER_KG
+                              description: 'The unit of the amount: milligrams per kilogram. Required when ''amount'' is provided.'
+                            amount:
+                              type: number
+                              exclusiveMinimum: 0
+                              description: 'The POP''s concentration, in ''unit'': a number greater than 0. Exactly one of ''amount'' or ''threshold'' is required.'
+                            threshold:
                               type: string
                               enum:
                                 - LESS_THAN
                                 - EQUAL_TO
                                 - GREATER_THAN
-                              description: How the POP's concentration compares with the threshold WM3 sets for its code, when the concentration itself isn't given. The threshold value isn't sent. Exactly one of 'concentration' or 'concentrationThresholdOperator' is required.
+                              description: How the POP's concentration compares with the threshold WM3 sets for its code, when the amount itself isn't given. The threshold value isn't sent. Exactly one of 'amount' or 'threshold' is required.
                           required:
                             - code
                           additionalProperties: false
@@ -2849,6 +3064,19 @@ components:
                         codes:
                           - HP_4
                           - HP_8
+                        componentsSource: OWN_TESTING
+                        componentsNotApplicable: false
+                        components:
+                          - name: Mercury
+                            unit: MG_PER_KG
+                            amount: 120
+                          - name: Lead compounds
+                            threshold: GREATER_THAN
+                      - isPresent: true
+                        codes:
+                          - HP_14
+                        componentsSource: GUIDANCE
+                        componentsNotApplicable: true
                       - isPresent: false
                     type: object
                     if:
@@ -2860,12 +3088,49 @@ components:
                     then:
                       properties:
                         codes: {}
+                        componentsSource: {}
+                        componentsNotApplicable: {}
                       required:
                         - codes
+                        - componentsSource
+                        - componentsNotApplicable
                       description: Required when 'isPresent' is true
+                      allOf:
+                        - if:
+                            properties:
+                              componentsNotApplicable:
+                                const: false
+                            required:
+                              - componentsNotApplicable
+                          then:
+                            properties:
+                              components: {}
+                            required:
+                              - components
+                            description: Required when 'componentsNotApplicable' is false
+                        - if:
+                            properties:
+                              componentsNotApplicable:
+                                const: true
+                            required:
+                              - componentsNotApplicable
+                          then:
+                            properties:
+                              components:
+                                not: {}
+                                description: Not allowed when 'componentsNotApplicable' is true
                     else:
                       properties:
                         codes:
+                          not: {}
+                          description: Not allowed unless 'isPresent' is true
+                        componentsSource:
+                          not: {}
+                          description: Not allowed unless 'isPresent' is true
+                        componentsNotApplicable:
+                          not: {}
+                          description: Not allowed unless 'isPresent' is true
+                        components:
                           not: {}
                           description: Not allowed unless 'isPresent' is true
                     properties:
@@ -2896,6 +3161,75 @@ components:
                             - HP_POP
                           description: 'A hazardous property code: HP_1 to HP_15, or HP_POP.'
                         description: The hazardous property codes that apply to the waste item. At least one is required when isPresent is true; not allowed otherwise. Duplicates are accepted.
+                      componentsSource:
+                        type: string
+                        enum:
+                          - GUIDANCE
+                          - PROVIDED_WITH_WASTE
+                          - OWN_TESTING
+                        description: 'Where the hazardous component details came from: government guidance, provided with the waste, or the receiver''s own testing or analysis. Required when isPresent is true, including when componentsNotApplicable is true; not allowed otherwise.'
+                      componentsNotApplicable:
+                        type: boolean
+                        description: Whether no hazardous components need reporting for the waste item. Required when isPresent is true; not allowed otherwise. When it is true, components are not allowed; when it is false, at least one component is required.
+                      components:
+                        type: array
+                        minItems: 1
+                        items:
+                          $schema: https://json-schema.org/draft/2020-12/schema
+                          title: Hazardous component
+                          description: 'A hazardous component of a waste item: its name, and either its concentration as an amount with a unit or how its concentration compares with the relevant threshold, but not both.'
+                          examples:
+                            - name: Mercury
+                              unit: MG_PER_KG
+                              amount: 120
+                            - name: Lead compounds
+                              threshold: GREATER_THAN
+                          type: object
+                          allOf:
+                            - if:
+                                properties:
+                                  amount: {}
+                                required:
+                                  - amount
+                              then:
+                                properties:
+                                  threshold:
+                                    not: {}
+                                    description: Not allowed when 'amount' is provided
+                                  unit: {}
+                                required:
+                                  - unit
+                                description: Required when 'amount' is provided
+                              else:
+                                properties:
+                                  threshold: {}
+                                required:
+                                  - threshold
+                                description: Required when 'amount' is not provided
+                          properties:
+                            name:
+                              type: string
+                              minLength: 1
+                              description: The hazardous component's name, as free text. Not checked against any reference data.
+                            unit:
+                              type: string
+                              enum:
+                                - MG_PER_KG
+                              description: 'The unit of the amount: milligrams per kilogram. Required when ''amount'' is provided.'
+                            amount:
+                              type: number
+                              exclusiveMinimum: 0
+                              description: 'The component''s concentration, in ''unit'': a number greater than 0. Exactly one of ''amount'' or ''threshold'' is required.'
+                            threshold:
+                              type: string
+                              enum:
+                                - EQUAL_TO
+                                - GREATER_THAN
+                              description: 'How the component''s concentration compares with the relevant threshold, when the amount itself isn''t given: equal to it or greater than it. The threshold value isn''t sent. Exactly one of ''amount'' or ''threshold'' is required.'
+                          required:
+                            - name
+                          additionalProperties: false
+                        description: The hazardous components the waste item contains. At least one is required when isPresent is true and componentsNotApplicable is false; not allowed otherwise.
                     required:
                       - isPresent
                     additionalProperties: false
@@ -3102,13 +3436,17 @@ components:
                       unit: KILOGRAMS
                       isEstimate: false
               - classification:
-                  wasteDescription: Soil and stones
+                  wasteDescription: Soil and stones containing hazardous substances
                   ewcCodes:
-                    - '170504'
+                    - '170503'
                   pops:
                     isPresent: false
                   hazardous:
-                    isPresent: false
+                    isPresent: true
+                    codes:
+                      - HP_14
+                    componentsSource: GUIDANCE
+                    componentsNotApplicable: true
                 physicalDetails:
                   form: MIXED
                   containerType: LOO
@@ -3776,9 +4114,9 @@ components:
               description: Data-quality warnings. Empty when there are none.
           additionalProperties: false
       additionalProperties: false
-    recordReceiptWithoutDeliveryResponse:
+    recordReceiptUndocumentedResponse:
       $schema: https://json-schema.org/draft/2020-12/schema
-      title: Record receipt without delivery response
+      title: Record undocumented receipt response
       description: 'Response returned when a receipt is recorded without a Delivery ID. Same shape as recording a receipt against a delivery: `data.deliveryId` is the new empty Delivery minted for it.'
       type: object
       required:
@@ -4397,6 +4735,75 @@ paths:
                           - sicCode
                           - contactDetails
                           - address
+                plannedCollectionDateTime:
+                  type: string
+                  format: date-time
+                  description: The planned collection time, as an ISO 8601 date-time. The actual time is recorded by the Collection event.
+                collectionSite:
+                  $schema: https://json-schema.org/draft/2020-12/schema
+                  title: Collection site
+                  description: The place the waste will be collected from. address and contactDetails are required.
+                  examples:
+                    - address:
+                        fullAddress: 10 Industrial Way, Test City
+                        postcode: TE1 2PQ
+                      contactDetails:
+                        emailAddress: site@example.com
+                        phoneNumber: '01234567890'
+                  type: object
+                  properties:
+                    address:
+                      $schema: https://json-schema.org/draft/2020-12/schema
+                      title: Address
+                      description: A UK or Irish postal address. fullAddress is optional; postcode is required.
+                      examples:
+                        - fullAddress: 10 Industrial Way, Test City
+                          postcode: TE1 2PQ
+                      type: object
+                      properties:
+                        fullAddress:
+                          type: string
+                          minLength: 1
+                          description: Full address line.
+                        postcode:
+                          type: string
+                          pattern: ^\s*(?:(?:(([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z]\d{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y]\d{1,2})|(([A-Za-z]\d[A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y]\d?[A-Za-z])))) \d[A-Za-z]{2})))|(?:(?:[Dd]6[Ww]|[AaC-Fc-fHhKkNnPpRrTtV-Yv-y]\d{2}) ?[0-9AaC-Fc-fHhKkNnPpRrTtV-Yv-y]{4}))\s*$
+                          description: Accepts UK postcodes and Irish Eircodes.
+                      required:
+                        - postcode
+                      additionalProperties: false
+                    contactDetails:
+                      $schema: https://json-schema.org/draft/2020-12/schema
+                      title: Contact details
+                      description: Contact details for a party. At least one of emailAddress or phoneNumber must be provided.
+                      examples:
+                        - emailAddress: producer@example.com
+                          phoneNumber: '01234567890'
+                        - emailAddress: producer@example.com
+                      type: object
+                      properties:
+                        emailAddress:
+                          type: string
+                          format: email
+                          description: Contact email address.
+                        phoneNumber:
+                          type: string
+                          pattern: ^\s*(?=(?:\D*\d){7,15}\D*$)\+?[0-9()\-\s]+$
+                          description: Contact phone number, in a valid format.
+                      anyOf:
+                        - properties:
+                            emailAddress: {}
+                          required:
+                            - emailAddress
+                        - properties:
+                            phoneNumber: {}
+                          required:
+                            - phoneNumber
+                      additionalProperties: false
+                  required:
+                    - address
+                    - contactDetails
+                  additionalProperties: false
                 intendedCarriers:
                   type: array
                   items:
@@ -4644,15 +5051,20 @@ paths:
                               - '200121'
                             pops:
                               isPresent: true
-                              sourceOfComponents: GUIDANCE
+                              componentsSource: GUIDANCE
                               components:
                                 - code: PFOS
-                                  concentrationThresholdOperator: LESS_THAN
+                                  threshold: LESS_THAN
                             hazardous:
                               isPresent: true
                               codes:
                                 - HP_6
                                 - HP_14
+                              componentsSource: PROVIDED_WITH_WASTE
+                              componentsNotApplicable: false
+                              components:
+                                - name: Mercury
+                                  threshold: EQUAL_TO
                         type: object
                         properties:
                           wasteDescription:
@@ -4675,12 +5087,13 @@ paths:
                             examples:
                               - isPresent: false
                               - isPresent: true
-                                sourceOfComponents: OWN_TESTING
+                                componentsSource: OWN_TESTING
                                 components:
                                   - code: PFOA
-                                    concentration: 0.5
+                                    unit: MG_PER_KG
+                                    amount: 0.5
                                   - code: PFOS
-                                    concentrationThresholdOperator: LESS_THAN
+                                    threshold: LESS_THAN
                             type: object
                             if:
                               properties:
@@ -4690,15 +5103,15 @@ paths:
                                 - isPresent
                             then:
                               properties:
-                                sourceOfComponents: {}
+                                componentsSource: {}
                                 components: {}
                               required:
-                                - sourceOfComponents
+                                - componentsSource
                                 - components
                               description: Required when 'isPresent' is true
                             else:
                               properties:
-                                sourceOfComponents:
+                                componentsSource:
                                   not: {}
                                   description: Not allowed unless 'isPresent' is true
                                 components:
@@ -4708,70 +5121,69 @@ paths:
                               isPresent:
                                 type: boolean
                                 description: Whether the waste item contains any persistent organic pollutants.
-                              sourceOfComponents:
+                              componentsSource:
                                 type: string
                                 enum:
                                   - GUIDANCE
                                   - PROVIDED_WITH_WASTE
                                   - OWN_TESTING
-                                  - NOT_PROVIDED
-                                description: 'Where the POP details came from: government guidance, provided with the waste, the receiver''s own testing or analysis, or not provided. Required when isPresent is true; not allowed otherwise.'
+                                description: 'Where the POP details came from: government guidance, provided with the waste, or the receiver''s own testing or analysis. Required when isPresent is true; not allowed otherwise.'
                               components:
                                 type: array
                                 minItems: 1
                                 items:
                                   $schema: https://json-schema.org/draft/2020-12/schema
                                   title: POP component
-                                  description: 'A persistent organic pollutant (POP) in a waste item: its code, and either its concentration or how its concentration compares with the threshold WM3 sets for that code, but not both. A concentration of null or an empty string is treated as not provided.'
+                                  description: 'A persistent organic pollutant (POP) in a waste item: its code, and either its concentration as an amount with a unit or how its concentration compares with the threshold WM3 sets for that code, but not both.'
                                   examples:
                                     - code: PFOA
-                                      concentration: 0.5
+                                      unit: MG_PER_KG
+                                      amount: 0.5
                                     - code: PFOS
-                                      concentrationThresholdOperator: LESS_THAN
+                                      threshold: LESS_THAN
                                   type: object
                                   allOf:
                                     - if:
                                         properties:
-                                          concentration:
-                                            type: number
+                                          amount: {}
                                         required:
-                                          - concentration
+                                          - amount
                                       then:
                                         properties:
-                                          concentrationThresholdOperator:
+                                          threshold:
                                             not: {}
-                                            description: Not allowed when 'concentration' is provided
+                                            description: Not allowed when 'amount' is provided
+                                          unit: {}
+                                        required:
+                                          - unit
+                                        description: Required when 'amount' is provided
                                       else:
                                         properties:
-                                          concentrationThresholdOperator: {}
+                                          threshold: {}
                                         required:
-                                          - concentrationThresholdOperator
-                                        description: Required when 'concentration' is not provided
+                                          - threshold
+                                        description: Required when 'amount' is not provided
                                   properties:
                                     code:
                                       type: string
                                       minLength: 1
                                       description: The POP's code, from GET /reference-data/pop-names. Only checked for being non-empty here; the service checks it against the reference data and reports an unrecognised code as an InvalidValue error.
-                                    concentration:
-                                      if:
-                                        type: number
-                                      then:
-                                        type: number
-                                        exclusiveMinimum: 0
-                                        description: Must be greater than 0
-                                      else:
-                                        enum:
-                                          - null
-                                          - ''
-                                        description: Must be a number greater than 0, or null or an empty string when not provided
-                                      description: 'The POP''s concentration: a number greater than 0. null or an empty string means not provided. Exactly one of ''concentration'' or ''concentrationThresholdOperator'' is required.'
-                                    concentrationThresholdOperator:
+                                    unit:
+                                      type: string
+                                      enum:
+                                        - MG_PER_KG
+                                      description: 'The unit of the amount: milligrams per kilogram. Required when ''amount'' is provided.'
+                                    amount:
+                                      type: number
+                                      exclusiveMinimum: 0
+                                      description: 'The POP''s concentration, in ''unit'': a number greater than 0. Exactly one of ''amount'' or ''threshold'' is required.'
+                                    threshold:
                                       type: string
                                       enum:
                                         - LESS_THAN
                                         - EQUAL_TO
                                         - GREATER_THAN
-                                      description: How the POP's concentration compares with the threshold WM3 sets for its code, when the concentration itself isn't given. The threshold value isn't sent. Exactly one of 'concentration' or 'concentrationThresholdOperator' is required.
+                                      description: How the POP's concentration compares with the threshold WM3 sets for its code, when the amount itself isn't given. The threshold value isn't sent. Exactly one of 'amount' or 'threshold' is required.
                                   required:
                                     - code
                                   additionalProperties: false
@@ -4788,6 +5200,19 @@ paths:
                                 codes:
                                   - HP_4
                                   - HP_8
+                                componentsSource: OWN_TESTING
+                                componentsNotApplicable: false
+                                components:
+                                  - name: Mercury
+                                    unit: MG_PER_KG
+                                    amount: 120
+                                  - name: Lead compounds
+                                    threshold: GREATER_THAN
+                              - isPresent: true
+                                codes:
+                                  - HP_14
+                                componentsSource: GUIDANCE
+                                componentsNotApplicable: true
                               - isPresent: false
                             type: object
                             if:
@@ -4799,12 +5224,49 @@ paths:
                             then:
                               properties:
                                 codes: {}
+                                componentsSource: {}
+                                componentsNotApplicable: {}
                               required:
                                 - codes
+                                - componentsSource
+                                - componentsNotApplicable
                               description: Required when 'isPresent' is true
+                              allOf:
+                                - if:
+                                    properties:
+                                      componentsNotApplicable:
+                                        const: false
+                                    required:
+                                      - componentsNotApplicable
+                                  then:
+                                    properties:
+                                      components: {}
+                                    required:
+                                      - components
+                                    description: Required when 'componentsNotApplicable' is false
+                                - if:
+                                    properties:
+                                      componentsNotApplicable:
+                                        const: true
+                                    required:
+                                      - componentsNotApplicable
+                                  then:
+                                    properties:
+                                      components:
+                                        not: {}
+                                        description: Not allowed when 'componentsNotApplicable' is true
                             else:
                               properties:
                                 codes:
+                                  not: {}
+                                  description: Not allowed unless 'isPresent' is true
+                                componentsSource:
+                                  not: {}
+                                  description: Not allowed unless 'isPresent' is true
+                                componentsNotApplicable:
+                                  not: {}
+                                  description: Not allowed unless 'isPresent' is true
+                                components:
                                   not: {}
                                   description: Not allowed unless 'isPresent' is true
                             properties:
@@ -4835,6 +5297,75 @@ paths:
                                     - HP_POP
                                   description: 'A hazardous property code: HP_1 to HP_15, or HP_POP.'
                                 description: The hazardous property codes that apply to the waste item. At least one is required when isPresent is true; not allowed otherwise. Duplicates are accepted.
+                              componentsSource:
+                                type: string
+                                enum:
+                                  - GUIDANCE
+                                  - PROVIDED_WITH_WASTE
+                                  - OWN_TESTING
+                                description: 'Where the hazardous component details came from: government guidance, provided with the waste, or the receiver''s own testing or analysis. Required when isPresent is true, including when componentsNotApplicable is true; not allowed otherwise.'
+                              componentsNotApplicable:
+                                type: boolean
+                                description: Whether no hazardous components need reporting for the waste item. Required when isPresent is true; not allowed otherwise. When it is true, components are not allowed; when it is false, at least one component is required.
+                              components:
+                                type: array
+                                minItems: 1
+                                items:
+                                  $schema: https://json-schema.org/draft/2020-12/schema
+                                  title: Hazardous component
+                                  description: 'A hazardous component of a waste item: its name, and either its concentration as an amount with a unit or how its concentration compares with the relevant threshold, but not both.'
+                                  examples:
+                                    - name: Mercury
+                                      unit: MG_PER_KG
+                                      amount: 120
+                                    - name: Lead compounds
+                                      threshold: GREATER_THAN
+                                  type: object
+                                  allOf:
+                                    - if:
+                                        properties:
+                                          amount: {}
+                                        required:
+                                          - amount
+                                      then:
+                                        properties:
+                                          threshold:
+                                            not: {}
+                                            description: Not allowed when 'amount' is provided
+                                          unit: {}
+                                        required:
+                                          - unit
+                                        description: Required when 'amount' is provided
+                                      else:
+                                        properties:
+                                          threshold: {}
+                                        required:
+                                          - threshold
+                                        description: Required when 'amount' is not provided
+                                  properties:
+                                    name:
+                                      type: string
+                                      minLength: 1
+                                      description: The hazardous component's name, as free text. Not checked against any reference data.
+                                    unit:
+                                      type: string
+                                      enum:
+                                        - MG_PER_KG
+                                      description: 'The unit of the amount: milligrams per kilogram. Required when ''amount'' is provided.'
+                                    amount:
+                                      type: number
+                                      exclusiveMinimum: 0
+                                      description: 'The component''s concentration, in ''unit'': a number greater than 0. Exactly one of ''amount'' or ''threshold'' is required.'
+                                    threshold:
+                                      type: string
+                                      enum:
+                                        - EQUAL_TO
+                                        - GREATER_THAN
+                                      description: 'How the component''s concentration compares with the relevant threshold, when the amount itself isn''t given: equal to it or greater than it. The threshold value isn''t sent. Exactly one of ''amount'' or ''threshold'' is required.'
+                                  required:
+                                    - name
+                                  additionalProperties: false
+                                description: The hazardous components the waste item contains. At least one is required when isPresent is true and componentsNotApplicable is false; not allowed otherwise.
                             required:
                               - isPresent
                             additionalProperties: false
@@ -5040,13 +5571,17 @@ paths:
                               unit: KILOGRAMS
                               isEstimate: false
                       - classification:
-                          wasteDescription: Soil and stones
+                          wasteDescription: Soil and stones containing hazardous substances
                           ewcCodes:
-                            - '170504'
+                            - '170503'
                           pops:
                             isPresent: false
                           hazardous:
-                            isPresent: false
+                            isPresent: true
+                            codes:
+                              - HP_14
+                            componentsSource: GUIDANCE
+                            componentsNotApplicable: true
                         physicalDetails:
                           form: MIXED
                           containerType: LOO
@@ -5290,6 +5825,8 @@ paths:
                 - intendedCarriers
                 - intendedReceivers
                 - wasteItems
+                - plannedCollectionDateTime
+                - collectionSite
               additionalProperties: false
             examples:
               commercial:
@@ -5305,6 +5842,14 @@ paths:
                       postcode: TE1 2PQ
                     contactDetails:
                       emailAddress: producer@example.com
+                      phoneNumber: '01234567890'
+                  plannedCollectionDateTime: '2026-01-15T09:30:00Z'
+                  collectionSite:
+                    address:
+                      fullAddress: 10 Industrial Way, Test City
+                      postcode: TE1 2PQ
+                    contactDetails:
+                      emailAddress: site@example.com
                       phoneNumber: '01234567890'
                   intendedReceivers:
                     - siteName: Receiver Site Ltd
@@ -5327,6 +5872,14 @@ paths:
                           codes:
                             - HP_6
                             - HP_14
+                          componentsSource: OWN_TESTING
+                          componentsNotApplicable: false
+                          components:
+                            - name: Mercury
+                              unit: MG_PER_KG
+                              amount: 120
+                            - name: Lead compounds
+                              threshold: GREATER_THAN
                       physicalDetails:
                         form: SOLID
                         containerType: DRU
@@ -5370,6 +5923,14 @@ paths:
                 value:
                   producer:
                     wasteSource: Household
+                  plannedCollectionDateTime: '2026-01-15T09:30:00Z'
+                  collectionSite:
+                    address:
+                      fullAddress: 10 Industrial Way, Test City
+                      postcode: TE1 2PQ
+                    contactDetails:
+                      emailAddress: site@example.com
+                      phoneNumber: '01234567890'
                   intendedCarriers:
                     - organisationName: Carrier Demo Ltd
                       registrationNumber: CBDU123456
@@ -5938,6 +6499,75 @@ paths:
                     - meansOfTransport
                     - contactDetails
                   additionalProperties: false
+                actualCollectionDateTime:
+                  type: string
+                  format: date-time
+                  description: The time the waste was collected, as an ISO 8601 date-time.
+                collectionSite:
+                  $schema: https://json-schema.org/draft/2020-12/schema
+                  title: Collection site
+                  description: The place the waste will be collected from. address and contactDetails are required.
+                  examples:
+                    - address:
+                        fullAddress: 10 Industrial Way, Test City
+                        postcode: TE1 2PQ
+                      contactDetails:
+                        emailAddress: site@example.com
+                        phoneNumber: '01234567890'
+                  type: object
+                  properties:
+                    address:
+                      $schema: https://json-schema.org/draft/2020-12/schema
+                      title: Address
+                      description: A UK or Irish postal address. fullAddress is optional; postcode is required.
+                      examples:
+                        - fullAddress: 10 Industrial Way, Test City
+                          postcode: TE1 2PQ
+                      type: object
+                      properties:
+                        fullAddress:
+                          type: string
+                          minLength: 1
+                          description: Full address line.
+                        postcode:
+                          type: string
+                          pattern: ^\s*(?:(?:(([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z]\d{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y]\d{1,2})|(([A-Za-z]\d[A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y]\d?[A-Za-z])))) \d[A-Za-z]{2})))|(?:(?:[Dd]6[Ww]|[AaC-Fc-fHhKkNnPpRrTtV-Yv-y]\d{2}) ?[0-9AaC-Fc-fHhKkNnPpRrTtV-Yv-y]{4}))\s*$
+                          description: Accepts UK postcodes and Irish Eircodes.
+                      required:
+                        - postcode
+                      additionalProperties: false
+                    contactDetails:
+                      $schema: https://json-schema.org/draft/2020-12/schema
+                      title: Contact details
+                      description: Contact details for a party. At least one of emailAddress or phoneNumber must be provided.
+                      examples:
+                        - emailAddress: producer@example.com
+                          phoneNumber: '01234567890'
+                        - emailAddress: producer@example.com
+                      type: object
+                      properties:
+                        emailAddress:
+                          type: string
+                          format: email
+                          description: Contact email address.
+                        phoneNumber:
+                          type: string
+                          pattern: ^\s*(?=(?:\D*\d){7,15}\D*$)\+?[0-9()\-\s]+$
+                          description: Contact phone number, in a valid format.
+                      anyOf:
+                        - properties:
+                            emailAddress: {}
+                          required:
+                            - emailAddress
+                        - properties:
+                            phoneNumber: {}
+                          required:
+                            - phoneNumber
+                      additionalProperties: false
+                  required:
+                    - address
+                    - contactDetails
+                  additionalProperties: false
                 brokerOrDealer:
                   $schema: https://json-schema.org/draft/2020-12/schema
                   title: Broker or dealer involvement
@@ -6130,6 +6760,8 @@ paths:
               required:
                 - carrier
                 - dutyOfCareConfirmed
+                - actualCollectionDateTime
+                - collectionSite
               additionalProperties: false
             examples:
               withBrokerAndReferences:
@@ -6146,6 +6778,14 @@ paths:
                     address:
                       fullAddress: 4 Carrier Lane, Test City
                       postcode: TE1 4CR
+                  actualCollectionDateTime: '2026-01-15T09:30:00Z'
+                  collectionSite:
+                    address:
+                      fullAddress: 10 Industrial Way, Test City
+                      postcode: TE1 2PQ
+                    contactDetails:
+                      emailAddress: site@example.com
+                      phoneNumber: '01234567890'
                   dutyOfCareConfirmed: true
                   brokerOrDealer:
                     isPresent: true
@@ -6178,6 +6818,14 @@ paths:
                     address:
                       fullAddress: 4 Carrier Lane, Test City
                       postcode: TE1 4CR
+                  actualCollectionDateTime: '2026-01-15T09:30:00Z'
+                  collectionSite:
+                    address:
+                      fullAddress: 10 Industrial Way, Test City
+                      postcode: TE1 2PQ
+                    contactDetails:
+                      emailAddress: site@example.com
+                      phoneNumber: '01234567890'
                   dutyOfCareConfirmed: true
       responses:
         '201':
@@ -7256,16 +7904,16 @@ paths:
     post:
       tags:
         - Receipt
-      summary: Record receipt of waste without a Delivery ID
+      summary: Record receipt of undocumented waste
       description: Fallback for recording receipt with no prior Delivery, e.g. waste received with no movement trail. Not linked to any Movement; `reasonForNoDeliveryId` must explain why. The server creates an empty Delivery behind the scenes and returns its `deliveryId`, so the receipt stays addressable.
-      operationId: recordReceiptWithoutDelivery
+      operationId: recordReceiptUndocumented
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $schema: https://json-schema.org/draft/2020-12/schema
-              title: Record receipt without delivery request
+              title: Record undocumented receipt request
               description: Payload for POST /beta-2/receipts. A consignmentNote is required when any waste item declares hazardous properties; the service checks that, as the rule spans the waste items and the consignment note.
               type: object
               properties:
@@ -7514,15 +8162,20 @@ paths:
                               - '200121'
                             pops:
                               isPresent: true
-                              sourceOfComponents: GUIDANCE
+                              componentsSource: GUIDANCE
                               components:
                                 - code: PFOS
-                                  concentrationThresholdOperator: LESS_THAN
+                                  threshold: LESS_THAN
                             hazardous:
                               isPresent: true
                               codes:
                                 - HP_6
                                 - HP_14
+                              componentsSource: PROVIDED_WITH_WASTE
+                              componentsNotApplicable: false
+                              components:
+                                - name: Mercury
+                                  threshold: EQUAL_TO
                         type: object
                         properties:
                           wasteDescription:
@@ -7545,12 +8198,13 @@ paths:
                             examples:
                               - isPresent: false
                               - isPresent: true
-                                sourceOfComponents: OWN_TESTING
+                                componentsSource: OWN_TESTING
                                 components:
                                   - code: PFOA
-                                    concentration: 0.5
+                                    unit: MG_PER_KG
+                                    amount: 0.5
                                   - code: PFOS
-                                    concentrationThresholdOperator: LESS_THAN
+                                    threshold: LESS_THAN
                             type: object
                             if:
                               properties:
@@ -7560,15 +8214,15 @@ paths:
                                 - isPresent
                             then:
                               properties:
-                                sourceOfComponents: {}
+                                componentsSource: {}
                                 components: {}
                               required:
-                                - sourceOfComponents
+                                - componentsSource
                                 - components
                               description: Required when 'isPresent' is true
                             else:
                               properties:
-                                sourceOfComponents:
+                                componentsSource:
                                   not: {}
                                   description: Not allowed unless 'isPresent' is true
                                 components:
@@ -7578,70 +8232,69 @@ paths:
                               isPresent:
                                 type: boolean
                                 description: Whether the waste item contains any persistent organic pollutants.
-                              sourceOfComponents:
+                              componentsSource:
                                 type: string
                                 enum:
                                   - GUIDANCE
                                   - PROVIDED_WITH_WASTE
                                   - OWN_TESTING
-                                  - NOT_PROVIDED
-                                description: 'Where the POP details came from: government guidance, provided with the waste, the receiver''s own testing or analysis, or not provided. Required when isPresent is true; not allowed otherwise.'
+                                description: 'Where the POP details came from: government guidance, provided with the waste, or the receiver''s own testing or analysis. Required when isPresent is true; not allowed otherwise.'
                               components:
                                 type: array
                                 minItems: 1
                                 items:
                                   $schema: https://json-schema.org/draft/2020-12/schema
                                   title: POP component
-                                  description: 'A persistent organic pollutant (POP) in a waste item: its code, and either its concentration or how its concentration compares with the threshold WM3 sets for that code, but not both. A concentration of null or an empty string is treated as not provided.'
+                                  description: 'A persistent organic pollutant (POP) in a waste item: its code, and either its concentration as an amount with a unit or how its concentration compares with the threshold WM3 sets for that code, but not both.'
                                   examples:
                                     - code: PFOA
-                                      concentration: 0.5
+                                      unit: MG_PER_KG
+                                      amount: 0.5
                                     - code: PFOS
-                                      concentrationThresholdOperator: LESS_THAN
+                                      threshold: LESS_THAN
                                   type: object
                                   allOf:
                                     - if:
                                         properties:
-                                          concentration:
-                                            type: number
+                                          amount: {}
                                         required:
-                                          - concentration
+                                          - amount
                                       then:
                                         properties:
-                                          concentrationThresholdOperator:
+                                          threshold:
                                             not: {}
-                                            description: Not allowed when 'concentration' is provided
+                                            description: Not allowed when 'amount' is provided
+                                          unit: {}
+                                        required:
+                                          - unit
+                                        description: Required when 'amount' is provided
                                       else:
                                         properties:
-                                          concentrationThresholdOperator: {}
+                                          threshold: {}
                                         required:
-                                          - concentrationThresholdOperator
-                                        description: Required when 'concentration' is not provided
+                                          - threshold
+                                        description: Required when 'amount' is not provided
                                   properties:
                                     code:
                                       type: string
                                       minLength: 1
                                       description: The POP's code, from GET /reference-data/pop-names. Only checked for being non-empty here; the service checks it against the reference data and reports an unrecognised code as an InvalidValue error.
-                                    concentration:
-                                      if:
-                                        type: number
-                                      then:
-                                        type: number
-                                        exclusiveMinimum: 0
-                                        description: Must be greater than 0
-                                      else:
-                                        enum:
-                                          - null
-                                          - ''
-                                        description: Must be a number greater than 0, or null or an empty string when not provided
-                                      description: 'The POP''s concentration: a number greater than 0. null or an empty string means not provided. Exactly one of ''concentration'' or ''concentrationThresholdOperator'' is required.'
-                                    concentrationThresholdOperator:
+                                    unit:
+                                      type: string
+                                      enum:
+                                        - MG_PER_KG
+                                      description: 'The unit of the amount: milligrams per kilogram. Required when ''amount'' is provided.'
+                                    amount:
+                                      type: number
+                                      exclusiveMinimum: 0
+                                      description: 'The POP''s concentration, in ''unit'': a number greater than 0. Exactly one of ''amount'' or ''threshold'' is required.'
+                                    threshold:
                                       type: string
                                       enum:
                                         - LESS_THAN
                                         - EQUAL_TO
                                         - GREATER_THAN
-                                      description: How the POP's concentration compares with the threshold WM3 sets for its code, when the concentration itself isn't given. The threshold value isn't sent. Exactly one of 'concentration' or 'concentrationThresholdOperator' is required.
+                                      description: How the POP's concentration compares with the threshold WM3 sets for its code, when the amount itself isn't given. The threshold value isn't sent. Exactly one of 'amount' or 'threshold' is required.
                                   required:
                                     - code
                                   additionalProperties: false
@@ -7658,6 +8311,19 @@ paths:
                                 codes:
                                   - HP_4
                                   - HP_8
+                                componentsSource: OWN_TESTING
+                                componentsNotApplicable: false
+                                components:
+                                  - name: Mercury
+                                    unit: MG_PER_KG
+                                    amount: 120
+                                  - name: Lead compounds
+                                    threshold: GREATER_THAN
+                              - isPresent: true
+                                codes:
+                                  - HP_14
+                                componentsSource: GUIDANCE
+                                componentsNotApplicable: true
                               - isPresent: false
                             type: object
                             if:
@@ -7669,12 +8335,49 @@ paths:
                             then:
                               properties:
                                 codes: {}
+                                componentsSource: {}
+                                componentsNotApplicable: {}
                               required:
                                 - codes
+                                - componentsSource
+                                - componentsNotApplicable
                               description: Required when 'isPresent' is true
+                              allOf:
+                                - if:
+                                    properties:
+                                      componentsNotApplicable:
+                                        const: false
+                                    required:
+                                      - componentsNotApplicable
+                                  then:
+                                    properties:
+                                      components: {}
+                                    required:
+                                      - components
+                                    description: Required when 'componentsNotApplicable' is false
+                                - if:
+                                    properties:
+                                      componentsNotApplicable:
+                                        const: true
+                                    required:
+                                      - componentsNotApplicable
+                                  then:
+                                    properties:
+                                      components:
+                                        not: {}
+                                        description: Not allowed when 'componentsNotApplicable' is true
                             else:
                               properties:
                                 codes:
+                                  not: {}
+                                  description: Not allowed unless 'isPresent' is true
+                                componentsSource:
+                                  not: {}
+                                  description: Not allowed unless 'isPresent' is true
+                                componentsNotApplicable:
+                                  not: {}
+                                  description: Not allowed unless 'isPresent' is true
+                                components:
                                   not: {}
                                   description: Not allowed unless 'isPresent' is true
                             properties:
@@ -7705,6 +8408,75 @@ paths:
                                     - HP_POP
                                   description: 'A hazardous property code: HP_1 to HP_15, or HP_POP.'
                                 description: The hazardous property codes that apply to the waste item. At least one is required when isPresent is true; not allowed otherwise. Duplicates are accepted.
+                              componentsSource:
+                                type: string
+                                enum:
+                                  - GUIDANCE
+                                  - PROVIDED_WITH_WASTE
+                                  - OWN_TESTING
+                                description: 'Where the hazardous component details came from: government guidance, provided with the waste, or the receiver''s own testing or analysis. Required when isPresent is true, including when componentsNotApplicable is true; not allowed otherwise.'
+                              componentsNotApplicable:
+                                type: boolean
+                                description: Whether no hazardous components need reporting for the waste item. Required when isPresent is true; not allowed otherwise. When it is true, components are not allowed; when it is false, at least one component is required.
+                              components:
+                                type: array
+                                minItems: 1
+                                items:
+                                  $schema: https://json-schema.org/draft/2020-12/schema
+                                  title: Hazardous component
+                                  description: 'A hazardous component of a waste item: its name, and either its concentration as an amount with a unit or how its concentration compares with the relevant threshold, but not both.'
+                                  examples:
+                                    - name: Mercury
+                                      unit: MG_PER_KG
+                                      amount: 120
+                                    - name: Lead compounds
+                                      threshold: GREATER_THAN
+                                  type: object
+                                  allOf:
+                                    - if:
+                                        properties:
+                                          amount: {}
+                                        required:
+                                          - amount
+                                      then:
+                                        properties:
+                                          threshold:
+                                            not: {}
+                                            description: Not allowed when 'amount' is provided
+                                          unit: {}
+                                        required:
+                                          - unit
+                                        description: Required when 'amount' is provided
+                                      else:
+                                        properties:
+                                          threshold: {}
+                                        required:
+                                          - threshold
+                                        description: Required when 'amount' is not provided
+                                  properties:
+                                    name:
+                                      type: string
+                                      minLength: 1
+                                      description: The hazardous component's name, as free text. Not checked against any reference data.
+                                    unit:
+                                      type: string
+                                      enum:
+                                        - MG_PER_KG
+                                      description: 'The unit of the amount: milligrams per kilogram. Required when ''amount'' is provided.'
+                                    amount:
+                                      type: number
+                                      exclusiveMinimum: 0
+                                      description: 'The component''s concentration, in ''unit'': a number greater than 0. Exactly one of ''amount'' or ''threshold'' is required.'
+                                    threshold:
+                                      type: string
+                                      enum:
+                                        - EQUAL_TO
+                                        - GREATER_THAN
+                                      description: 'How the component''s concentration compares with the relevant threshold, when the amount itself isn''t given: equal to it or greater than it. The threshold value isn''t sent. Exactly one of ''amount'' or ''threshold'' is required.'
+                                  required:
+                                    - name
+                                  additionalProperties: false
+                                description: The hazardous components the waste item contains. At least one is required when isPresent is true and componentsNotApplicable is false; not allowed otherwise.
                             required:
                               - isPresent
                             additionalProperties: false
@@ -7911,13 +8683,17 @@ paths:
                               unit: KILOGRAMS
                               isEstimate: false
                       - classification:
-                          wasteDescription: Soil and stones
+                          wasteDescription: Soil and stones containing hazardous substances
                           ewcCodes:
-                            - '170504'
+                            - '170503'
                           pops:
                             isPresent: false
                           hazardous:
-                            isPresent: false
+                            isPresent: true
+                            codes:
+                              - HP_14
+                            componentsSource: GUIDANCE
+                            componentsNotApplicable: true
                         physicalDetails:
                           form: MIXED
                           containerType: LOO
@@ -8182,12 +8958,13 @@ paths:
                           - '200301'
                         pops:
                           isPresent: true
-                          sourceOfComponents: OWN_TESTING
+                          componentsSource: OWN_TESTING
                           components:
                             - code: PFOA
-                              concentration: 0.5
+                              unit: MG_PER_KG
+                              amount: 0.5
                             - code: PFOS
-                              concentrationThresholdOperator: LESS_THAN
+                              threshold: LESS_THAN
                         hazardous:
                           isPresent: false
                       physicalDetails:
@@ -8221,7 +8998,7 @@ paths:
             application/json:
               schema:
                 $schema: https://json-schema.org/draft/2020-12/schema
-                title: Record receipt without delivery response
+                title: Record undocumented receipt response
                 description: 'Response returned when a receipt is recorded without a Delivery ID. Same shape as recording a receipt against a delivery: `data.deliveryId` is the new empty Delivery minted for it.'
                 type: object
                 required:
@@ -8878,65 +9655,6 @@ paths:
                     - containerCount
                     - totalWeight
                   additionalProperties: false
-                hazardous:
-                  description: Whether the waste received has hazardous properties, and if so which. Required, even when there are none.
-                  $schema: https://json-schema.org/draft/2020-12/schema
-                  title: Hazardous properties
-                  examples:
-                    - isPresent: true
-                      codes:
-                        - HP_4
-                        - HP_8
-                    - isPresent: false
-                  type: object
-                  if:
-                    properties:
-                      isPresent:
-                        const: true
-                    required:
-                      - isPresent
-                  then:
-                    properties:
-                      codes: {}
-                    required:
-                      - codes
-                    description: Required when 'isPresent' is true
-                  else:
-                    properties:
-                      codes:
-                        not: {}
-                        description: Not allowed unless 'isPresent' is true
-                  properties:
-                    isPresent:
-                      type: boolean
-                      description: Whether the waste item has any hazardous properties.
-                    codes:
-                      type: array
-                      minItems: 1
-                      items:
-                        type: string
-                        enum:
-                          - HP_1
-                          - HP_2
-                          - HP_3
-                          - HP_4
-                          - HP_5
-                          - HP_6
-                          - HP_7
-                          - HP_8
-                          - HP_9
-                          - HP_10
-                          - HP_11
-                          - HP_12
-                          - HP_13
-                          - HP_14
-                          - HP_15
-                          - HP_POP
-                        description: 'A hazardous property code: HP_1 to HP_15, or HP_POP.'
-                      description: The hazardous property codes that apply to the waste item. At least one is required when isPresent is true; not allowed otherwise. Duplicates are accepted.
-                  required:
-                    - isPresent
-                  additionalProperties: false
                 treatments:
                   description: The disposal or recovery operations applied to the waste received. At least one is required.
                   $schema: https://json-schema.org/draft/2020-12/schema
@@ -9197,7 +9915,6 @@ paths:
                 - carrier
                 - receiver
                 - physicalDetails
-                - hazardous
                 - treatments
               additionalProperties: false
             examples:
@@ -9232,8 +9949,6 @@ paths:
                       amount: 248.2
                       unit: KILOGRAMS
                       isEstimate: false
-                  hazardous:
-                    isPresent: false
                   treatments:
                     - disposalOrRecoveryCode: R3
                       weight:

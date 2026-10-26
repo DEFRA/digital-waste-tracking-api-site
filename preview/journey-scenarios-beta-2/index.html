@@ -11,6 +11,10 @@
         <link rel="canonical" href="https://defra.github.io/digital-waste-tracking-api-site/preview/journey-scenarios-beta-2/">
       
       
+        <link rel="prev" href="../software-provider-integration-guidance/">
+      
+      
+        <link rel="next" href="../api/openapi-beta-2/">
       
       
         
@@ -21,7 +25,7 @@
     
     
       
-        <title>Digital Waste Tracking API: journey scenarios - Beta 2 - Digital Waste Tracking API</title>
+        <title>Journey scenarios (beta-2) - Digital Waste Tracking API</title>
       
     
     
@@ -122,7 +126,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Digital Waste Tracking API: journey scenarios - Beta 2
+              Journey scenarios (beta-2)
             
           </span>
         </div>
@@ -206,10 +210,12 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
+      <li class="md-tabs__item md-tabs__item--active">
         <a href=".." class="md-tabs__link">
           
   
@@ -280,6 +286,8 @@
       
   
   
+    
+  
   
   
     
@@ -305,14 +313,17 @@
     
     
       
+        
+        
+      
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" checked>
         
           
           <div class="md-nav__link md-nav__container">
@@ -334,13 +345,13 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_1" id="__nav_1_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_1" id="__nav_1_label" tabindex="">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_1">
             <span class="md-nav__icon md-icon"></span>
             
@@ -351,6 +362,34 @@
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../roadmap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Development roadmap
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
               
             
               
@@ -385,17 +424,26 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../journey-scenarios-beta-1.md" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
   <span class="md-ellipsis">
     
   
-    Journey scenarios (beta-1)
+    Journey scenarios (beta-2)
   
 
     
@@ -404,34 +452,7 @@
   
 
       </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../receiver-details-reference-guide/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Receiver details reference guide
-  
-
-    
-  </span>
-  
-  
-
-      </a>
+      
     </li>
   
 
@@ -559,8 +580,8 @@
 <h1 id="digital-waste-tracking-api-journey-scenarios-beta-2">Digital Waste Tracking API: journey scenarios - Beta 2</h1>
 <p>The Digital Waste Tracking API will enable a variety of journey scenarios which will be rolled out through the various Beta incarnations. Beta 2 adds new journeys to the original journeys in Beta 1 and will be the first release of the DWT API where you can record a waste movement from start to finish, with full input validation on every request.</p>
 <p><br></p>
-<p><a href="../../software-provider-integration-guidance.md">A reminder of our original DWT API integration guidance</a></p>
-<p><br> </p>
+<p><a href="../software-provider-integration-guidance/">A reminder of our original DWT API integration guidance</a></p>
+<p><br></p>
 <h2 id="b1a-single-non-hazardous-movement">B1A - Single non-hazardous movement</h2>
 <p>A waste movement is made up of 4 events:</p>
 <ol>
@@ -572,7 +593,7 @@
 <p>You need a valid Movement ID to record a collection or a delivery.</p>
 <p><img alt="Single movement" src="../images/dwt-scenario-01-single-movement.png" /></p>
 <h2 id="b1b-several-non-hazardous-movements-delivered-together">B1B - Several non-hazardous movements delivered together</h2>
-<p>You can deliver several non-hazardous movements to a receiving site in one delivery. To do this, list all their Movement IDs when you call <code>POST /deliveries</code>. This returns one new Delivery ID for the whole group. </p>
+<p>You can deliver several non-hazardous movements to a receiving site in one delivery. To do this, list all their Movement IDs when you call <code>POST /deliveries</code>. This returns one new Delivery ID for the whole group.</p>
 <p>The receiving site uses this Delivery ID to record the receipt, using <code>POST /deliveries/{deliveryId}/receipt</code>.</p>
 <p><img alt="Several movements, one delivery" src="../images/dwt-scenario-02-several-movements-one-delivery.png" /></p>
 <h2 id="b1c-waste-delivered-to-more-than-one-receiving-site">B1C - Waste delivered to more than one receiving site</h2>
