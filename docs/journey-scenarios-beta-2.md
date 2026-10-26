@@ -4,9 +4,9 @@ The Digital Waste Tracking API will enable a variety of journey scenarios which 
 
 <br>
 
-[A reminder of our original DWT API integration guidance](../../software-provider-integration-guidance.md)
+[A reminder of our original DWT API integration guidance](software-provider-integration-guidance.md)
 
-<br> 
+<br>
 
 ## B1A - Single non-hazardous movement
 
@@ -23,7 +23,7 @@ You need a valid Movement ID to record a collection or a delivery.
 
 ## B1B - Several non-hazardous movements delivered together
 
-You can deliver several non-hazardous movements to a receiving site in one delivery. To do this, list all their Movement IDs when you call `POST /deliveries`. This returns one new Delivery ID for the whole group. 
+You can deliver several non-hazardous movements to a receiving site in one delivery. To do this, list all their Movement IDs when you call `POST /deliveries`. This returns one new Delivery ID for the whole group.
 
 The receiving site uses this Delivery ID to record the receipt, using `POST /deliveries/{deliveryId}/receipt`.
 
@@ -35,13 +35,11 @@ Waste from one or more movements can be split between more than one receiving si
 
 ![More than one receiving site](./images/dwt-scenario-03-more-than-one-receiving-site.png)
 
-
 ## B1D - Waste received without a Delivery ID
 
 A receiving site can accept waste that arrives without a Delivery ID. Record the receipt with `POST /receipts`, and explain why there’s no Delivery ID in `reasonForNoDeliveryId`. This returns a new Delivery ID for the receipt.
 
 ![Received without delivery ID](./images/dwt-scenario-04-received-without-delivery-id.png)
-
 
 ## B2A - Hazardous movement
 
@@ -51,18 +49,16 @@ When you record the delivery, `POST /deliveries` still returns a Delivery ID, ho
 
 ![Hazardous movement](./images/dwt-scenario-05-hazardous-movement.png)
 
-
 ## B2B - Hazardous and non-hazardous movements delivered together
 
 You can include hazardous and non-hazardous movements in the same `POST /deliveries` request. The response gives you:
 
-  - one new Delivery ID for all the non-hazardous movements together
-  - one Delivery ID for each hazardous movement, which is the same as its initial Movement ID
+- one new Delivery ID for all the non-hazardous movements together
+- one Delivery ID for each hazardous movement, which is the same as its initial Movement ID
 
 Hazardous movements cannot be grouped with other hazardous movements for receipt.
 
 ![Hazardous and non-hazardous together](./images/dwt-scenario-06-hazardous-and-non-hazardous-together.png)
-
 
 ## B2C - Linking related movements
 
@@ -71,17 +67,3 @@ Some jobs need more than one movement, for example when waste is removed over se
 To link these movements, add the same reference to each one when you create it with `POST /movements`.
 
 ![Linking related movements](./images/dwt-scenario-08-linking-related-movements.png)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
