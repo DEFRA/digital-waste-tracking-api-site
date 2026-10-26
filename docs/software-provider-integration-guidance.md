@@ -1,6 +1,6 @@
 # Digital Waste Tracking: API integration guidance
 
-**Status:** draft outline, v0.1
+**Status:** draft outline, v1.0
 
 **Owner:** Dave Oliver
 
@@ -22,21 +22,13 @@
 
 ## 1. Introduction
 
-**Purpose of document:** This document provides guidance for software providers building producer, broker, carrier/driver or receiver-facing systems that will interact with Defra's dedicated API to record waste movements.
-
-**Service background:** Digital Waste Tracking (DWT) is a UK cross-government programme to build a single digital service for tracking waste movements, ultimately replacing paper-based waste transfer notes (WTNs). Its main aims are to reduce waste crime and misclassification, improve data on how waste moves domestically to support the transition to a circular economy, and cut the administrative burden of the current fragmented, paper-based system.
-
-**Current status:** The current focus of the DWT development team is to reach the first 'development milestone' of the service (Aug/Sep 2026) - to test API interactions in a sandbox environment and use the findings to better refine the service for rollout. The scope of this document is therefore focused on the integration API only, rather than the overall DWT service, which will follow. While the overall concept and rollout timetable are approved, some coding and naming elements may evolve as the development progresses.
-
-![DWT events](./images/dwt-api-delivery-roadmap-milestone-1.png)
-
-**[API roadmap – full view](./images/dwt-api-delivery-roadmap-19-10-26.png)**
+This document provides guidance for software providers building producer, broker, carrier/driver or receiver-facing systems that will interact with Defra's dedicated API to record waste movements.
 
 <br>
 
 ## 2. Service overview
 
-![DWT events](./images/dwt-movement-delivery-events.png)
+<img src="images/dwt-movement-delivery-events.png" alt="DWT events" width="600">
 
 ### 2.1 Lifecycle stages
 
@@ -87,20 +79,20 @@ Many Movement IDs can be linked to a single Delivery ID at delivery; a Delivery 
 
 | Term | Meaning |
 | --- | --- |
-| DWT | Digital Waste Tracking – the digital service this API supports |
-| EA | Environment Agency |
-| EWC | European Waste Catalogue – the code list used to classify waste type |
-| HWCN | Hazardous Waste Consignment Note – the paper record DWT replaces for hazardous waste |
-| POPs | Persistent organic pollutants – chemicals subject to additional handling and reporting rules |
-| Waste Movement ID | Identifier issued when a movement is created, before waste moves |
-| Waste Delivery ID | Identifier issued at delivery; can link multiple Movement IDs together |
-| WTN | Waste Transfer Note – the paper record DWT replaces for non-hazardous waste |
+| **DWT** | Digital Waste Tracking – the digital service this API supports |
+| **EA** | Environment Agency |
+| **EWC** | European Waste Catalogue – the code list used to classify waste type |
+| **HWCN** | Hazardous Waste Consignment Note – the paper record DWT replaces for hazardous waste |
+| **POPs** | Persistent organic pollutants – chemicals subject to additional handling and reporting rules |
+| **Waste Movement ID** | Identifier issued when a movement is created, before waste moves |
+| **Waste Delivery ID** | Identifier issued at delivery; can link multiple Movement IDs together |
+| **WTN** | Waste Transfer Note – the paper record DWT replaces for non-hazardous waste |
 
 ## Appendix B: endpoint quick reference
 
 | Method | Path                                 |
 | ------ | ------------------------------------ |
-| POST   | `/movements`                         |
-| POST   | `/movements/{movementId}/collection` |
-| POST   | `/deliveries`                        |
-| POST   | `/deliveries/{deliveryId}/receipt`   |
+| **POST**   | `/movements`                         |
+| **POST**   | `/movements/{movementId}/collection` |
+| **POST**   | `/deliveries`                        |
+| **POST**   | `/deliveries/{deliveryId}/receipt`   |
