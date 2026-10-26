@@ -16,6 +16,7 @@ The team is currently focused on Beta-2, with key input from software providers 
 <br>
 
 ## Pages:
+- [Development roadmap](roadmap.md)
 - [Software provider integration guidance](software-provider-integration-guidance.md)
 - [API specification (beta-2)](api/openapi-beta-2.md)
 - [Problem types](problems/index.md): the errors the API returns, and how to handle them
