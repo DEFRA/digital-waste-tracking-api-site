@@ -570,21 +570,21 @@
 <li>Record the receipt with <code>POST /deliveries/{deliveryId}/receipt</code>.</li>
 </ol>
 <p>You need a valid Movement ID to record a collection or a delivery.</p>
-<p><img alt="Single movement" src="../../images/dwt-scenario-01-single-movement.png" /></p>
+<p><img alt="Single movement" src="../images/dwt-scenario-01-single-movement.png" /></p>
 <h2 id="b1b-several-non-hazardous-movements-delivered-together">B1B - Several non-hazardous movements delivered together</h2>
 <p>You can deliver several non-hazardous movements to a receiving site in one delivery. To do this, list all their Movement IDs when you call <code>POST /deliveries</code>. This returns one new Delivery ID for the whole group. </p>
 <p>The receiving site uses this Delivery ID to record the receipt, using <code>POST /deliveries/{deliveryId}/receipt</code>.</p>
-<p><img alt="Several movements, one delivery" src="../../images/dwt-scenario-02-several-movements-one-delivery.png" /></p>
+<p><img alt="Several movements, one delivery" src="../images/dwt-scenario-02-several-movements-one-delivery.png" /></p>
 <h2 id="b1c-waste-delivered-to-more-than-one-receiving-site">B1C - Waste delivered to more than one receiving site</h2>
 <p>Waste from one or more movements can be split between more than one receiving site. List the Movement IDs when you call <code>POST /deliveries</code>. Each receiving site then records its own receipt against the Delivery ID, using <code>POST /deliveries/{deliveryId}/receipt</code>.</p>
-<p><img alt="More than one receiving site" src="../../images/dwt-scenario-03-more-than-one-receiving-site.png" /></p>
+<p><img alt="More than one receiving site" src="../images/dwt-scenario-03-more-than-one-receiving-site.png" /></p>
 <h2 id="b1d-waste-received-without-a-delivery-id">B1D - Waste received without a Delivery ID</h2>
 <p>A receiving site can accept waste that arrives without a Delivery ID. Record the receipt with <code>POST /receipts</code>, and explain why there’s no Delivery ID in <code>reasonForNoDeliveryId</code>. This returns a new Delivery ID for the receipt.</p>
-<p><img alt="Received without delivery ID" src="../../images/dwt-scenario-04-received-without-delivery-id.png" /></p>
+<p><img alt="Received without delivery ID" src="../images/dwt-scenario-04-received-without-delivery-id.png" /></p>
 <h2 id="b2a-hazardous-movement">B2A - Hazardous movement</h2>
 <p>A movement is hazardous if any of its waste items has a hazardous European Waste Catalogue (EWC) code when you create it with <code>POST /movements</code>. It stays hazardous for all 4 events.</p>
 <p>When you record the delivery, <code>POST /deliveries</code> still returns a Delivery ID, however this is the same code as the initial Movement ID. Use it to record the receipt in the usual way.</p>
-<p><img alt="Hazardous movement" src="../../images/dwt-scenario-05-hazardous-movement.png" /></p>
+<p><img alt="Hazardous movement" src="../images/dwt-scenario-05-hazardous-movement.png" /></p>
 <h2 id="b2b-hazardous-and-non-hazardous-movements-delivered-together">B2B - Hazardous and non-hazardous movements delivered together</h2>
 <p>You can include hazardous and non-hazardous movements in the same <code>POST /deliveries</code> request. The response gives you:</p>
 <ul>
@@ -592,11 +592,11 @@
 <li>one Delivery ID for each hazardous movement, which is the same as its initial Movement ID</li>
 </ul>
 <p>Hazardous movements cannot be grouped with other hazardous movements for receipt.</p>
-<p><img alt="Hazardous and non-hazardous together" src="../../images/dwt-scenario-06-hazardous-and-non-hazardous-together.png" /></p>
+<p><img alt="Hazardous and non-hazardous together" src="../images/dwt-scenario-06-hazardous-and-non-hazardous-together.png" /></p>
 <h2 id="b2c-linking-related-movements">B2C - Linking related movements</h2>
 <p>Some jobs need more than one movement, for example when waste is removed over several trips.</p>
 <p>To link these movements, add the same reference to each one when you create it with <code>POST /movements</code>.</p>
-<p><img alt="Linking related movements" src="../../images/dwt-scenario-08-linking-related-movements.png" /></p>
+<p><img alt="Linking related movements" src="../images/dwt-scenario-08-linking-related-movements.png" /></p>
 
 
 
