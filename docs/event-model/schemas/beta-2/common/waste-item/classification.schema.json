@@ -18,17 +18,25 @@
       "ewcCodes": ["200121"],
       "pops": {
         "isPresent": true,
-        "sourceOfComponents": "GUIDANCE",
+        "componentsSource": "GUIDANCE",
         "components": [
           {
             "code": "PFOS",
-            "concentrationThresholdOperator": "LESS_THAN"
+            "threshold": "LESS_THAN"
           }
         ]
       },
       "hazardous": {
         "isPresent": true,
-        "codes": ["HP_6", "HP_14"]
+        "codes": ["HP_6", "HP_14"],
+        "componentsSource": "PROVIDED_WITH_WASTE",
+        "componentsNotApplicable": false,
+        "components": [
+          {
+            "name": "Mercury",
+            "threshold": "EQUAL_TO"
+          }
+        ]
       }
     }
   ],
