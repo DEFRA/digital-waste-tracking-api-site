@@ -28,7 +28,7 @@ This document provides guidance for software providers building producer, broker
 
 ## 2. Service overview
 
-<img src="images/dwt-movement-delivery-events.png" alt="DWT events" width="600">
+![DWT events](images/dwt-movement-delivery-events.png){ width="600" }
 
 ### 2.1 Lifecycle stages
 
@@ -90,9 +90,9 @@ Many Movement IDs can be linked to a single Delivery ID at delivery; a Delivery 
 
 ## Appendix B: endpoint quick reference
 
-| Method | Path                                 |
-| ------ | ------------------------------------ |
-| **POST**   | `/movements`                         |
-| **POST**   | `/movements/{movementId}/collection` |
-| **POST**   | `/deliveries`                        |
-| **POST**   | `/deliveries/{deliveryId}/receipt`   |
+| Method   | Path                                 |
+| -------- | ------------------------------------ |
+| **POST** | `/movements`                         |
+| **POST** | `/movements/{movementId}/collection` |
+| **POST** | `/deliveries`                        |
+| **POST** | `/deliveries/{deliveryId}/receipt`   |
