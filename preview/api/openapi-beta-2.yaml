@@ -95,7 +95,7 @@ components:
           title: Producer
           description: The organisation or party the waste originates from. Required fields vary by wasteSource — see the variants below. For Commercial and Municipal, contactDetails is required (with at least one of emailAddress or phoneNumber within it), and exactly one of authorisationNumber or reasonForNoAuthorisationNumber must be provided; not applicable for Household, where contactDetails and the rest remain forbidden.
           examples:
-            - wasteSource: Commercial
+            - wasteSource: COMMERCIAL
               organisationName: ACME Waste Producers Ltd
               authorisationNumber: EAS/P/123456
               sicCode: '38110'
@@ -105,7 +105,7 @@ components:
               contactDetails:
                 emailAddress: producer@example.com
                 phoneNumber: '01234567890'
-            - wasteSource: Municipal
+            - wasteSource: MUNICIPAL
               organisationName: Test Council
               reasonForNoAuthorisationNumber: TBC
               address:
@@ -114,13 +114,13 @@ components:
               contactDetails:
                 emailAddress: waste.services@example.gov.uk
                 phoneNumber: '01234567890'
-            - wasteSource: Household
+            - wasteSource: HOUSEHOLD
           oneOf:
             - $schema: https://json-schema.org/draft/2020-12/schema
               title: Producer (Household)
               description: Producer fields specific to household waste. organisationName, authorisationNumber, sicCode, contactDetails and address do not apply and must not be provided.
               examples:
-                - wasteSource: Household
+                - wasteSource: HOUSEHOLD
               type: object
               allOf:
                 - $schema: https://json-schema.org/draft/2020-12/schema
@@ -131,7 +131,7 @@ components:
                 - type: object
                   properties:
                     wasteSource:
-                      const: Household
+                      const: HOUSEHOLD
                       description: Waste originates from a household.
                   required:
                     - wasteSource
@@ -142,7 +142,7 @@ components:
               title: Producer (Commercial)
               description: Producer fields specific to commercial waste. organisationName, sicCode, address and contactDetails are required. Exactly one of authorisationNumber or reasonForNoAuthorisationNumber must be provided.
               examples:
-                - wasteSource: Commercial
+                - wasteSource: COMMERCIAL
                   organisationName: ACME Waste Producers Ltd
                   authorisationNumber: EAS/P/123456
                   sicCode: '38110'
@@ -178,7 +178,7 @@ components:
                     description: Required when 'authorisationNumber' is not provided
                   properties:
                     wasteSource:
-                      const: Commercial
+                      const: COMMERCIAL
                       description: Waste originates from a commercial source.
                     organisationName:
                       type: string
@@ -263,7 +263,7 @@ components:
               title: Producer (Municipal)
               description: Producer fields specific to municipal waste. organisationName, address and contactDetails are required; sicCode is optional. Exactly one of authorisationNumber or reasonForNoAuthorisationNumber must be provided.
               examples:
-                - wasteSource: Municipal
+                - wasteSource: MUNICIPAL
                   organisationName: Test Council
                   reasonForNoAuthorisationNumber: TBC
                   address:
@@ -298,7 +298,7 @@ components:
                     description: Required when 'authorisationNumber' is not provided
                   properties:
                     wasteSource:
-                      const: Municipal
+                      const: MUNICIPAL
                       description: Waste originates from a municipal source.
                     organisationName:
                       type: string
@@ -452,7 +452,7 @@ components:
           items:
             $schema: https://json-schema.org/draft/2020-12/schema
             title: Carrier
-            description: A single waste carrier. organisationName, meansOfTransport and contactDetails are required, and exactly one of registrationNumber or reasonForNoRegistrationNumber must be provided. vehicleRegistration is required for Road and otherMeansOfTransport for Other; each is forbidden otherwise. address is optional.
+            description: A single waste carrier. organisationName, meansOfTransport and contactDetails are required, and exactly one of registrationNumber or reasonForNoRegistrationNumber must be provided. vehicleRegistration is required for ROAD and otherMeansOfTransport for OTHER; each is forbidden otherwise. address is optional.
             type: object
             allOf:
               - if:
@@ -474,7 +474,7 @@ components:
               - if:
                   properties:
                     meansOfTransport:
-                      const: Road
+                      const: ROAD
                   required:
                     - meansOfTransport
                 then:
@@ -482,16 +482,16 @@ components:
                     vehicleRegistration: {}
                   required:
                     - vehicleRegistration
-                  description: Required when 'meansOfTransport' is 'Road'
+                  description: Required when 'meansOfTransport' is 'ROAD'
                 else:
                   properties:
                     vehicleRegistration:
                       not: {}
-                      description: Not allowed unless 'meansOfTransport' is 'Road'
+                      description: Not allowed unless 'meansOfTransport' is 'ROAD'
               - if:
                   properties:
                     meansOfTransport:
-                      const: Other
+                      const: OTHER
                   required:
                     - meansOfTransport
                 then:
@@ -499,12 +499,12 @@ components:
                     otherMeansOfTransport: {}
                   required:
                     - otherMeansOfTransport
-                  description: Required when 'meansOfTransport' is 'Other'
+                  description: Required when 'meansOfTransport' is 'OTHER'
                 else:
                   properties:
                     otherMeansOfTransport:
                       not: {}
-                      description: Not allowed unless 'meansOfTransport' is 'Other'
+                      description: Not allowed unless 'meansOfTransport' is 'OTHER'
             properties:
               organisationName:
                 type: string
@@ -527,22 +527,22 @@ components:
               meansOfTransport:
                 type: string
                 enum:
-                  - Road
-                  - Rail
-                  - Air
-                  - Sea
-                  - Inland Waterway
-                  - Piped
-                  - Other
+                  - ROAD
+                  - RAIL
+                  - AIR
+                  - SEA
+                  - INLAND_WATERWAY
+                  - PIPED
+                  - OTHER
                 description: How the carrier will transport the waste.
               vehicleRegistration:
                 type: string
                 minLength: 1
-                description: Registration of the vehicle carrying the waste. Required when meansOfTransport is Road; forbidden otherwise.
+                description: Registration of the vehicle carrying the waste. Required when meansOfTransport is ROAD; forbidden otherwise.
               otherMeansOfTransport:
                 type: string
                 minLength: 1
-                description: Description of the means of transport. Required when meansOfTransport is Other; forbidden otherwise.
+                description: Description of the means of transport. Required when meansOfTransport is OTHER; forbidden otherwise.
               contactDetails:
                 $schema: https://json-schema.org/draft/2020-12/schema
                 title: Contact details
@@ -1285,7 +1285,7 @@ components:
               items:
                 $schema: https://json-schema.org/draft/2020-12/schema
                 title: Broker or dealer
-                description: A single broker or dealer who arranged the transfer. organisationName and contactDetails are required, and exactly one of registrationNumber or reasonForNoRegistrationNumber must be provided. address is optional.
+                description: A single broker or dealer who arranged the Movement. organisationName and contactDetails are required, and exactly one of registrationNumber or reasonForNoRegistrationNumber must be provided. address is optional.
                 examples:
                   - organisationName: Broker Demo Ltd
                     registrationNumber: CBDU654321
@@ -1320,7 +1320,7 @@ components:
                   organisationName:
                     type: string
                     minLength: 1
-                    description: Name of the broker or dealer organisation who arranged this transfer.
+                    description: Name of the broker or dealer organisation who arranged this Movement.
                   registrationNumber:
                     description: Waste carrier, broker or dealer registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Mutually exclusive with reasonForNoRegistrationNumber — exactly one of the two is required.
                     $schema: https://json-schema.org/draft/2020-12/schema
@@ -1390,9 +1390,9 @@ components:
           title: Supporting references
           description: label/reference pairs for the movement. Both reference and label are required for every entry.
           examples:
-            - - label: PO Number
+            - - label: PO_NUMBER
                 reference: PO-123456
-              - label: Job Number
+              - label: JOB_NUMBER
                 reference: CARRIER-JOB-001
           type: array
           minItems: 1
@@ -1407,12 +1407,12 @@ components:
               label:
                 type: string
                 enum:
-                  - Weighbridge Number
-                  - PO Number
-                  - Job Number
-                  - Invoice Number
-                  - Waste Ticket Number
-                  - Other
+                  - WEIGHBRIDGE_NUMBER
+                  - PO_NUMBER
+                  - JOB_NUMBER
+                  - INVOICE_NUMBER
+                  - WASTE_TICKET_NUMBER
+                  - OTHER
                 description: Label identifying the reference type.
             required:
               - reference
@@ -1480,7 +1480,7 @@ components:
         carrier:
           $schema: https://json-schema.org/draft/2020-12/schema
           title: Carrier
-          description: A single waste carrier. organisationName, meansOfTransport and contactDetails are required, and exactly one of registrationNumber or reasonForNoRegistrationNumber must be provided. vehicleRegistration is required for Road and otherMeansOfTransport for Other; each is forbidden otherwise. address is optional.
+          description: A single waste carrier. organisationName, meansOfTransport and contactDetails are required, and exactly one of registrationNumber or reasonForNoRegistrationNumber must be provided. vehicleRegistration is required for ROAD and otherMeansOfTransport for OTHER; each is forbidden otherwise. address is optional.
           type: object
           allOf:
             - if:
@@ -1502,7 +1502,7 @@ components:
             - if:
                 properties:
                   meansOfTransport:
-                    const: Road
+                    const: ROAD
                 required:
                   - meansOfTransport
               then:
@@ -1510,16 +1510,16 @@ components:
                   vehicleRegistration: {}
                 required:
                   - vehicleRegistration
-                description: Required when 'meansOfTransport' is 'Road'
+                description: Required when 'meansOfTransport' is 'ROAD'
               else:
                 properties:
                   vehicleRegistration:
                     not: {}
-                    description: Not allowed unless 'meansOfTransport' is 'Road'
+                    description: Not allowed unless 'meansOfTransport' is 'ROAD'
             - if:
                 properties:
                   meansOfTransport:
-                    const: Other
+                    const: OTHER
                 required:
                   - meansOfTransport
               then:
@@ -1527,12 +1527,12 @@ components:
                   otherMeansOfTransport: {}
                 required:
                   - otherMeansOfTransport
-                description: Required when 'meansOfTransport' is 'Other'
+                description: Required when 'meansOfTransport' is 'OTHER'
               else:
                 properties:
                   otherMeansOfTransport:
                     not: {}
-                    description: Not allowed unless 'meansOfTransport' is 'Other'
+                    description: Not allowed unless 'meansOfTransport' is 'OTHER'
           properties:
             organisationName:
               type: string
@@ -1555,22 +1555,22 @@ components:
             meansOfTransport:
               type: string
               enum:
-                - Road
-                - Rail
-                - Air
-                - Sea
-                - Inland Waterway
-                - Piped
-                - Other
+                - ROAD
+                - RAIL
+                - AIR
+                - SEA
+                - INLAND_WATERWAY
+                - PIPED
+                - OTHER
               description: How the carrier will transport the waste.
             vehicleRegistration:
               type: string
               minLength: 1
-              description: Registration of the vehicle carrying the waste. Required when meansOfTransport is Road; forbidden otherwise.
+              description: Registration of the vehicle carrying the waste. Required when meansOfTransport is ROAD; forbidden otherwise.
             otherMeansOfTransport:
               type: string
               minLength: 1
-              description: Description of the means of transport. Required when meansOfTransport is Other; forbidden otherwise.
+              description: Description of the means of transport. Required when meansOfTransport is OTHER; forbidden otherwise.
             contactDetails:
               $schema: https://json-schema.org/draft/2020-12/schema
               title: Contact details
@@ -1737,7 +1737,7 @@ components:
               items:
                 $schema: https://json-schema.org/draft/2020-12/schema
                 title: Broker or dealer
-                description: A single broker or dealer who arranged the transfer. organisationName and contactDetails are required, and exactly one of registrationNumber or reasonForNoRegistrationNumber must be provided. address is optional.
+                description: A single broker or dealer who arranged the Movement. organisationName and contactDetails are required, and exactly one of registrationNumber or reasonForNoRegistrationNumber must be provided. address is optional.
                 examples:
                   - organisationName: Broker Demo Ltd
                     registrationNumber: CBDU654321
@@ -1772,7 +1772,7 @@ components:
                   organisationName:
                     type: string
                     minLength: 1
-                    description: Name of the broker or dealer organisation who arranged this transfer.
+                    description: Name of the broker or dealer organisation who arranged this Movement.
                   registrationNumber:
                     description: Waste carrier, broker or dealer registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Mutually exclusive with reasonForNoRegistrationNumber — exactly one of the two is required.
                     $schema: https://json-schema.org/draft/2020-12/schema
@@ -1845,9 +1845,9 @@ components:
           title: Supporting references
           description: label/reference pairs for the movement. Both reference and label are required for every entry.
           examples:
-            - - label: PO Number
+            - - label: PO_NUMBER
                 reference: PO-123456
-              - label: Job Number
+              - label: JOB_NUMBER
                 reference: CARRIER-JOB-001
           type: array
           minItems: 1
@@ -1862,12 +1862,12 @@ components:
               label:
                 type: string
                 enum:
-                  - Weighbridge Number
-                  - PO Number
-                  - Job Number
-                  - Invoice Number
-                  - Waste Ticket Number
-                  - Other
+                  - WEIGHBRIDGE_NUMBER
+                  - PO_NUMBER
+                  - JOB_NUMBER
+                  - INVOICE_NUMBER
+                  - WASTE_TICKET_NUMBER
+                  - OTHER
                 description: Label identifying the reference type.
             required:
               - reference
@@ -1909,7 +1909,7 @@ components:
         carrier:
           $schema: https://json-schema.org/draft/2020-12/schema
           title: Carrier
-          description: A single waste carrier. organisationName, meansOfTransport and contactDetails are required, and exactly one of registrationNumber or reasonForNoRegistrationNumber must be provided. vehicleRegistration is required for Road and otherMeansOfTransport for Other; each is forbidden otherwise. address is optional.
+          description: A single waste carrier. organisationName, meansOfTransport and contactDetails are required, and exactly one of registrationNumber or reasonForNoRegistrationNumber must be provided. vehicleRegistration is required for ROAD and otherMeansOfTransport for OTHER; each is forbidden otherwise. address is optional.
           type: object
           allOf:
             - if:
@@ -1931,7 +1931,7 @@ components:
             - if:
                 properties:
                   meansOfTransport:
-                    const: Road
+                    const: ROAD
                 required:
                   - meansOfTransport
               then:
@@ -1939,16 +1939,16 @@ components:
                   vehicleRegistration: {}
                 required:
                   - vehicleRegistration
-                description: Required when 'meansOfTransport' is 'Road'
+                description: Required when 'meansOfTransport' is 'ROAD'
               else:
                 properties:
                   vehicleRegistration:
                     not: {}
-                    description: Not allowed unless 'meansOfTransport' is 'Road'
+                    description: Not allowed unless 'meansOfTransport' is 'ROAD'
             - if:
                 properties:
                   meansOfTransport:
-                    const: Other
+                    const: OTHER
                 required:
                   - meansOfTransport
               then:
@@ -1956,12 +1956,12 @@ components:
                   otherMeansOfTransport: {}
                 required:
                   - otherMeansOfTransport
-                description: Required when 'meansOfTransport' is 'Other'
+                description: Required when 'meansOfTransport' is 'OTHER'
               else:
                 properties:
                   otherMeansOfTransport:
                     not: {}
-                    description: Not allowed unless 'meansOfTransport' is 'Other'
+                    description: Not allowed unless 'meansOfTransport' is 'OTHER'
           properties:
             organisationName:
               type: string
@@ -1984,22 +1984,22 @@ components:
             meansOfTransport:
               type: string
               enum:
-                - Road
-                - Rail
-                - Air
-                - Sea
-                - Inland Waterway
-                - Piped
-                - Other
+                - ROAD
+                - RAIL
+                - AIR
+                - SEA
+                - INLAND_WATERWAY
+                - PIPED
+                - OTHER
               description: How the carrier will transport the waste.
             vehicleRegistration:
               type: string
               minLength: 1
-              description: Registration of the vehicle carrying the waste. Required when meansOfTransport is Road; forbidden otherwise.
+              description: Registration of the vehicle carrying the waste. Required when meansOfTransport is ROAD; forbidden otherwise.
             otherMeansOfTransport:
               type: string
               minLength: 1
-              description: Description of the means of transport. Required when meansOfTransport is Other; forbidden otherwise.
+              description: Description of the means of transport. Required when meansOfTransport is OTHER; forbidden otherwise.
             contactDetails:
               $schema: https://json-schema.org/draft/2020-12/schema
               title: Contact details
@@ -2058,9 +2058,9 @@ components:
           title: Supporting references
           description: label/reference pairs for the movement. Both reference and label are required for every entry.
           examples:
-            - - label: PO Number
+            - - label: PO_NUMBER
                 reference: PO-123456
-              - label: Job Number
+              - label: JOB_NUMBER
                 reference: CARRIER-JOB-001
           type: array
           minItems: 1
@@ -2075,12 +2075,12 @@ components:
               label:
                 type: string
                 enum:
-                  - Weighbridge Number
-                  - PO Number
-                  - Job Number
-                  - Invoice Number
-                  - Waste Ticket Number
-                  - Other
+                  - WEIGHBRIDGE_NUMBER
+                  - PO_NUMBER
+                  - JOB_NUMBER
+                  - INVOICE_NUMBER
+                  - WASTE_TICKET_NUMBER
+                  - OTHER
                 description: Label identifying the reference type.
             required:
               - reference
@@ -2096,10 +2096,16 @@ components:
       description: Payload for POST /beta-2/deliveries/{deliveryId}/receipt.
       type: object
       properties:
+        receiptDateTime:
+          type: string
+          format: date-time
+          description: When the waste was received at the receiver's site, as an ISO 8601 date-time with a timezone. Must not be later than the time the receipt is submitted; the service checks that, as it depends on when the request arrives.
+          examples:
+            - '2026-10-14T09:30:00Z'
         carrier:
           $schema: https://json-schema.org/draft/2020-12/schema
           title: Carrier
-          description: A single waste carrier. organisationName, meansOfTransport and contactDetails are required, and exactly one of registrationNumber or reasonForNoRegistrationNumber must be provided. vehicleRegistration is required for Road and otherMeansOfTransport for Other; each is forbidden otherwise. address is optional.
+          description: A single waste carrier. organisationName, meansOfTransport and contactDetails are required, and exactly one of registrationNumber or reasonForNoRegistrationNumber must be provided. vehicleRegistration is required for ROAD and otherMeansOfTransport for OTHER; each is forbidden otherwise. address is optional.
           type: object
           allOf:
             - if:
@@ -2121,7 +2127,7 @@ components:
             - if:
                 properties:
                   meansOfTransport:
-                    const: Road
+                    const: ROAD
                 required:
                   - meansOfTransport
               then:
@@ -2129,16 +2135,16 @@ components:
                   vehicleRegistration: {}
                 required:
                   - vehicleRegistration
-                description: Required when 'meansOfTransport' is 'Road'
+                description: Required when 'meansOfTransport' is 'ROAD'
               else:
                 properties:
                   vehicleRegistration:
                     not: {}
-                    description: Not allowed unless 'meansOfTransport' is 'Road'
+                    description: Not allowed unless 'meansOfTransport' is 'ROAD'
             - if:
                 properties:
                   meansOfTransport:
-                    const: Other
+                    const: OTHER
                 required:
                   - meansOfTransport
               then:
@@ -2146,12 +2152,12 @@ components:
                   otherMeansOfTransport: {}
                 required:
                   - otherMeansOfTransport
-                description: Required when 'meansOfTransport' is 'Other'
+                description: Required when 'meansOfTransport' is 'OTHER'
               else:
                 properties:
                   otherMeansOfTransport:
                     not: {}
-                    description: Not allowed unless 'meansOfTransport' is 'Other'
+                    description: Not allowed unless 'meansOfTransport' is 'OTHER'
           properties:
             organisationName:
               type: string
@@ -2174,22 +2180,22 @@ components:
             meansOfTransport:
               type: string
               enum:
-                - Road
-                - Rail
-                - Air
-                - Sea
-                - Inland Waterway
-                - Piped
-                - Other
+                - ROAD
+                - RAIL
+                - AIR
+                - SEA
+                - INLAND_WATERWAY
+                - PIPED
+                - OTHER
               description: How the carrier will transport the waste.
             vehicleRegistration:
               type: string
               minLength: 1
-              description: Registration of the vehicle carrying the waste. Required when meansOfTransport is Road; forbidden otherwise.
+              description: Registration of the vehicle carrying the waste. Required when meansOfTransport is ROAD; forbidden otherwise.
             otherMeansOfTransport:
               type: string
               minLength: 1
-              description: Description of the means of transport. Required when meansOfTransport is Other; forbidden otherwise.
+              description: Description of the means of transport. Required when meansOfTransport is OTHER; forbidden otherwise.
             contactDetails:
               $schema: https://json-schema.org/draft/2020-12/schema
               title: Contact details
@@ -2525,7 +2531,7 @@ components:
               items:
                 $schema: https://json-schema.org/draft/2020-12/schema
                 title: Broker or dealer
-                description: A single broker or dealer who arranged the transfer. organisationName and contactDetails are required, and exactly one of registrationNumber or reasonForNoRegistrationNumber must be provided. address is optional.
+                description: A single broker or dealer who arranged the Movement. organisationName and contactDetails are required, and exactly one of registrationNumber or reasonForNoRegistrationNumber must be provided. address is optional.
                 examples:
                   - organisationName: Broker Demo Ltd
                     registrationNumber: CBDU654321
@@ -2560,7 +2566,7 @@ components:
                   organisationName:
                     type: string
                     minLength: 1
-                    description: Name of the broker or dealer organisation who arranged this transfer.
+                    description: Name of the broker or dealer organisation who arranged this Movement.
                   registrationNumber:
                     description: Waste carrier, broker or dealer registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Mutually exclusive with reasonForNoRegistrationNumber — exactly one of the two is required.
                     $schema: https://json-schema.org/draft/2020-12/schema
@@ -2630,9 +2636,9 @@ components:
           title: Supporting references
           description: label/reference pairs for the movement. Both reference and label are required for every entry.
           examples:
-            - - label: PO Number
+            - - label: PO_NUMBER
                 reference: PO-123456
-              - label: Job Number
+              - label: JOB_NUMBER
                 reference: CARRIER-JOB-001
           type: array
           minItems: 1
@@ -2647,18 +2653,19 @@ components:
               label:
                 type: string
                 enum:
-                  - Weighbridge Number
-                  - PO Number
-                  - Job Number
-                  - Invoice Number
-                  - Waste Ticket Number
-                  - Other
+                  - WEIGHBRIDGE_NUMBER
+                  - PO_NUMBER
+                  - JOB_NUMBER
+                  - INVOICE_NUMBER
+                  - WASTE_TICKET_NUMBER
+                  - OTHER
                 description: Label identifying the reference type.
             required:
               - reference
               - label
             additionalProperties: false
       required:
+        - receiptDateTime
         - carrier
         - receiver
         - physicalDetails
@@ -2676,10 +2683,16 @@ components:
           description: Mandatory explanation for why this receipt is being recorded without a Delivery ID.
           examples:
             - No delivery was recorded prior to receipt; waste received directly from the producer.
+        receiptDateTime:
+          type: string
+          format: date-time
+          description: When the waste was received at the receiver's site, as an ISO 8601 date-time with a timezone. Must not be later than the time the receipt is submitted; the service checks that, as it depends on when the request arrives.
+          examples:
+            - '2026-10-14T09:30:00Z'
         carrier:
           $schema: https://json-schema.org/draft/2020-12/schema
           title: Carrier
-          description: A single waste carrier. organisationName, meansOfTransport and contactDetails are required, and exactly one of registrationNumber or reasonForNoRegistrationNumber must be provided. vehicleRegistration is required for Road and otherMeansOfTransport for Other; each is forbidden otherwise. address is optional.
+          description: A single waste carrier. organisationName, meansOfTransport and contactDetails are required, and exactly one of registrationNumber or reasonForNoRegistrationNumber must be provided. vehicleRegistration is required for ROAD and otherMeansOfTransport for OTHER; each is forbidden otherwise. address is optional.
           type: object
           allOf:
             - if:
@@ -2701,7 +2714,7 @@ components:
             - if:
                 properties:
                   meansOfTransport:
-                    const: Road
+                    const: ROAD
                 required:
                   - meansOfTransport
               then:
@@ -2709,16 +2722,16 @@ components:
                   vehicleRegistration: {}
                 required:
                   - vehicleRegistration
-                description: Required when 'meansOfTransport' is 'Road'
+                description: Required when 'meansOfTransport' is 'ROAD'
               else:
                 properties:
                   vehicleRegistration:
                     not: {}
-                    description: Not allowed unless 'meansOfTransport' is 'Road'
+                    description: Not allowed unless 'meansOfTransport' is 'ROAD'
             - if:
                 properties:
                   meansOfTransport:
-                    const: Other
+                    const: OTHER
                 required:
                   - meansOfTransport
               then:
@@ -2726,12 +2739,12 @@ components:
                   otherMeansOfTransport: {}
                 required:
                   - otherMeansOfTransport
-                description: Required when 'meansOfTransport' is 'Other'
+                description: Required when 'meansOfTransport' is 'OTHER'
               else:
                 properties:
                   otherMeansOfTransport:
                     not: {}
-                    description: Not allowed unless 'meansOfTransport' is 'Other'
+                    description: Not allowed unless 'meansOfTransport' is 'OTHER'
           properties:
             organisationName:
               type: string
@@ -2754,22 +2767,22 @@ components:
             meansOfTransport:
               type: string
               enum:
-                - Road
-                - Rail
-                - Air
-                - Sea
-                - Inland Waterway
-                - Piped
-                - Other
+                - ROAD
+                - RAIL
+                - AIR
+                - SEA
+                - INLAND_WATERWAY
+                - PIPED
+                - OTHER
               description: How the carrier will transport the waste.
             vehicleRegistration:
               type: string
               minLength: 1
-              description: Registration of the vehicle carrying the waste. Required when meansOfTransport is Road; forbidden otherwise.
+              description: Registration of the vehicle carrying the waste. Required when meansOfTransport is ROAD; forbidden otherwise.
             otherMeansOfTransport:
               type: string
               minLength: 1
-              description: Description of the means of transport. Required when meansOfTransport is Other; forbidden otherwise.
+              description: Description of the means of transport. Required when meansOfTransport is OTHER; forbidden otherwise.
             contactDetails:
               $schema: https://json-schema.org/draft/2020-12/schema
               title: Contact details
@@ -3504,7 +3517,7 @@ components:
               items:
                 $schema: https://json-schema.org/draft/2020-12/schema
                 title: Broker or dealer
-                description: A single broker or dealer who arranged the transfer. organisationName and contactDetails are required, and exactly one of registrationNumber or reasonForNoRegistrationNumber must be provided. address is optional.
+                description: A single broker or dealer who arranged the Movement. organisationName and contactDetails are required, and exactly one of registrationNumber or reasonForNoRegistrationNumber must be provided. address is optional.
                 examples:
                   - organisationName: Broker Demo Ltd
                     registrationNumber: CBDU654321
@@ -3539,7 +3552,7 @@ components:
                   organisationName:
                     type: string
                     minLength: 1
-                    description: Name of the broker or dealer organisation who arranged this transfer.
+                    description: Name of the broker or dealer organisation who arranged this Movement.
                   registrationNumber:
                     description: Waste carrier, broker or dealer registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Mutually exclusive with reasonForNoRegistrationNumber — exactly one of the two is required.
                     $schema: https://json-schema.org/draft/2020-12/schema
@@ -3609,9 +3622,9 @@ components:
           title: Supporting references
           description: label/reference pairs for the movement. Both reference and label are required for every entry.
           examples:
-            - - label: PO Number
+            - - label: PO_NUMBER
                 reference: PO-123456
-              - label: Job Number
+              - label: JOB_NUMBER
                 reference: CARRIER-JOB-001
           type: array
           minItems: 1
@@ -3626,12 +3639,12 @@ components:
               label:
                 type: string
                 enum:
-                  - Weighbridge Number
-                  - PO Number
-                  - Job Number
-                  - Invoice Number
-                  - Waste Ticket Number
-                  - Other
+                  - WEIGHBRIDGE_NUMBER
+                  - PO_NUMBER
+                  - JOB_NUMBER
+                  - INVOICE_NUMBER
+                  - WASTE_TICKET_NUMBER
+                  - OTHER
                 description: Label identifying the reference type.
             required:
               - reference
@@ -3675,6 +3688,7 @@ components:
           additionalProperties: false
       required:
         - reasonForNoDeliveryId
+        - receiptDateTime
         - carrier
         - receiver
         - wasteItems
@@ -4452,7 +4466,7 @@ paths:
                   title: Producer
                   description: The organisation or party the waste originates from. Required fields vary by wasteSource — see the variants below. For Commercial and Municipal, contactDetails is required (with at least one of emailAddress or phoneNumber within it), and exactly one of authorisationNumber or reasonForNoAuthorisationNumber must be provided; not applicable for Household, where contactDetails and the rest remain forbidden.
                   examples:
-                    - wasteSource: Commercial
+                    - wasteSource: COMMERCIAL
                       organisationName: ACME Waste Producers Ltd
                       authorisationNumber: EAS/P/123456
                       sicCode: '38110'
@@ -4462,7 +4476,7 @@ paths:
                       contactDetails:
                         emailAddress: producer@example.com
                         phoneNumber: '01234567890'
-                    - wasteSource: Municipal
+                    - wasteSource: MUNICIPAL
                       organisationName: Test Council
                       reasonForNoAuthorisationNumber: TBC
                       address:
@@ -4471,13 +4485,13 @@ paths:
                       contactDetails:
                         emailAddress: waste.services@example.gov.uk
                         phoneNumber: '01234567890'
-                    - wasteSource: Household
+                    - wasteSource: HOUSEHOLD
                   oneOf:
                     - $schema: https://json-schema.org/draft/2020-12/schema
                       title: Producer (Household)
                       description: Producer fields specific to household waste. organisationName, authorisationNumber, sicCode, contactDetails and address do not apply and must not be provided.
                       examples:
-                        - wasteSource: Household
+                        - wasteSource: HOUSEHOLD
                       type: object
                       allOf:
                         - $schema: https://json-schema.org/draft/2020-12/schema
@@ -4488,7 +4502,7 @@ paths:
                         - type: object
                           properties:
                             wasteSource:
-                              const: Household
+                              const: HOUSEHOLD
                               description: Waste originates from a household.
                           required:
                             - wasteSource
@@ -4499,7 +4513,7 @@ paths:
                       title: Producer (Commercial)
                       description: Producer fields specific to commercial waste. organisationName, sicCode, address and contactDetails are required. Exactly one of authorisationNumber or reasonForNoAuthorisationNumber must be provided.
                       examples:
-                        - wasteSource: Commercial
+                        - wasteSource: COMMERCIAL
                           organisationName: ACME Waste Producers Ltd
                           authorisationNumber: EAS/P/123456
                           sicCode: '38110'
@@ -4535,7 +4549,7 @@ paths:
                             description: Required when 'authorisationNumber' is not provided
                           properties:
                             wasteSource:
-                              const: Commercial
+                              const: COMMERCIAL
                               description: Waste originates from a commercial source.
                             organisationName:
                               type: string
@@ -4620,7 +4634,7 @@ paths:
                       title: Producer (Municipal)
                       description: Producer fields specific to municipal waste. organisationName, address and contactDetails are required; sicCode is optional. Exactly one of authorisationNumber or reasonForNoAuthorisationNumber must be provided.
                       examples:
-                        - wasteSource: Municipal
+                        - wasteSource: MUNICIPAL
                           organisationName: Test Council
                           reasonForNoAuthorisationNumber: TBC
                           address:
@@ -4655,7 +4669,7 @@ paths:
                             description: Required when 'authorisationNumber' is not provided
                           properties:
                             wasteSource:
-                              const: Municipal
+                              const: MUNICIPAL
                               description: Waste originates from a municipal source.
                             organisationName:
                               type: string
@@ -4809,7 +4823,7 @@ paths:
                   items:
                     $schema: https://json-schema.org/draft/2020-12/schema
                     title: Carrier
-                    description: A single waste carrier. organisationName, meansOfTransport and contactDetails are required, and exactly one of registrationNumber or reasonForNoRegistrationNumber must be provided. vehicleRegistration is required for Road and otherMeansOfTransport for Other; each is forbidden otherwise. address is optional.
+                    description: A single waste carrier. organisationName, meansOfTransport and contactDetails are required, and exactly one of registrationNumber or reasonForNoRegistrationNumber must be provided. vehicleRegistration is required for ROAD and otherMeansOfTransport for OTHER; each is forbidden otherwise. address is optional.
                     type: object
                     allOf:
                       - if:
@@ -4831,7 +4845,7 @@ paths:
                       - if:
                           properties:
                             meansOfTransport:
-                              const: Road
+                              const: ROAD
                           required:
                             - meansOfTransport
                         then:
@@ -4839,16 +4853,16 @@ paths:
                             vehicleRegistration: {}
                           required:
                             - vehicleRegistration
-                          description: Required when 'meansOfTransport' is 'Road'
+                          description: Required when 'meansOfTransport' is 'ROAD'
                         else:
                           properties:
                             vehicleRegistration:
                               not: {}
-                              description: Not allowed unless 'meansOfTransport' is 'Road'
+                              description: Not allowed unless 'meansOfTransport' is 'ROAD'
                       - if:
                           properties:
                             meansOfTransport:
-                              const: Other
+                              const: OTHER
                           required:
                             - meansOfTransport
                         then:
@@ -4856,12 +4870,12 @@ paths:
                             otherMeansOfTransport: {}
                           required:
                             - otherMeansOfTransport
-                          description: Required when 'meansOfTransport' is 'Other'
+                          description: Required when 'meansOfTransport' is 'OTHER'
                         else:
                           properties:
                             otherMeansOfTransport:
                               not: {}
-                              description: Not allowed unless 'meansOfTransport' is 'Other'
+                              description: Not allowed unless 'meansOfTransport' is 'OTHER'
                     properties:
                       organisationName:
                         type: string
@@ -4884,22 +4898,22 @@ paths:
                       meansOfTransport:
                         type: string
                         enum:
-                          - Road
-                          - Rail
-                          - Air
-                          - Sea
-                          - Inland Waterway
-                          - Piped
-                          - Other
+                          - ROAD
+                          - RAIL
+                          - AIR
+                          - SEA
+                          - INLAND_WATERWAY
+                          - PIPED
+                          - OTHER
                         description: How the carrier will transport the waste.
                       vehicleRegistration:
                         type: string
                         minLength: 1
-                        description: Registration of the vehicle carrying the waste. Required when meansOfTransport is Road; forbidden otherwise.
+                        description: Registration of the vehicle carrying the waste. Required when meansOfTransport is ROAD; forbidden otherwise.
                       otherMeansOfTransport:
                         type: string
                         minLength: 1
-                        description: Description of the means of transport. Required when meansOfTransport is Other; forbidden otherwise.
+                        description: Description of the means of transport. Required when meansOfTransport is OTHER; forbidden otherwise.
                       contactDetails:
                         $schema: https://json-schema.org/draft/2020-12/schema
                         title: Contact details
@@ -5642,7 +5656,7 @@ paths:
                       items:
                         $schema: https://json-schema.org/draft/2020-12/schema
                         title: Broker or dealer
-                        description: A single broker or dealer who arranged the transfer. organisationName and contactDetails are required, and exactly one of registrationNumber or reasonForNoRegistrationNumber must be provided. address is optional.
+                        description: A single broker or dealer who arranged the Movement. organisationName and contactDetails are required, and exactly one of registrationNumber or reasonForNoRegistrationNumber must be provided. address is optional.
                         examples:
                           - organisationName: Broker Demo Ltd
                             registrationNumber: CBDU654321
@@ -5677,7 +5691,7 @@ paths:
                           organisationName:
                             type: string
                             minLength: 1
-                            description: Name of the broker or dealer organisation who arranged this transfer.
+                            description: Name of the broker or dealer organisation who arranged this Movement.
                           registrationNumber:
                             description: Waste carrier, broker or dealer registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Mutually exclusive with reasonForNoRegistrationNumber — exactly one of the two is required.
                             $schema: https://json-schema.org/draft/2020-12/schema
@@ -5747,9 +5761,9 @@ paths:
                   title: Supporting references
                   description: label/reference pairs for the movement. Both reference and label are required for every entry.
                   examples:
-                    - - label: PO Number
+                    - - label: PO_NUMBER
                         reference: PO-123456
-                      - label: Job Number
+                      - label: JOB_NUMBER
                         reference: CARRIER-JOB-001
                   type: array
                   minItems: 1
@@ -5764,12 +5778,12 @@ paths:
                       label:
                         type: string
                         enum:
-                          - Weighbridge Number
-                          - PO Number
-                          - Job Number
-                          - Invoice Number
-                          - Waste Ticket Number
-                          - Other
+                          - WEIGHBRIDGE_NUMBER
+                          - PO_NUMBER
+                          - JOB_NUMBER
+                          - INVOICE_NUMBER
+                          - WASTE_TICKET_NUMBER
+                          - OTHER
                         description: Label identifying the reference type.
                     required:
                       - reference
@@ -5833,7 +5847,7 @@ paths:
                 summary: Commercial producer of hazardous waste, with consignment note, broker or dealer, supporting references and special handling
                 value:
                   producer:
-                    wasteSource: Commercial
+                    wasteSource: COMMERCIAL
                     organisationName: ACME Waste Producers Ltd
                     authorisationNumber: EAS/P/123456
                     sicCode: '38110'
@@ -5900,15 +5914,15 @@ paths:
                           fullAddress: 2 Broker Yard, Test City
                           postcode: TE1 1ST
                   supportingReferences:
-                    - label: PO Number
+                    - label: PO_NUMBER
                       reference: PO-123456
-                    - label: Job Number
+                    - label: JOB_NUMBER
                       reference: CARRIER-JOB-001
                   specialHandlingRequirements: Handle with care and keep upright.
                   intendedCarriers:
                     - organisationName: Carrier Demo Ltd
                       registrationNumber: CBDU123456
-                      meansOfTransport: Road
+                      meansOfTransport: ROAD
                       vehicleRegistration: AB12 CDE
                       contactDetails:
                         emailAddress: carrier@example.com
@@ -5922,7 +5936,7 @@ paths:
                 summary: Household producer, minimal
                 value:
                   producer:
-                    wasteSource: Household
+                    wasteSource: HOUSEHOLD
                   plannedCollectionDateTime: '2026-01-15T09:30:00Z'
                   collectionSite:
                     address:
@@ -5934,7 +5948,7 @@ paths:
                   intendedCarriers:
                     - organisationName: Carrier Demo Ltd
                       registrationNumber: CBDU123456
-                      meansOfTransport: Road
+                      meansOfTransport: ROAD
                       vehicleRegistration: AB12 CDE
                       contactDetails:
                         emailAddress: carrier@example.com
@@ -6355,7 +6369,7 @@ paths:
                 carrier:
                   $schema: https://json-schema.org/draft/2020-12/schema
                   title: Carrier
-                  description: A single waste carrier. organisationName, meansOfTransport and contactDetails are required, and exactly one of registrationNumber or reasonForNoRegistrationNumber must be provided. vehicleRegistration is required for Road and otherMeansOfTransport for Other; each is forbidden otherwise. address is optional.
+                  description: A single waste carrier. organisationName, meansOfTransport and contactDetails are required, and exactly one of registrationNumber or reasonForNoRegistrationNumber must be provided. vehicleRegistration is required for ROAD and otherMeansOfTransport for OTHER; each is forbidden otherwise. address is optional.
                   type: object
                   allOf:
                     - if:
@@ -6377,7 +6391,7 @@ paths:
                     - if:
                         properties:
                           meansOfTransport:
-                            const: Road
+                            const: ROAD
                         required:
                           - meansOfTransport
                       then:
@@ -6385,16 +6399,16 @@ paths:
                           vehicleRegistration: {}
                         required:
                           - vehicleRegistration
-                        description: Required when 'meansOfTransport' is 'Road'
+                        description: Required when 'meansOfTransport' is 'ROAD'
                       else:
                         properties:
                           vehicleRegistration:
                             not: {}
-                            description: Not allowed unless 'meansOfTransport' is 'Road'
+                            description: Not allowed unless 'meansOfTransport' is 'ROAD'
                     - if:
                         properties:
                           meansOfTransport:
-                            const: Other
+                            const: OTHER
                         required:
                           - meansOfTransport
                       then:
@@ -6402,12 +6416,12 @@ paths:
                           otherMeansOfTransport: {}
                         required:
                           - otherMeansOfTransport
-                        description: Required when 'meansOfTransport' is 'Other'
+                        description: Required when 'meansOfTransport' is 'OTHER'
                       else:
                         properties:
                           otherMeansOfTransport:
                             not: {}
-                            description: Not allowed unless 'meansOfTransport' is 'Other'
+                            description: Not allowed unless 'meansOfTransport' is 'OTHER'
                   properties:
                     organisationName:
                       type: string
@@ -6430,22 +6444,22 @@ paths:
                     meansOfTransport:
                       type: string
                       enum:
-                        - Road
-                        - Rail
-                        - Air
-                        - Sea
-                        - Inland Waterway
-                        - Piped
-                        - Other
+                        - ROAD
+                        - RAIL
+                        - AIR
+                        - SEA
+                        - INLAND_WATERWAY
+                        - PIPED
+                        - OTHER
                       description: How the carrier will transport the waste.
                     vehicleRegistration:
                       type: string
                       minLength: 1
-                      description: Registration of the vehicle carrying the waste. Required when meansOfTransport is Road; forbidden otherwise.
+                      description: Registration of the vehicle carrying the waste. Required when meansOfTransport is ROAD; forbidden otherwise.
                     otherMeansOfTransport:
                       type: string
                       minLength: 1
-                      description: Description of the means of transport. Required when meansOfTransport is Other; forbidden otherwise.
+                      description: Description of the means of transport. Required when meansOfTransport is OTHER; forbidden otherwise.
                     contactDetails:
                       $schema: https://json-schema.org/draft/2020-12/schema
                       title: Contact details
@@ -6612,7 +6626,7 @@ paths:
                       items:
                         $schema: https://json-schema.org/draft/2020-12/schema
                         title: Broker or dealer
-                        description: A single broker or dealer who arranged the transfer. organisationName and contactDetails are required, and exactly one of registrationNumber or reasonForNoRegistrationNumber must be provided. address is optional.
+                        description: A single broker or dealer who arranged the Movement. organisationName and contactDetails are required, and exactly one of registrationNumber or reasonForNoRegistrationNumber must be provided. address is optional.
                         examples:
                           - organisationName: Broker Demo Ltd
                             registrationNumber: CBDU654321
@@ -6647,7 +6661,7 @@ paths:
                           organisationName:
                             type: string
                             minLength: 1
-                            description: Name of the broker or dealer organisation who arranged this transfer.
+                            description: Name of the broker or dealer organisation who arranged this Movement.
                           registrationNumber:
                             description: Waste carrier, broker or dealer registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Mutually exclusive with reasonForNoRegistrationNumber — exactly one of the two is required.
                             $schema: https://json-schema.org/draft/2020-12/schema
@@ -6720,9 +6734,9 @@ paths:
                   title: Supporting references
                   description: label/reference pairs for the movement. Both reference and label are required for every entry.
                   examples:
-                    - - label: PO Number
+                    - - label: PO_NUMBER
                         reference: PO-123456
-                      - label: Job Number
+                      - label: JOB_NUMBER
                         reference: CARRIER-JOB-001
                   type: array
                   minItems: 1
@@ -6737,12 +6751,12 @@ paths:
                       label:
                         type: string
                         enum:
-                          - Weighbridge Number
-                          - PO Number
-                          - Job Number
-                          - Invoice Number
-                          - Waste Ticket Number
-                          - Other
+                          - WEIGHBRIDGE_NUMBER
+                          - PO_NUMBER
+                          - JOB_NUMBER
+                          - INVOICE_NUMBER
+                          - WASTE_TICKET_NUMBER
+                          - OTHER
                         description: Label identifying the reference type.
                     required:
                       - reference
@@ -6770,7 +6784,7 @@ paths:
                   carrier:
                     organisationName: Carrier Demo Ltd
                     registrationNumber: CBDU123456
-                    meansOfTransport: Road
+                    meansOfTransport: ROAD
                     vehicleRegistration: AB12 CDE
                     contactDetails:
                       emailAddress: carrier@example.com
@@ -6799,9 +6813,9 @@ paths:
                           fullAddress: 2 Broker Yard, Test City
                           postcode: TE1 1ST
                   supportingReferences:
-                    - label: PO Number
+                    - label: PO_NUMBER
                       reference: PO-123456
-                    - label: Job Number
+                    - label: JOB_NUMBER
                       reference: CARRIER-JOB-001
                   specialHandlingRequirements: Handle with care and keep upright.
               minimal:
@@ -6810,7 +6824,7 @@ paths:
                   carrier:
                     organisationName: Carrier Demo Ltd
                     registrationNumber: CBDU123456
-                    meansOfTransport: Road
+                    meansOfTransport: ROAD
                     vehicleRegistration: AB12 CDE
                     contactDetails:
                       emailAddress: carrier@example.com
@@ -7277,7 +7291,7 @@ paths:
                 carrier:
                   $schema: https://json-schema.org/draft/2020-12/schema
                   title: Carrier
-                  description: A single waste carrier. organisationName, meansOfTransport and contactDetails are required, and exactly one of registrationNumber or reasonForNoRegistrationNumber must be provided. vehicleRegistration is required for Road and otherMeansOfTransport for Other; each is forbidden otherwise. address is optional.
+                  description: A single waste carrier. organisationName, meansOfTransport and contactDetails are required, and exactly one of registrationNumber or reasonForNoRegistrationNumber must be provided. vehicleRegistration is required for ROAD and otherMeansOfTransport for OTHER; each is forbidden otherwise. address is optional.
                   type: object
                   allOf:
                     - if:
@@ -7299,7 +7313,7 @@ paths:
                     - if:
                         properties:
                           meansOfTransport:
-                            const: Road
+                            const: ROAD
                         required:
                           - meansOfTransport
                       then:
@@ -7307,16 +7321,16 @@ paths:
                           vehicleRegistration: {}
                         required:
                           - vehicleRegistration
-                        description: Required when 'meansOfTransport' is 'Road'
+                        description: Required when 'meansOfTransport' is 'ROAD'
                       else:
                         properties:
                           vehicleRegistration:
                             not: {}
-                            description: Not allowed unless 'meansOfTransport' is 'Road'
+                            description: Not allowed unless 'meansOfTransport' is 'ROAD'
                     - if:
                         properties:
                           meansOfTransport:
-                            const: Other
+                            const: OTHER
                         required:
                           - meansOfTransport
                       then:
@@ -7324,12 +7338,12 @@ paths:
                           otherMeansOfTransport: {}
                         required:
                           - otherMeansOfTransport
-                        description: Required when 'meansOfTransport' is 'Other'
+                        description: Required when 'meansOfTransport' is 'OTHER'
                       else:
                         properties:
                           otherMeansOfTransport:
                             not: {}
-                            description: Not allowed unless 'meansOfTransport' is 'Other'
+                            description: Not allowed unless 'meansOfTransport' is 'OTHER'
                   properties:
                     organisationName:
                       type: string
@@ -7352,22 +7366,22 @@ paths:
                     meansOfTransport:
                       type: string
                       enum:
-                        - Road
-                        - Rail
-                        - Air
-                        - Sea
-                        - Inland Waterway
-                        - Piped
-                        - Other
+                        - ROAD
+                        - RAIL
+                        - AIR
+                        - SEA
+                        - INLAND_WATERWAY
+                        - PIPED
+                        - OTHER
                       description: How the carrier will transport the waste.
                     vehicleRegistration:
                       type: string
                       minLength: 1
-                      description: Registration of the vehicle carrying the waste. Required when meansOfTransport is Road; forbidden otherwise.
+                      description: Registration of the vehicle carrying the waste. Required when meansOfTransport is ROAD; forbidden otherwise.
                     otherMeansOfTransport:
                       type: string
                       minLength: 1
-                      description: Description of the means of transport. Required when meansOfTransport is Other; forbidden otherwise.
+                      description: Description of the means of transport. Required when meansOfTransport is OTHER; forbidden otherwise.
                     contactDetails:
                       $schema: https://json-schema.org/draft/2020-12/schema
                       title: Contact details
@@ -7426,9 +7440,9 @@ paths:
                   title: Supporting references
                   description: label/reference pairs for the movement. Both reference and label are required for every entry.
                   examples:
-                    - - label: PO Number
+                    - - label: PO_NUMBER
                         reference: PO-123456
-                      - label: Job Number
+                      - label: JOB_NUMBER
                         reference: CARRIER-JOB-001
                   type: array
                   minItems: 1
@@ -7443,12 +7457,12 @@ paths:
                       label:
                         type: string
                         enum:
-                          - Weighbridge Number
-                          - PO Number
-                          - Job Number
-                          - Invoice Number
-                          - Waste Ticket Number
-                          - Other
+                          - WEIGHBRIDGE_NUMBER
+                          - PO_NUMBER
+                          - JOB_NUMBER
+                          - INVOICE_NUMBER
+                          - WASTE_TICKET_NUMBER
+                          - OTHER
                         description: Label identifying the reference type.
                     required:
                       - reference
@@ -7468,7 +7482,7 @@ paths:
                   carrier:
                     organisationName: Carrier Demo Ltd
                     registrationNumber: CBDU123456
-                    meansOfTransport: Road
+                    meansOfTransport: ROAD
                     vehicleRegistration: AB12 CDE
                     contactDetails:
                       emailAddress: carrier@example.com
@@ -7477,7 +7491,7 @@ paths:
                       fullAddress: 4 Carrier Lane, Test City
                       postcode: TE1 4CR
                   supportingReferences:
-                    - label: Waste Ticket Number
+                    - label: WASTE_TICKET_NUMBER
                       reference: WT-7781
               mixedWasteTypes:
                 summary: Two non-hazardous movements and one hazardous movement delivered together
@@ -7489,7 +7503,7 @@ paths:
                   carrier:
                     organisationName: Carrier Demo Ltd
                     registrationNumber: CBDU123456
-                    meansOfTransport: Road
+                    meansOfTransport: ROAD
                     vehicleRegistration: AB12 CDE
                     contactDetails:
                       emailAddress: carrier@example.com
@@ -7923,10 +7937,16 @@ paths:
                   description: Mandatory explanation for why this receipt is being recorded without a Delivery ID.
                   examples:
                     - No delivery was recorded prior to receipt; waste received directly from the producer.
+                receiptDateTime:
+                  type: string
+                  format: date-time
+                  description: When the waste was received at the receiver's site, as an ISO 8601 date-time with a timezone. Must not be later than the time the receipt is submitted; the service checks that, as it depends on when the request arrives.
+                  examples:
+                    - '2026-10-14T09:30:00Z'
                 carrier:
                   $schema: https://json-schema.org/draft/2020-12/schema
                   title: Carrier
-                  description: A single waste carrier. organisationName, meansOfTransport and contactDetails are required, and exactly one of registrationNumber or reasonForNoRegistrationNumber must be provided. vehicleRegistration is required for Road and otherMeansOfTransport for Other; each is forbidden otherwise. address is optional.
+                  description: A single waste carrier. organisationName, meansOfTransport and contactDetails are required, and exactly one of registrationNumber or reasonForNoRegistrationNumber must be provided. vehicleRegistration is required for ROAD and otherMeansOfTransport for OTHER; each is forbidden otherwise. address is optional.
                   type: object
                   allOf:
                     - if:
@@ -7948,7 +7968,7 @@ paths:
                     - if:
                         properties:
                           meansOfTransport:
-                            const: Road
+                            const: ROAD
                         required:
                           - meansOfTransport
                       then:
@@ -7956,16 +7976,16 @@ paths:
                           vehicleRegistration: {}
                         required:
                           - vehicleRegistration
-                        description: Required when 'meansOfTransport' is 'Road'
+                        description: Required when 'meansOfTransport' is 'ROAD'
                       else:
                         properties:
                           vehicleRegistration:
                             not: {}
-                            description: Not allowed unless 'meansOfTransport' is 'Road'
+                            description: Not allowed unless 'meansOfTransport' is 'ROAD'
                     - if:
                         properties:
                           meansOfTransport:
-                            const: Other
+                            const: OTHER
                         required:
                           - meansOfTransport
                       then:
@@ -7973,12 +7993,12 @@ paths:
                           otherMeansOfTransport: {}
                         required:
                           - otherMeansOfTransport
-                        description: Required when 'meansOfTransport' is 'Other'
+                        description: Required when 'meansOfTransport' is 'OTHER'
                       else:
                         properties:
                           otherMeansOfTransport:
                             not: {}
-                            description: Not allowed unless 'meansOfTransport' is 'Other'
+                            description: Not allowed unless 'meansOfTransport' is 'OTHER'
                   properties:
                     organisationName:
                       type: string
@@ -8001,22 +8021,22 @@ paths:
                     meansOfTransport:
                       type: string
                       enum:
-                        - Road
-                        - Rail
-                        - Air
-                        - Sea
-                        - Inland Waterway
-                        - Piped
-                        - Other
+                        - ROAD
+                        - RAIL
+                        - AIR
+                        - SEA
+                        - INLAND_WATERWAY
+                        - PIPED
+                        - OTHER
                       description: How the carrier will transport the waste.
                     vehicleRegistration:
                       type: string
                       minLength: 1
-                      description: Registration of the vehicle carrying the waste. Required when meansOfTransport is Road; forbidden otherwise.
+                      description: Registration of the vehicle carrying the waste. Required when meansOfTransport is ROAD; forbidden otherwise.
                     otherMeansOfTransport:
                       type: string
                       minLength: 1
-                      description: Description of the means of transport. Required when meansOfTransport is Other; forbidden otherwise.
+                      description: Description of the means of transport. Required when meansOfTransport is OTHER; forbidden otherwise.
                     contactDetails:
                       $schema: https://json-schema.org/draft/2020-12/schema
                       title: Contact details
@@ -8751,7 +8771,7 @@ paths:
                       items:
                         $schema: https://json-schema.org/draft/2020-12/schema
                         title: Broker or dealer
-                        description: A single broker or dealer who arranged the transfer. organisationName and contactDetails are required, and exactly one of registrationNumber or reasonForNoRegistrationNumber must be provided. address is optional.
+                        description: A single broker or dealer who arranged the Movement. organisationName and contactDetails are required, and exactly one of registrationNumber or reasonForNoRegistrationNumber must be provided. address is optional.
                         examples:
                           - organisationName: Broker Demo Ltd
                             registrationNumber: CBDU654321
@@ -8786,7 +8806,7 @@ paths:
                           organisationName:
                             type: string
                             minLength: 1
-                            description: Name of the broker or dealer organisation who arranged this transfer.
+                            description: Name of the broker or dealer organisation who arranged this Movement.
                           registrationNumber:
                             description: Waste carrier, broker or dealer registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Mutually exclusive with reasonForNoRegistrationNumber — exactly one of the two is required.
                             $schema: https://json-schema.org/draft/2020-12/schema
@@ -8856,9 +8876,9 @@ paths:
                   title: Supporting references
                   description: label/reference pairs for the movement. Both reference and label are required for every entry.
                   examples:
-                    - - label: PO Number
+                    - - label: PO_NUMBER
                         reference: PO-123456
-                      - label: Job Number
+                      - label: JOB_NUMBER
                         reference: CARRIER-JOB-001
                   type: array
                   minItems: 1
@@ -8873,12 +8893,12 @@ paths:
                       label:
                         type: string
                         enum:
-                          - Weighbridge Number
-                          - PO Number
-                          - Job Number
-                          - Invoice Number
-                          - Waste Ticket Number
-                          - Other
+                          - WEIGHBRIDGE_NUMBER
+                          - PO_NUMBER
+                          - JOB_NUMBER
+                          - INVOICE_NUMBER
+                          - WASTE_TICKET_NUMBER
+                          - OTHER
                         description: Label identifying the reference type.
                     required:
                       - reference
@@ -8922,6 +8942,7 @@ paths:
                   additionalProperties: false
               required:
                 - reasonForNoDeliveryId
+                - receiptDateTime
                 - carrier
                 - receiver
                 - wasteItems
@@ -8931,10 +8952,11 @@ paths:
                 summary: Receipt with no prior delivery, with the reason why, of waste containing POPs
                 value:
                   reasonForNoDeliveryId: No delivery was recorded prior to receipt; waste received directly from the producer.
+                  receiptDateTime: '2026-10-14T09:30:00Z'
                   carrier:
                     organisationName: Carrier Demo Ltd
                     registrationNumber: CBDU123456
-                    meansOfTransport: Road
+                    meansOfTransport: ROAD
                     vehicleRegistration: AB12 CDE
                     contactDetails:
                       emailAddress: carrier@example.com
@@ -8982,7 +9004,7 @@ paths:
                             unit: KILOGRAMS
                             isEstimate: false
                   supportingReferences:
-                    - label: Weighbridge Number
+                    - label: WEIGHBRIDGE_NUMBER
                       reference: WB-0042
       responses:
         '201':
@@ -9349,10 +9371,16 @@ paths:
               description: Payload for POST /beta-2/deliveries/{deliveryId}/receipt.
               type: object
               properties:
+                receiptDateTime:
+                  type: string
+                  format: date-time
+                  description: When the waste was received at the receiver's site, as an ISO 8601 date-time with a timezone. Must not be later than the time the receipt is submitted; the service checks that, as it depends on when the request arrives.
+                  examples:
+                    - '2026-10-14T09:30:00Z'
                 carrier:
                   $schema: https://json-schema.org/draft/2020-12/schema
                   title: Carrier
-                  description: A single waste carrier. organisationName, meansOfTransport and contactDetails are required, and exactly one of registrationNumber or reasonForNoRegistrationNumber must be provided. vehicleRegistration is required for Road and otherMeansOfTransport for Other; each is forbidden otherwise. address is optional.
+                  description: A single waste carrier. organisationName, meansOfTransport and contactDetails are required, and exactly one of registrationNumber or reasonForNoRegistrationNumber must be provided. vehicleRegistration is required for ROAD and otherMeansOfTransport for OTHER; each is forbidden otherwise. address is optional.
                   type: object
                   allOf:
                     - if:
@@ -9374,7 +9402,7 @@ paths:
                     - if:
                         properties:
                           meansOfTransport:
-                            const: Road
+                            const: ROAD
                         required:
                           - meansOfTransport
                       then:
@@ -9382,16 +9410,16 @@ paths:
                           vehicleRegistration: {}
                         required:
                           - vehicleRegistration
-                        description: Required when 'meansOfTransport' is 'Road'
+                        description: Required when 'meansOfTransport' is 'ROAD'
                       else:
                         properties:
                           vehicleRegistration:
                             not: {}
-                            description: Not allowed unless 'meansOfTransport' is 'Road'
+                            description: Not allowed unless 'meansOfTransport' is 'ROAD'
                     - if:
                         properties:
                           meansOfTransport:
-                            const: Other
+                            const: OTHER
                         required:
                           - meansOfTransport
                       then:
@@ -9399,12 +9427,12 @@ paths:
                           otherMeansOfTransport: {}
                         required:
                           - otherMeansOfTransport
-                        description: Required when 'meansOfTransport' is 'Other'
+                        description: Required when 'meansOfTransport' is 'OTHER'
                       else:
                         properties:
                           otherMeansOfTransport:
                             not: {}
-                            description: Not allowed unless 'meansOfTransport' is 'Other'
+                            description: Not allowed unless 'meansOfTransport' is 'OTHER'
                   properties:
                     organisationName:
                       type: string
@@ -9427,22 +9455,22 @@ paths:
                     meansOfTransport:
                       type: string
                       enum:
-                        - Road
-                        - Rail
-                        - Air
-                        - Sea
-                        - Inland Waterway
-                        - Piped
-                        - Other
+                        - ROAD
+                        - RAIL
+                        - AIR
+                        - SEA
+                        - INLAND_WATERWAY
+                        - PIPED
+                        - OTHER
                       description: How the carrier will transport the waste.
                     vehicleRegistration:
                       type: string
                       minLength: 1
-                      description: Registration of the vehicle carrying the waste. Required when meansOfTransport is Road; forbidden otherwise.
+                      description: Registration of the vehicle carrying the waste. Required when meansOfTransport is ROAD; forbidden otherwise.
                     otherMeansOfTransport:
                       type: string
                       minLength: 1
-                      description: Description of the means of transport. Required when meansOfTransport is Other; forbidden otherwise.
+                      description: Description of the means of transport. Required when meansOfTransport is OTHER; forbidden otherwise.
                     contactDetails:
                       $schema: https://json-schema.org/draft/2020-12/schema
                       title: Contact details
@@ -9778,7 +9806,7 @@ paths:
                       items:
                         $schema: https://json-schema.org/draft/2020-12/schema
                         title: Broker or dealer
-                        description: A single broker or dealer who arranged the transfer. organisationName and contactDetails are required, and exactly one of registrationNumber or reasonForNoRegistrationNumber must be provided. address is optional.
+                        description: A single broker or dealer who arranged the Movement. organisationName and contactDetails are required, and exactly one of registrationNumber or reasonForNoRegistrationNumber must be provided. address is optional.
                         examples:
                           - organisationName: Broker Demo Ltd
                             registrationNumber: CBDU654321
@@ -9813,7 +9841,7 @@ paths:
                           organisationName:
                             type: string
                             minLength: 1
-                            description: Name of the broker or dealer organisation who arranged this transfer.
+                            description: Name of the broker or dealer organisation who arranged this Movement.
                           registrationNumber:
                             description: Waste carrier, broker or dealer registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Mutually exclusive with reasonForNoRegistrationNumber — exactly one of the two is required.
                             $schema: https://json-schema.org/draft/2020-12/schema
@@ -9883,9 +9911,9 @@ paths:
                   title: Supporting references
                   description: label/reference pairs for the movement. Both reference and label are required for every entry.
                   examples:
-                    - - label: PO Number
+                    - - label: PO_NUMBER
                         reference: PO-123456
-                      - label: Job Number
+                      - label: JOB_NUMBER
                         reference: CARRIER-JOB-001
                   type: array
                   minItems: 1
@@ -9900,18 +9928,19 @@ paths:
                       label:
                         type: string
                         enum:
-                          - Weighbridge Number
-                          - PO Number
-                          - Job Number
-                          - Invoice Number
-                          - Waste Ticket Number
-                          - Other
+                          - WEIGHBRIDGE_NUMBER
+                          - PO_NUMBER
+                          - JOB_NUMBER
+                          - INVOICE_NUMBER
+                          - WASTE_TICKET_NUMBER
+                          - OTHER
                         description: Label identifying the reference type.
                     required:
                       - reference
                       - label
                     additionalProperties: false
               required:
+                - receiptDateTime
                 - carrier
                 - receiver
                 - physicalDetails
@@ -9921,10 +9950,11 @@ paths:
               withBrokerAndReferences:
                 summary: With broker or dealer and a weighbridge reference
                 value:
+                  receiptDateTime: '2026-10-14T09:30:00Z'
                   carrier:
                     organisationName: Carrier Demo Ltd
                     registrationNumber: CBDU123456
-                    meansOfTransport: Road
+                    meansOfTransport: ROAD
                     vehicleRegistration: AB12 CDE
                     contactDetails:
                       emailAddress: carrier@example.com
@@ -9967,7 +9997,7 @@ paths:
                           fullAddress: 2 Broker Yard, Test City
                           postcode: TE1 1ST
                   supportingReferences:
-                    - label: Weighbridge Number
+                    - label: WEIGHBRIDGE_NUMBER
                       reference: WB-0042
       responses:
         '201':
