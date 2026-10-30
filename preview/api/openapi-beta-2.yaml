@@ -12,11 +12,11 @@ security:
     apiCode: []
 tags:
   - name: Movement
-    description: Create and manage a waste movement record.
+    description: Create and manage Movements.
   - name: Collection
-    description: Record a collection event — waste passing from a producer to a driver.
+    description: Record a Collection — waste passing from a producer to a driver.
   - name: Delivery
-    description: Record a delivery event, generating one or more Delivery IDs.
+    description: Record a Delivery, generating one or more Delivery IDs.
   - name: Receipt
     description: Record receipt of waste at a receiver site.
 components:
@@ -40,7 +40,7 @@ components:
       schema:
         $schema: https://json-schema.org/draft/2020-12/schema
         title: Movement ID
-        description: 'Unique identifier for a waste movement, minted by the server on `POST /movements`. Format: a two-digit year prefix followed by six or seven characters from A–Z and 0–9, 8 or 9 characters in all. Movement IDs and Delivery IDs share this format. Treat it as opaque: don''t parse it.'
+        description: 'Unique identifier for a Movement, minted by the server on `POST /movements`. Format: a two-digit year prefix followed by six or seven characters from A–Z and 0–9, 8 or 9 characters in all. Movement IDs and Delivery IDs share this format. Treat it as opaque: don''t parse it.'
         type: string
         pattern: ^[0-9]{2}[A-Z0-9]{6,7}$
         examples:
@@ -54,7 +54,7 @@ components:
       schema:
         $schema: https://json-schema.org/draft/2020-12/schema
         title: Delivery ID
-        description: 'Unique identifier for a delivery, returned by `POST /deliveries`. The server mints a new ID for the non-hazardous Delivery; a hazardous Movement''s Delivery reuses its Movement ID. Format: a two-digit year prefix followed by six or seven characters from A–Z and 0–9, 8 or 9 characters in all. Movement IDs and Delivery IDs share this format. Treat it as opaque: don''t parse it.'
+        description: 'Unique identifier for a Delivery, returned by `POST /deliveries`. The server mints a new ID for the non-hazardous Delivery; a hazardous Movement''s Delivery reuses its Movement ID. Format: a two-digit year prefix followed by six or seven characters from A–Z and 0–9, 8 or 9 characters in all. Movement IDs and Delivery IDs share this format. Treat it as opaque: don''t parse it.'
         type: string
         pattern: ^[0-9]{2}[A-Z0-9]{6,7}$
         examples:
@@ -71,7 +71,7 @@ components:
     movementId:
       $schema: https://json-schema.org/draft/2020-12/schema
       title: Movement ID
-      description: 'Unique identifier for a waste movement, minted by the server on `POST /movements`. Format: a two-digit year prefix followed by six or seven characters from A–Z and 0–9, 8 or 9 characters in all. Movement IDs and Delivery IDs share this format. Treat it as opaque: don''t parse it.'
+      description: 'Unique identifier for a Movement, minted by the server on `POST /movements`. Format: a two-digit year prefix followed by six or seven characters from A–Z and 0–9, 8 or 9 characters in all. Movement IDs and Delivery IDs share this format. Treat it as opaque: don''t parse it.'
       type: string
       pattern: ^[0-9]{2}[A-Z0-9]{6,7}$
       examples:
@@ -79,7 +79,7 @@ components:
     deliveryId:
       $schema: https://json-schema.org/draft/2020-12/schema
       title: Delivery ID
-      description: 'Unique identifier for a delivery, returned by `POST /deliveries`. The server mints a new ID for the non-hazardous Delivery; a hazardous Movement''s Delivery reuses its Movement ID. Format: a two-digit year prefix followed by six or seven characters from A–Z and 0–9, 8 or 9 characters in all. Movement IDs and Delivery IDs share this format. Treat it as opaque: don''t parse it.'
+      description: 'Unique identifier for a Delivery, returned by `POST /deliveries`. The server mints a new ID for the non-hazardous Delivery; a hazardous Movement''s Delivery reuses its Movement ID. Format: a two-digit year prefix followed by six or seven characters from A–Z and 0–9, 8 or 9 characters in all. Movement IDs and Delivery IDs share this format. Treat it as opaque: don''t parse it.'
       type: string
       pattern: ^[0-9]{2}[A-Z0-9]{6,7}$
       examples:
@@ -87,7 +87,7 @@ components:
     createMovementRequest:
       $schema: https://json-schema.org/draft/2020-12/schema
       title: Create movement request
-      description: Payload for POST /beta-2/movements. A consignmentNote is required when any waste item declares hazardous properties; the service checks that, as the rule spans the waste items and the consignment note.
+      description: Payload for `POST /movements`. A consignmentNote is required when any waste item declares hazardous properties; the service checks that, as the rule spans the waste items and the consignment note.
       type: object
       properties:
         producer:
@@ -125,7 +125,7 @@ components:
               allOf:
                 - $schema: https://json-schema.org/draft/2020-12/schema
                   title: Producer base fields
-                  description: Fields present on every Producer, regardless of wasteSource.
+                  description: Placeholder for fields shared by every Producer, regardless of wasteSource. It has none yet.
                   type: object
                   properties: {}
                 - type: object
@@ -156,7 +156,7 @@ components:
               allOf:
                 - $schema: https://json-schema.org/draft/2020-12/schema
                   title: Producer base fields
-                  description: Fields present on every Producer, regardless of wasteSource.
+                  description: Placeholder for fields shared by every Producer, regardless of wasteSource. It has none yet.
                   type: object
                   properties: {}
                 - type: object
@@ -197,7 +197,7 @@ components:
                       type: string
                       minLength: 1
                       maxLength: 5000
-                      description: Reason no authorisationNumber is held. Free text for now — enum values TBC pending BA/policy input. Exactly one of 'authorisationNumber' or 'reasonForNoAuthorisationNumber' is required.
+                      description: Why there is no authorisation number. Exactly one of 'authorisationNumber' or 'reasonForNoAuthorisationNumber' is required.
                     sicCode:
                       type: string
                       pattern: ^\d{5}$
@@ -286,7 +286,7 @@ components:
               allOf:
                 - $schema: https://json-schema.org/draft/2020-12/schema
                   title: Producer base fields
-                  description: Fields present on every Producer, regardless of wasteSource.
+                  description: Placeholder for fields shared by every Producer, regardless of wasteSource. It has none yet.
                   type: object
                   properties: {}
                 - type: object
@@ -327,7 +327,7 @@ components:
                       type: string
                       minLength: 1
                       maxLength: 5000
-                      description: Reason no authorisationNumber is held. Free text for now — enum values TBC pending BA/policy input. Exactly one of 'authorisationNumber' or 'reasonForNoAuthorisationNumber' is required.
+                      description: Why there is no authorisation number. Exactly one of 'authorisationNumber' or 'reasonForNoAuthorisationNumber' is required.
                     sicCode:
                       type: string
                       pattern: ^\d{5}$
@@ -401,7 +401,7 @@ components:
         collectionDateTime:
           type: string
           format: date-time
-          description: The planned time the waste will be collected, as an ISO 8601 date-time. The actual time is given when the collection is recorded.
+          description: The planned time the waste will be collected, as an ISO 8601 date-time. The actual time is given when the Collection is recorded.
         collectionSite:
           description: The place the waste will be collected from.
           $schema: https://json-schema.org/draft/2020-12/schema
@@ -561,7 +561,7 @@ components:
                   - HOUSEHOLD
                   - ONE_OFF
                   - MARINE
-                description: Why the carrier has no registration number. Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
+                description: Why there is no registration number. Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
               meansOfTransport:
                 type: string
                 enum:
@@ -733,7 +733,7 @@ components:
           minItems: 1
           description: The intended receivers of the waste. At least one is required.
         wasteItems:
-          description: The items of waste in the movement. At least one is required. Treatments are not accepted when creating a movement.
+          description: The items of waste in the Movement. At least one is required. Treatments are not accepted when creating a Movement.
           type: array
           items:
             type: object
@@ -781,10 +781,10 @@ components:
                     items:
                       type: string
                       pattern: ^\d{6}$
-                      description: 'A European Waste Catalogue (EWC) code: six digits, with no spaces. Only the format is checked here; the service also checks the code is one of those served by GET /reference-data/ewc-codes, which is too long a list to inline, and reports an unrecognised code as an InvalidValue error.'
+                      description: 'A European Waste Catalogue (EWC) code: six digits, with no spaces. Only the format is checked here; the service also checks the code is one of those served by `GET /reference-data/ewc-codes`, which is too long a list to inline, and reports an unrecognised code as an InvalidValue error.'
                     minItems: 1
                     maxItems: 5
-                    description: 'The EWC codes that describe the waste: at least one, and up to five to allow for dual and mirror codes. Each must be six digits and a code from GET /reference-data/ewc-codes; the service checks the second.'
+                    description: 'The EWC codes that describe the waste: at least one, and up to five to allow for dual and mirror codes. Each must be six digits and a code from `GET /reference-data/ewc-codes`; the service checks the second.'
                   pops:
                     description: Whether the waste item contains persistent organic pollutants, and if so which. Required, even when there are none.
                     $schema: https://json-schema.org/draft/2020-12/schema
@@ -873,7 +873,7 @@ components:
                               type: string
                               minLength: 1
                               maxLength: 255
-                              description: The POP's code, from GET /reference-data/pop-names. Only checked for being non-empty here; the service checks it against the reference data and reports an unrecognised code as an InvalidValue error.
+                              description: The POP's code, from `GET /reference-data/pop-names`. Only checked for being non-empty here; the service checks it against the reference data and reports an unrecognised code as an InvalidValue error.
                             unit:
                               type: string
                               enum:
@@ -898,7 +898,7 @@ components:
                       - isPresent
                     additionalProperties: false
                   hazardous:
-                    description: Whether the waste item has hazardous properties, and if so which. Required, even when there are none. A movement is hazardous when any of its waste items declares hazardous properties.
+                    description: Whether the waste item has hazardous properties, and if so which. Required, even when there are none. A Movement is hazardous when any of its waste items declares hazardous properties.
                     $schema: https://json-schema.org/draft/2020-12/schema
                     title: Hazardous properties
                     examples:
@@ -1184,7 +1184,7 @@ components:
                   - totalWeight
                 additionalProperties: false
               treatments:
-                description: Not accepted when creating a movement yet
+                description: Not accepted when creating a Movement yet
                 not: {}
                 $schema: https://json-schema.org/draft/2020-12/schema
                 title: Treatments
@@ -1275,7 +1275,7 @@ components:
                   additionalProperties: false
             $schema: https://json-schema.org/draft/2020-12/schema
             title: Waste item
-            description: A single item of waste in a movement. classification and physicalDetails are required; treatments is optional.
+            description: A single item of waste in a Movement. classification and physicalDetails are required; treatments is optional.
             examples:
               - classification:
                   wasteDescription: Mixed municipal waste
@@ -1344,7 +1344,7 @@ components:
                     isEstimate: false
           minItems: 1
         brokerOrDealer:
-          description: Any broker or dealer involved in the movement.
+          description: Any broker or dealer involved in the Movement.
           $schema: https://json-schema.org/draft/2020-12/schema
           title: Broker or dealer involvement
           examples:
@@ -1380,7 +1380,7 @@ components:
           properties:
             isPresent:
               type: boolean
-              description: Whether a broker or dealer was involved in arranging the movement. Absent is equivalent to false.
+              description: Whether a broker or dealer was involved in arranging the Movement. Absent is equivalent to false.
             items:
               type: array
               minItems: 1
@@ -1436,7 +1436,7 @@ components:
                     type: string
                     minLength: 1
                     maxLength: 5000
-                    description: Reason no registrationNumber is held. Free text for now — enum values TBC pending BA/policy input. Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
+                    description: Why there is no registration number. Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
                   contactDetails:
                     description: How to contact the broker or dealer.
                     $schema: https://json-schema.org/draft/2020-12/schema
@@ -1496,7 +1496,7 @@ components:
               description: The brokers or dealers involved. Required with at least one entry when isPresent is true, and must not be provided otherwise. More than one may be declared.
           additionalProperties: false
         supportingReferences:
-          description: References that help identify the movement, such as a PO or job number.
+          description: References that help identify the Movement, such as a PO or job number.
           $schema: https://json-schema.org/draft/2020-12/schema
           title: Supporting references
           examples:
@@ -1563,7 +1563,7 @@ components:
           minLength: 1
           maxLength: 5000
         consignmentNote:
-          description: The hazardous waste consignment note. Required when any waste item declares hazardous properties. Replaces hazardousWasteConsignmentCode and reasonForNoConsignmentCode.
+          description: The hazardous waste consignment note. Required when any waste item declares hazardous properties.
           $schema: https://json-schema.org/draft/2020-12/schema
           title: Consignment note
           examples:
@@ -1589,7 +1589,7 @@ components:
               type: string
               minLength: 1
               maxLength: 5000
-              description: 'Free text: why there is no consignment note code. Required when any waste item declares hazardous properties and ''code'' is not provided; not allowed when ''code'' is provided.'
+              description: Why there is no consignment note code. Required when any waste item declares hazardous properties and 'code' is not provided; not allowed when 'code' is provided.
           additionalProperties: false
       required:
         - producer
@@ -1601,8 +1601,8 @@ components:
       additionalProperties: false
     recordCollectionRequest:
       $schema: https://json-schema.org/draft/2020-12/schema
-      title: Create collection request
-      description: Payload for POST /beta-2/movements/{movementId}/collection.
+      title: Record collection request
+      description: Payload for `POST /movements/{movementId}/collection`.
       type: object
       properties:
         carrier:
@@ -1693,7 +1693,7 @@ components:
                 - HOUSEHOLD
                 - ONE_OFF
                 - MARINE
-              description: Why the carrier has no registration number. Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
+              description: Why there is no registration number. Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
             meansOfTransport:
               type: string
               enum:
@@ -1775,7 +1775,7 @@ components:
         collectionDateTime:
           type: string
           format: date-time
-          description: The actual time the waste was collected, as an ISO 8601 date-time. The planned time was given when the movement was created.
+          description: The actual time the waste was collected, as an ISO 8601 date-time. The planned time was given when the Movement was created.
         collectionSite:
           description: The place the waste was collected from.
           $schema: https://json-schema.org/draft/2020-12/schema
@@ -1846,7 +1846,7 @@ components:
             - contactDetails
           additionalProperties: false
         brokerOrDealer:
-          description: Any broker or dealer involved in the collection.
+          description: Any broker or dealer involved in the Collection.
           $schema: https://json-schema.org/draft/2020-12/schema
           title: Broker or dealer involvement
           examples:
@@ -1882,7 +1882,7 @@ components:
           properties:
             isPresent:
               type: boolean
-              description: Whether a broker or dealer was involved in arranging the movement. Absent is equivalent to false.
+              description: Whether a broker or dealer was involved in arranging the Movement. Absent is equivalent to false.
             items:
               type: array
               minItems: 1
@@ -1938,7 +1938,7 @@ components:
                     type: string
                     minLength: 1
                     maxLength: 5000
-                    description: Reason no registrationNumber is held. Free text for now — enum values TBC pending BA/policy input. Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
+                    description: Why there is no registration number. Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
                   contactDetails:
                     description: How to contact the broker or dealer.
                     $schema: https://json-schema.org/draft/2020-12/schema
@@ -2001,7 +2001,7 @@ components:
           type: boolean
           description: Carrier confirms they have inspected the waste, that it is as described, and that they are content to transport it.
         supportingReferences:
-          description: References that help identify the collection, such as a PO or job number.
+          description: References that help identify the Collection, such as a PO or job number.
           $schema: https://json-schema.org/draft/2020-12/schema
           title: Supporting references
           examples:
@@ -2076,7 +2076,7 @@ components:
     recordDeliveryRequest:
       $schema: https://json-schema.org/draft/2020-12/schema
       title: Record delivery request
-      description: Payload for POST /beta-2/deliveries.
+      description: Payload for `POST /deliveries`.
       type: object
       properties:
         movementIds:
@@ -2084,13 +2084,13 @@ components:
           items:
             $schema: https://json-schema.org/draft/2020-12/schema
             title: Movement ID
-            description: 'Unique identifier for a waste movement, minted by the server on `POST /movements`. Format: a two-digit year prefix followed by six or seven characters from A–Z and 0–9, 8 or 9 characters in all. Movement IDs and Delivery IDs share this format. Treat it as opaque: don''t parse it.'
+            description: 'Unique identifier for a Movement, minted by the server on `POST /movements`. Format: a two-digit year prefix followed by six or seven characters from A–Z and 0–9, 8 or 9 characters in all. Movement IDs and Delivery IDs share this format. Treat it as opaque: don''t parse it.'
             type: string
             pattern: ^[0-9]{2}[A-Z0-9]{6,7}$
             examples:
               - 25HRA0B2
           minItems: 1
-          description: One or more Movement IDs delivered together at this delivery.
+          description: One or more Movement IDs delivered together in this Delivery.
         carrier:
           description: The carrier that delivered the waste.
           $schema: https://json-schema.org/draft/2020-12/schema
@@ -2179,7 +2179,7 @@ components:
                 - HOUSEHOLD
                 - ONE_OFF
                 - MARINE
-              description: Why the carrier has no registration number. Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
+              description: Why there is no registration number. Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
             meansOfTransport:
               type: string
               enum:
@@ -2259,7 +2259,7 @@ components:
             - contactDetails
           additionalProperties: false
         supportingReferences:
-          description: References that help identify the delivery, such as a PO or job number.
+          description: References that help identify the Delivery, such as a PO or job number.
           $schema: https://json-schema.org/draft/2020-12/schema
           title: Supporting references
           examples:
@@ -2323,7 +2323,7 @@ components:
     recordReceiptRequest:
       $schema: https://json-schema.org/draft/2020-12/schema
       title: Record receipt request
-      description: Payload for POST /beta-2/deliveries/{deliveryId}/receipt.
+      description: Payload for `POST /deliveries/{deliveryId}/receipt`.
       type: object
       properties:
         receiptDateTime:
@@ -2422,7 +2422,7 @@ components:
                 - HOUSEHOLD
                 - ONE_OFF
                 - MARINE
-              description: Why the carrier has no registration number. Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
+              description: Why there is no registration number. Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
             meansOfTransport:
               type: string
               enum:
@@ -2778,7 +2778,7 @@ components:
               - weight
             additionalProperties: false
         brokerOrDealer:
-          description: Any broker or dealer involved in the movement.
+          description: Any broker or dealer involved in the Movement.
           $schema: https://json-schema.org/draft/2020-12/schema
           title: Broker or dealer involvement
           examples:
@@ -2814,7 +2814,7 @@ components:
           properties:
             isPresent:
               type: boolean
-              description: Whether a broker or dealer was involved in arranging the movement. Absent is equivalent to false.
+              description: Whether a broker or dealer was involved in arranging the Movement. Absent is equivalent to false.
             items:
               type: array
               minItems: 1
@@ -2870,7 +2870,7 @@ components:
                     type: string
                     minLength: 1
                     maxLength: 5000
-                    description: Reason no registrationNumber is held. Free text for now — enum values TBC pending BA/policy input. Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
+                    description: Why there is no registration number. Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
                   contactDetails:
                     description: How to contact the broker or dealer.
                     $schema: https://json-schema.org/draft/2020-12/schema
@@ -2930,7 +2930,7 @@ components:
               description: The brokers or dealers involved. Required with at least one entry when isPresent is true, and must not be provided otherwise. More than one may be declared.
           additionalProperties: false
         supportingReferences:
-          description: References that help identify the receipt, such as a PO or job number.
+          description: References that help identify the Receipt, such as a PO or job number.
           $schema: https://json-schema.org/draft/2020-12/schema
           title: Supporting references
           examples:
@@ -2997,14 +2997,14 @@ components:
     recordReceiptUndocumentedRequest:
       $schema: https://json-schema.org/draft/2020-12/schema
       title: Record undocumented receipt request
-      description: Payload for POST /beta-2/receipts. A consignmentNote is required when any waste item declares hazardous properties; the service checks that, as the rule spans the waste items and the consignment note.
+      description: Payload for `POST /receipts`. A consignmentNote is required when any waste item declares hazardous properties; the service checks that, as the rule spans the waste items and the consignment note.
       type: object
       properties:
         reasonForNoDeliveryId:
           type: string
           minLength: 1
           maxLength: 5000
-          description: Mandatory explanation for why this receipt is being recorded without a Delivery ID.
+          description: Why this Receipt has no Delivery ID. Required, because this route is for Receipts without one; a Receipt with a Delivery ID is recorded at `POST /deliveries/{deliveryId}/receipt`.
           examples:
             - No delivery was recorded prior to receipt; waste received directly from the producer.
         receiptDateTime:
@@ -3103,7 +3103,7 @@ components:
                 - HOUSEHOLD
                 - ONE_OFF
                 - MARINE
-              description: Why the carrier has no registration number. Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
+              description: Why there is no registration number. Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
             meansOfTransport:
               type: string
               enum:
@@ -3317,10 +3317,10 @@ components:
                     items:
                       type: string
                       pattern: ^\d{6}$
-                      description: 'A European Waste Catalogue (EWC) code: six digits, with no spaces. Only the format is checked here; the service also checks the code is one of those served by GET /reference-data/ewc-codes, which is too long a list to inline, and reports an unrecognised code as an InvalidValue error.'
+                      description: 'A European Waste Catalogue (EWC) code: six digits, with no spaces. Only the format is checked here; the service also checks the code is one of those served by `GET /reference-data/ewc-codes`, which is too long a list to inline, and reports an unrecognised code as an InvalidValue error.'
                     minItems: 1
                     maxItems: 5
-                    description: 'The EWC codes that describe the waste: at least one, and up to five to allow for dual and mirror codes. Each must be six digits and a code from GET /reference-data/ewc-codes; the service checks the second.'
+                    description: 'The EWC codes that describe the waste: at least one, and up to five to allow for dual and mirror codes. Each must be six digits and a code from `GET /reference-data/ewc-codes`; the service checks the second.'
                   pops:
                     description: Whether the waste item contains persistent organic pollutants, and if so which. Required, even when there are none.
                     $schema: https://json-schema.org/draft/2020-12/schema
@@ -3409,7 +3409,7 @@ components:
                               type: string
                               minLength: 1
                               maxLength: 255
-                              description: The POP's code, from GET /reference-data/pop-names. Only checked for being non-empty here; the service checks it against the reference data and reports an unrecognised code as an InvalidValue error.
+                              description: The POP's code, from `GET /reference-data/pop-names`. Only checked for being non-empty here; the service checks it against the reference data and reports an unrecognised code as an InvalidValue error.
                             unit:
                               type: string
                               enum:
@@ -3434,7 +3434,7 @@ components:
                       - isPresent
                     additionalProperties: false
                   hazardous:
-                    description: Whether the waste item has hazardous properties, and if so which. Required, even when there are none. A movement is hazardous when any of its waste items declares hazardous properties.
+                    description: Whether the waste item has hazardous properties, and if so which. Required, even when there are none. A Movement is hazardous when any of its waste items declares hazardous properties.
                     $schema: https://json-schema.org/draft/2020-12/schema
                     title: Hazardous properties
                     examples:
@@ -3720,7 +3720,7 @@ components:
                   - totalWeight
                 additionalProperties: false
               treatments:
-                description: 'Required on every waste item of a receipt: at least one disposal or recovery operation'
+                description: 'Required on every waste item of a Receipt: at least one disposal or recovery operation'
                 $schema: https://json-schema.org/draft/2020-12/schema
                 title: Treatments
                 examples:
@@ -3812,7 +3812,7 @@ components:
               - treatments
             $schema: https://json-schema.org/draft/2020-12/schema
             title: Waste item
-            description: A single item of waste in a movement. classification and physicalDetails are required; treatments is optional.
+            description: A single item of waste in a Movement. classification and physicalDetails are required; treatments is optional.
             examples:
               - classification:
                   wasteDescription: Mixed municipal waste
@@ -3878,7 +3878,7 @@ components:
                     isEstimate: false
           minItems: 1
         brokerOrDealer:
-          description: Any broker or dealer involved in the movement.
+          description: Any broker or dealer involved in the Movement.
           $schema: https://json-schema.org/draft/2020-12/schema
           title: Broker or dealer involvement
           examples:
@@ -3914,7 +3914,7 @@ components:
           properties:
             isPresent:
               type: boolean
-              description: Whether a broker or dealer was involved in arranging the movement. Absent is equivalent to false.
+              description: Whether a broker or dealer was involved in arranging the Movement. Absent is equivalent to false.
             items:
               type: array
               minItems: 1
@@ -3970,7 +3970,7 @@ components:
                     type: string
                     minLength: 1
                     maxLength: 5000
-                    description: Reason no registrationNumber is held. Free text for now — enum values TBC pending BA/policy input. Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
+                    description: Why there is no registration number. Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
                   contactDetails:
                     description: How to contact the broker or dealer.
                     $schema: https://json-schema.org/draft/2020-12/schema
@@ -4030,7 +4030,7 @@ components:
               description: The brokers or dealers involved. Required with at least one entry when isPresent is true, and must not be provided otherwise. More than one may be declared.
           additionalProperties: false
         supportingReferences:
-          description: References that help identify the receipt, such as a PO or job number.
+          description: References that help identify the Receipt, such as a PO or job number.
           $schema: https://json-schema.org/draft/2020-12/schema
           title: Supporting references
           examples:
@@ -4114,7 +4114,7 @@ components:
               type: string
               minLength: 1
               maxLength: 5000
-              description: 'Free text: why there is no consignment note code. Required when any waste item declares hazardous properties and ''code'' is not provided; not allowed when ''code'' is provided.'
+              description: Why there is no consignment note code. Required when any waste item declares hazardous properties and 'code' is not provided; not allowed when 'code' is provided.
           additionalProperties: false
       required:
         - reasonForNoDeliveryId
@@ -4238,7 +4238,7 @@ components:
     createMovementResponse:
       $schema: https://json-schema.org/draft/2020-12/schema
       title: Create movement response
-      description: Response returned when a movement is created.
+      description: Response returned when a Movement is created.
       type: object
       required:
         - data
@@ -4246,12 +4246,12 @@ components:
       properties:
         data:
           type: object
-          description: The created movement.
+          description: The created Movement.
           required:
             - movementId
           properties:
             movementId:
-              description: The Movement ID minted for the new movement.
+              description: The Movement ID minted for the new Movement.
               $schema: https://json-schema.org/draft/2020-12/schema
               title: Movement ID
               type: string
@@ -4315,8 +4315,8 @@ components:
       additionalProperties: false
     recordCollectionResponse:
       $schema: https://json-schema.org/draft/2020-12/schema
-      title: Create collection response
-      description: Response returned when a collection event is recorded.
+      title: Record collection response
+      description: Response returned when a Collection is recorded.
       type: object
       required:
         - data
@@ -4324,7 +4324,7 @@ components:
       properties:
         data:
           type: 'null'
-          description: No resource id is returned for a collection event; always null.
+          description: No resource id is returned for a Collection; always null.
           examples:
             - null
         validation:
@@ -4381,10 +4381,10 @@ components:
               description: Data-quality warnings. Empty when there are none.
           additionalProperties: false
       additionalProperties: false
-    deliveryResponse:
+    recordDeliveryResponse:
       $schema: https://json-schema.org/draft/2020-12/schema
       title: Record delivery response
-      description: Response returned when a delivery is recorded.
+      description: Response returned when a Delivery is recorded.
       type: object
       required:
         - data
@@ -4415,7 +4415,7 @@ components:
                   - wasteType
                 properties:
                   deliveryId:
-                    description: The Delivery ID for this delivery.
+                    description: The Delivery ID for this Delivery.
                     $schema: https://json-schema.org/draft/2020-12/schema
                     title: Delivery ID
                     type: string
@@ -4428,14 +4428,14 @@ components:
                     items:
                       $schema: https://json-schema.org/draft/2020-12/schema
                       title: Movement ID
-                      description: 'Unique identifier for a waste movement, minted by the server on `POST /movements`. Format: a two-digit year prefix followed by six or seven characters from A–Z and 0–9, 8 or 9 characters in all. Movement IDs and Delivery IDs share this format. Treat it as opaque: don''t parse it.'
+                      description: 'Unique identifier for a Movement, minted by the server on `POST /movements`. Format: a two-digit year prefix followed by six or seven characters from A–Z and 0–9, 8 or 9 characters in all. Movement IDs and Delivery IDs share this format. Treat it as opaque: don''t parse it.'
                       type: string
                       pattern: ^[0-9]{2}[A-Z0-9]{6,7}$
                       examples:
                         - 25HRA0B2
                     description: The subset of the submitted Movement IDs covered by this Delivery.
                   wasteType:
-                    description: Whether the movements in this delivery carry hazardous or non-hazardous waste.
+                    description: Whether the Movements in this Delivery carry hazardous or non-hazardous waste.
                     $schema: https://json-schema.org/draft/2020-12/schema
                     title: Waste type
                     type: string
@@ -4504,7 +4504,7 @@ components:
     recordReceiptResponse:
       $schema: https://json-schema.org/draft/2020-12/schema
       title: Record receipt response
-      description: Response returned when a receipt is recorded.
+      description: Response returned when a Receipt is recorded.
       type: object
       required:
         - data
@@ -4512,12 +4512,12 @@ components:
       properties:
         data:
           type: object
-          description: The Delivery the receipt is recorded against — echoed from the path on `POST /deliveries/{deliveryId}/receipt`, or a new empty Delivery minted by `POST /receipts`.
+          description: The Delivery the Receipt is recorded against — echoed from the path on `POST /deliveries/{deliveryId}/receipt`, or a new empty Delivery minted by `POST /receipts`.
           required:
             - deliveryId
           properties:
             deliveryId:
-              description: The Delivery ID the receipt was recorded against.
+              description: The Delivery ID the Receipt was recorded against.
               $schema: https://json-schema.org/draft/2020-12/schema
               title: Delivery ID
               type: string
@@ -4582,7 +4582,7 @@ components:
     recordReceiptUndocumentedResponse:
       $schema: https://json-schema.org/draft/2020-12/schema
       title: Record undocumented receipt response
-      description: 'Response returned when a receipt is recorded without a Delivery ID. Same shape as recording a receipt against a delivery: `data.deliveryId` is the new empty Delivery minted for it.'
+      description: 'Response returned when a Receipt is recorded without a Delivery ID. Same shape as recording a Receipt against a Delivery: `data.deliveryId` is the new empty Delivery minted for it.'
       type: object
       required:
         - data
@@ -4590,12 +4590,12 @@ components:
       properties:
         data:
           type: object
-          description: The Delivery the receipt is recorded against — echoed from the path on `POST /deliveries/{deliveryId}/receipt`, or a new empty Delivery minted by `POST /receipts`.
+          description: The Delivery the Receipt is recorded against — echoed from the path on `POST /deliveries/{deliveryId}/receipt`, or a new empty Delivery minted by `POST /receipts`.
           required:
             - deliveryId
           properties:
             deliveryId:
-              description: The Delivery ID the receipt was recorded against.
+              description: The Delivery ID the Receipt was recorded against.
               $schema: https://json-schema.org/draft/2020-12/schema
               title: Delivery ID
               type: string
@@ -4915,8 +4915,8 @@ paths:
     post:
       tags:
         - Movement
-      summary: Create a waste movement
-      description: Creates a new waste movement and returns its Movement ID.
+      summary: Create a Movement
+      description: Creates a new Movement and returns its Movement ID.
       operationId: createMovement
       requestBody:
         required: true
@@ -4925,7 +4925,7 @@ paths:
             schema:
               $schema: https://json-schema.org/draft/2020-12/schema
               title: Create movement request
-              description: Payload for POST /beta-2/movements. A consignmentNote is required when any waste item declares hazardous properties; the service checks that, as the rule spans the waste items and the consignment note.
+              description: Payload for `POST /movements`. A consignmentNote is required when any waste item declares hazardous properties; the service checks that, as the rule spans the waste items and the consignment note.
               type: object
               properties:
                 producer:
@@ -4963,7 +4963,7 @@ paths:
                       allOf:
                         - $schema: https://json-schema.org/draft/2020-12/schema
                           title: Producer base fields
-                          description: Fields present on every Producer, regardless of wasteSource.
+                          description: Placeholder for fields shared by every Producer, regardless of wasteSource. It has none yet.
                           type: object
                           properties: {}
                         - type: object
@@ -4994,7 +4994,7 @@ paths:
                       allOf:
                         - $schema: https://json-schema.org/draft/2020-12/schema
                           title: Producer base fields
-                          description: Fields present on every Producer, regardless of wasteSource.
+                          description: Placeholder for fields shared by every Producer, regardless of wasteSource. It has none yet.
                           type: object
                           properties: {}
                         - type: object
@@ -5035,7 +5035,7 @@ paths:
                               type: string
                               minLength: 1
                               maxLength: 5000
-                              description: Reason no authorisationNumber is held. Free text for now — enum values TBC pending BA/policy input. Exactly one of 'authorisationNumber' or 'reasonForNoAuthorisationNumber' is required.
+                              description: Why there is no authorisation number. Exactly one of 'authorisationNumber' or 'reasonForNoAuthorisationNumber' is required.
                             sicCode:
                               type: string
                               pattern: ^\d{5}$
@@ -5124,7 +5124,7 @@ paths:
                       allOf:
                         - $schema: https://json-schema.org/draft/2020-12/schema
                           title: Producer base fields
-                          description: Fields present on every Producer, regardless of wasteSource.
+                          description: Placeholder for fields shared by every Producer, regardless of wasteSource. It has none yet.
                           type: object
                           properties: {}
                         - type: object
@@ -5165,7 +5165,7 @@ paths:
                               type: string
                               minLength: 1
                               maxLength: 5000
-                              description: Reason no authorisationNumber is held. Free text for now — enum values TBC pending BA/policy input. Exactly one of 'authorisationNumber' or 'reasonForNoAuthorisationNumber' is required.
+                              description: Why there is no authorisation number. Exactly one of 'authorisationNumber' or 'reasonForNoAuthorisationNumber' is required.
                             sicCode:
                               type: string
                               pattern: ^\d{5}$
@@ -5239,7 +5239,7 @@ paths:
                 collectionDateTime:
                   type: string
                   format: date-time
-                  description: The planned time the waste will be collected, as an ISO 8601 date-time. The actual time is given when the collection is recorded.
+                  description: The planned time the waste will be collected, as an ISO 8601 date-time. The actual time is given when the Collection is recorded.
                 collectionSite:
                   description: The place the waste will be collected from.
                   $schema: https://json-schema.org/draft/2020-12/schema
@@ -5399,7 +5399,7 @@ paths:
                           - HOUSEHOLD
                           - ONE_OFF
                           - MARINE
-                        description: Why the carrier has no registration number. Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
+                        description: Why there is no registration number. Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
                       meansOfTransport:
                         type: string
                         enum:
@@ -5571,7 +5571,7 @@ paths:
                   minItems: 1
                   description: The intended receivers of the waste. At least one is required.
                 wasteItems:
-                  description: The items of waste in the movement. At least one is required. Treatments are not accepted when creating a movement.
+                  description: The items of waste in the Movement. At least one is required. Treatments are not accepted when creating a Movement.
                   type: array
                   items:
                     type: object
@@ -5619,10 +5619,10 @@ paths:
                             items:
                               type: string
                               pattern: ^\d{6}$
-                              description: 'A European Waste Catalogue (EWC) code: six digits, with no spaces. Only the format is checked here; the service also checks the code is one of those served by GET /reference-data/ewc-codes, which is too long a list to inline, and reports an unrecognised code as an InvalidValue error.'
+                              description: 'A European Waste Catalogue (EWC) code: six digits, with no spaces. Only the format is checked here; the service also checks the code is one of those served by `GET /reference-data/ewc-codes`, which is too long a list to inline, and reports an unrecognised code as an InvalidValue error.'
                             minItems: 1
                             maxItems: 5
-                            description: 'The EWC codes that describe the waste: at least one, and up to five to allow for dual and mirror codes. Each must be six digits and a code from GET /reference-data/ewc-codes; the service checks the second.'
+                            description: 'The EWC codes that describe the waste: at least one, and up to five to allow for dual and mirror codes. Each must be six digits and a code from `GET /reference-data/ewc-codes`; the service checks the second.'
                           pops:
                             description: Whether the waste item contains persistent organic pollutants, and if so which. Required, even when there are none.
                             $schema: https://json-schema.org/draft/2020-12/schema
@@ -5711,7 +5711,7 @@ paths:
                                       type: string
                                       minLength: 1
                                       maxLength: 255
-                                      description: The POP's code, from GET /reference-data/pop-names. Only checked for being non-empty here; the service checks it against the reference data and reports an unrecognised code as an InvalidValue error.
+                                      description: The POP's code, from `GET /reference-data/pop-names`. Only checked for being non-empty here; the service checks it against the reference data and reports an unrecognised code as an InvalidValue error.
                                     unit:
                                       type: string
                                       enum:
@@ -5736,7 +5736,7 @@ paths:
                               - isPresent
                             additionalProperties: false
                           hazardous:
-                            description: Whether the waste item has hazardous properties, and if so which. Required, even when there are none. A movement is hazardous when any of its waste items declares hazardous properties.
+                            description: Whether the waste item has hazardous properties, and if so which. Required, even when there are none. A Movement is hazardous when any of its waste items declares hazardous properties.
                             $schema: https://json-schema.org/draft/2020-12/schema
                             title: Hazardous properties
                             examples:
@@ -6022,7 +6022,7 @@ paths:
                           - totalWeight
                         additionalProperties: false
                       treatments:
-                        description: Not accepted when creating a movement yet
+                        description: Not accepted when creating a Movement yet
                         not: {}
                         $schema: https://json-schema.org/draft/2020-12/schema
                         title: Treatments
@@ -6113,7 +6113,7 @@ paths:
                           additionalProperties: false
                     $schema: https://json-schema.org/draft/2020-12/schema
                     title: Waste item
-                    description: A single item of waste in a movement. classification and physicalDetails are required; treatments is optional.
+                    description: A single item of waste in a Movement. classification and physicalDetails are required; treatments is optional.
                     examples:
                       - classification:
                           wasteDescription: Mixed municipal waste
@@ -6182,7 +6182,7 @@ paths:
                             isEstimate: false
                   minItems: 1
                 brokerOrDealer:
-                  description: Any broker or dealer involved in the movement.
+                  description: Any broker or dealer involved in the Movement.
                   $schema: https://json-schema.org/draft/2020-12/schema
                   title: Broker or dealer involvement
                   examples:
@@ -6218,7 +6218,7 @@ paths:
                   properties:
                     isPresent:
                       type: boolean
-                      description: Whether a broker or dealer was involved in arranging the movement. Absent is equivalent to false.
+                      description: Whether a broker or dealer was involved in arranging the Movement. Absent is equivalent to false.
                     items:
                       type: array
                       minItems: 1
@@ -6274,7 +6274,7 @@ paths:
                             type: string
                             minLength: 1
                             maxLength: 5000
-                            description: Reason no registrationNumber is held. Free text for now — enum values TBC pending BA/policy input. Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
+                            description: Why there is no registration number. Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
                           contactDetails:
                             description: How to contact the broker or dealer.
                             $schema: https://json-schema.org/draft/2020-12/schema
@@ -6334,7 +6334,7 @@ paths:
                       description: The brokers or dealers involved. Required with at least one entry when isPresent is true, and must not be provided otherwise. More than one may be declared.
                   additionalProperties: false
                 supportingReferences:
-                  description: References that help identify the movement, such as a PO or job number.
+                  description: References that help identify the Movement, such as a PO or job number.
                   $schema: https://json-schema.org/draft/2020-12/schema
                   title: Supporting references
                   examples:
@@ -6401,7 +6401,7 @@ paths:
                   minLength: 1
                   maxLength: 5000
                 consignmentNote:
-                  description: The hazardous waste consignment note. Required when any waste item declares hazardous properties. Replaces hazardousWasteConsignmentCode and reasonForNoConsignmentCode.
+                  description: The hazardous waste consignment note. Required when any waste item declares hazardous properties.
                   $schema: https://json-schema.org/draft/2020-12/schema
                   title: Consignment note
                   examples:
@@ -6427,7 +6427,7 @@ paths:
                       type: string
                       minLength: 1
                       maxLength: 5000
-                      description: 'Free text: why there is no consignment note code. Required when any waste item declares hazardous properties and ''code'' is not provided; not allowed when ''code'' is provided.'
+                      description: Why there is no consignment note code. Required when any waste item declares hazardous properties and 'code' is not provided; not allowed when 'code' is provided.
                   additionalProperties: false
               required:
                 - producer
@@ -6592,7 +6592,7 @@ paths:
               schema:
                 $schema: https://json-schema.org/draft/2020-12/schema
                 title: Create movement response
-                description: Response returned when a movement is created.
+                description: Response returned when a Movement is created.
                 type: object
                 required:
                   - data
@@ -6600,12 +6600,12 @@ paths:
                 properties:
                   data:
                     type: object
-                    description: The created movement.
+                    description: The created Movement.
                     required:
                       - movementId
                     properties:
                       movementId:
-                        description: The Movement ID minted for the new movement.
+                        description: The Movement ID minted for the new Movement.
                         $schema: https://json-schema.org/draft/2020-12/schema
                         title: Movement ID
                         type: string
@@ -6685,12 +6685,12 @@ paths:
           links:
             RecordCollection:
               operationId: recordCollection
-              description: The returned `movementId` identifies the movement whose collection is recorded.
+              description: The returned `movementId` identifies the Movement whose Collection is recorded.
               parameters:
                 movementId: $response.body#/data/movementId
             RecordDelivery:
               operationId: recordDelivery
-              description: The returned `movementId` can be included in the `movementIds` of a delivery.
+              description: The returned `movementId` can be included in the `movementIds` of a Delivery.
               requestBody:
                 movementIds:
                   - $response.body#/data/movementId
@@ -6955,7 +6955,7 @@ paths:
         schema:
           $schema: https://json-schema.org/draft/2020-12/schema
           title: Movement ID
-          description: 'Unique identifier for a waste movement, minted by the server on `POST /movements`. Format: a two-digit year prefix followed by six or seven characters from A–Z and 0–9, 8 or 9 characters in all. Movement IDs and Delivery IDs share this format. Treat it as opaque: don''t parse it.'
+          description: 'Unique identifier for a Movement, minted by the server on `POST /movements`. Format: a two-digit year prefix followed by six or seven characters from A–Z and 0–9, 8 or 9 characters in all. Movement IDs and Delivery IDs share this format. Treat it as opaque: don''t parse it.'
           type: string
           pattern: ^[0-9]{2}[A-Z0-9]{6,7}$
           examples:
@@ -6964,8 +6964,8 @@ paths:
     post:
       tags:
         - Collection
-      summary: Record the collection for a movement
-      description: Records a collection event for the given movement.
+      summary: Record the Collection for a Movement
+      description: Records the Collection for the given Movement.
       operationId: recordCollection
       requestBody:
         required: true
@@ -6973,8 +6973,8 @@ paths:
           application/json:
             schema:
               $schema: https://json-schema.org/draft/2020-12/schema
-              title: Create collection request
-              description: Payload for POST /beta-2/movements/{movementId}/collection.
+              title: Record collection request
+              description: Payload for `POST /movements/{movementId}/collection`.
               type: object
               properties:
                 carrier:
@@ -7065,7 +7065,7 @@ paths:
                         - HOUSEHOLD
                         - ONE_OFF
                         - MARINE
-                      description: Why the carrier has no registration number. Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
+                      description: Why there is no registration number. Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
                     meansOfTransport:
                       type: string
                       enum:
@@ -7147,7 +7147,7 @@ paths:
                 collectionDateTime:
                   type: string
                   format: date-time
-                  description: The actual time the waste was collected, as an ISO 8601 date-time. The planned time was given when the movement was created.
+                  description: The actual time the waste was collected, as an ISO 8601 date-time. The planned time was given when the Movement was created.
                 collectionSite:
                   description: The place the waste was collected from.
                   $schema: https://json-schema.org/draft/2020-12/schema
@@ -7218,7 +7218,7 @@ paths:
                     - contactDetails
                   additionalProperties: false
                 brokerOrDealer:
-                  description: Any broker or dealer involved in the collection.
+                  description: Any broker or dealer involved in the Collection.
                   $schema: https://json-schema.org/draft/2020-12/schema
                   title: Broker or dealer involvement
                   examples:
@@ -7254,7 +7254,7 @@ paths:
                   properties:
                     isPresent:
                       type: boolean
-                      description: Whether a broker or dealer was involved in arranging the movement. Absent is equivalent to false.
+                      description: Whether a broker or dealer was involved in arranging the Movement. Absent is equivalent to false.
                     items:
                       type: array
                       minItems: 1
@@ -7310,7 +7310,7 @@ paths:
                             type: string
                             minLength: 1
                             maxLength: 5000
-                            description: Reason no registrationNumber is held. Free text for now — enum values TBC pending BA/policy input. Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
+                            description: Why there is no registration number. Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
                           contactDetails:
                             description: How to contact the broker or dealer.
                             $schema: https://json-schema.org/draft/2020-12/schema
@@ -7373,7 +7373,7 @@ paths:
                   type: boolean
                   description: Carrier confirms they have inspected the waste, that it is as described, and that they are content to transport it.
                 supportingReferences:
-                  description: References that help identify the collection, such as a PO or job number.
+                  description: References that help identify the Collection, such as a PO or job number.
                   $schema: https://json-schema.org/draft/2020-12/schema
                   title: Supporting references
                   examples:
@@ -7523,8 +7523,8 @@ paths:
             application/json:
               schema:
                 $schema: https://json-schema.org/draft/2020-12/schema
-                title: Create collection response
-                description: Response returned when a collection event is recorded.
+                title: Record collection response
+                description: Response returned when a Collection is recorded.
                 type: object
                 required:
                   - data
@@ -7532,7 +7532,7 @@ paths:
                 properties:
                   data:
                     type: 'null'
-                    description: No resource id is returned for a collection event; always null.
+                    description: No resource id is returned for a Collection; always null.
                     examples:
                       - null
                   validation:
@@ -7855,9 +7855,9 @@ paths:
                     description: Field-level problems. Present on 400 responses; omitted otherwise.
                 additionalProperties: false
               example:
-                type: https://waste-tracking.service.gov.uk/problems/movement-not-found
-                title: Waste movement not found
-                detail: No waste movement exists with this Movement ID.
+                type: https://defra.github.io/digital-waste-tracking-api-site/preview/problems/not-found
+                title: Not Found
+                detail: movementId not found
                 instance: /movements/25HRA0B2/collection
                 requestId: 4c6f9e1a-8f2b-4e3d-9a1c-2b7d5e6f0a3c
         '500':
@@ -7948,8 +7948,8 @@ paths:
     post:
       tags:
         - Delivery
-      summary: Record a delivery
-      description: Records a delivery event. All the non-hazardous Movements share one new Delivery ID; each hazardous Movement gets its own Delivery, whose Delivery ID is its Movement ID.
+      summary: Record a Delivery
+      description: Records a Delivery. All the non-hazardous Movements share one new Delivery ID; each hazardous Movement gets its own Delivery, whose Delivery ID is its Movement ID.
       operationId: recordDelivery
       requestBody:
         required: true
@@ -7958,7 +7958,7 @@ paths:
             schema:
               $schema: https://json-schema.org/draft/2020-12/schema
               title: Record delivery request
-              description: Payload for POST /beta-2/deliveries.
+              description: Payload for `POST /deliveries`.
               type: object
               properties:
                 movementIds:
@@ -7966,13 +7966,13 @@ paths:
                   items:
                     $schema: https://json-schema.org/draft/2020-12/schema
                     title: Movement ID
-                    description: 'Unique identifier for a waste movement, minted by the server on `POST /movements`. Format: a two-digit year prefix followed by six or seven characters from A–Z and 0–9, 8 or 9 characters in all. Movement IDs and Delivery IDs share this format. Treat it as opaque: don''t parse it.'
+                    description: 'Unique identifier for a Movement, minted by the server on `POST /movements`. Format: a two-digit year prefix followed by six or seven characters from A–Z and 0–9, 8 or 9 characters in all. Movement IDs and Delivery IDs share this format. Treat it as opaque: don''t parse it.'
                     type: string
                     pattern: ^[0-9]{2}[A-Z0-9]{6,7}$
                     examples:
                       - 25HRA0B2
                   minItems: 1
-                  description: One or more Movement IDs delivered together at this delivery.
+                  description: One or more Movement IDs delivered together in this Delivery.
                 carrier:
                   description: The carrier that delivered the waste.
                   $schema: https://json-schema.org/draft/2020-12/schema
@@ -8061,7 +8061,7 @@ paths:
                         - HOUSEHOLD
                         - ONE_OFF
                         - MARINE
-                      description: Why the carrier has no registration number. Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
+                      description: Why there is no registration number. Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
                     meansOfTransport:
                       type: string
                       enum:
@@ -8141,7 +8141,7 @@ paths:
                     - contactDetails
                   additionalProperties: false
                 supportingReferences:
-                  description: References that help identify the delivery, such as a PO or job number.
+                  description: References that help identify the Delivery, such as a PO or job number.
                   $schema: https://json-schema.org/draft/2020-12/schema
                   title: Supporting references
                   examples:
@@ -8204,7 +8204,7 @@ paths:
               additionalProperties: false
             examples:
               twoMovements:
-                summary: Two movements delivered together
+                summary: Two Movements delivered together
                 value:
                   movementIds:
                     - 25HRA0B2
@@ -8224,7 +8224,7 @@ paths:
                     - label: WASTE_TICKET_NUMBER
                       reference: WT-7781
               mixedWasteTypes:
-                summary: Two non-hazardous movements and one hazardous movement delivered together
+                summary: Two non-hazardous Movements and one hazardous Movement delivered together
                 value:
                   movementIds:
                     - 25HRA0B2
@@ -8256,7 +8256,7 @@ paths:
               schema:
                 $schema: https://json-schema.org/draft/2020-12/schema
                 title: Record delivery response
-                description: Response returned when a delivery is recorded.
+                description: Response returned when a Delivery is recorded.
                 type: object
                 required:
                   - data
@@ -8287,7 +8287,7 @@ paths:
                             - wasteType
                           properties:
                             deliveryId:
-                              description: The Delivery ID for this delivery.
+                              description: The Delivery ID for this Delivery.
                               $schema: https://json-schema.org/draft/2020-12/schema
                               title: Delivery ID
                               type: string
@@ -8300,14 +8300,14 @@ paths:
                               items:
                                 $schema: https://json-schema.org/draft/2020-12/schema
                                 title: Movement ID
-                                description: 'Unique identifier for a waste movement, minted by the server on `POST /movements`. Format: a two-digit year prefix followed by six or seven characters from A–Z and 0–9, 8 or 9 characters in all. Movement IDs and Delivery IDs share this format. Treat it as opaque: don''t parse it.'
+                                description: 'Unique identifier for a Movement, minted by the server on `POST /movements`. Format: a two-digit year prefix followed by six or seven characters from A–Z and 0–9, 8 or 9 characters in all. Movement IDs and Delivery IDs share this format. Treat it as opaque: don''t parse it.'
                                 type: string
                                 pattern: ^[0-9]{2}[A-Z0-9]{6,7}$
                                 examples:
                                   - 25HRA0B2
                               description: The subset of the submitted Movement IDs covered by this Delivery.
                             wasteType:
-                              description: Whether the movements in this delivery carry hazardous or non-hazardous waste.
+                              description: Whether the Movements in this Delivery carry hazardous or non-hazardous waste.
                               $schema: https://json-schema.org/draft/2020-12/schema
                               title: Waste type
                               type: string
@@ -8375,7 +8375,7 @@ paths:
                 additionalProperties: false
               examples:
                 twoMovements:
-                  summary: Two movements delivered together
+                  summary: Two Movements delivered together
                   value:
                     data:
                       deliveries:
@@ -8387,7 +8387,7 @@ paths:
                     validation:
                       warnings: []
                 mixedWasteTypes:
-                  summary: Two non-hazardous movements and one hazardous movement delivered together
+                  summary: Two non-hazardous Movements and one hazardous Movement delivered together
                   value:
                     data:
                       deliveries:
@@ -8405,7 +8405,7 @@ paths:
           links:
             RecordReceipt:
               operationId: recordReceipt
-              description: Each returned `deliveryId` identifies a delivery whose receipt is recorded.
+              description: Each returned `deliveryId` identifies a Delivery whose Receipt is recorded.
               parameters:
                 deliveryId: $response.body#/data/deliveries/0/deliveryId
         '400':
@@ -8665,7 +8665,7 @@ paths:
       tags:
         - Receipt
       summary: Record receipt of undocumented waste
-      description: Fallback for recording receipt with no prior Delivery, e.g. waste received with no movement trail. Not linked to any Movement; `reasonForNoDeliveryId` must explain why. The server creates an empty Delivery behind the scenes and returns its `deliveryId`, so the receipt stays addressable.
+      description: Fallback for recording receipt with no prior Delivery, e.g. waste received with no movement trail. Not linked to any Movement; `reasonForNoDeliveryId` must explain why. The server creates an empty Delivery behind the scenes and returns its `deliveryId`, so the Receipt stays addressable.
       operationId: recordReceiptUndocumented
       requestBody:
         required: true
@@ -8674,14 +8674,14 @@ paths:
             schema:
               $schema: https://json-schema.org/draft/2020-12/schema
               title: Record undocumented receipt request
-              description: Payload for POST /beta-2/receipts. A consignmentNote is required when any waste item declares hazardous properties; the service checks that, as the rule spans the waste items and the consignment note.
+              description: Payload for `POST /receipts`. A consignmentNote is required when any waste item declares hazardous properties; the service checks that, as the rule spans the waste items and the consignment note.
               type: object
               properties:
                 reasonForNoDeliveryId:
                   type: string
                   minLength: 1
                   maxLength: 5000
-                  description: Mandatory explanation for why this receipt is being recorded without a Delivery ID.
+                  description: Why this Receipt has no Delivery ID. Required, because this route is for Receipts without one; a Receipt with a Delivery ID is recorded at `POST /deliveries/{deliveryId}/receipt`.
                   examples:
                     - No delivery was recorded prior to receipt; waste received directly from the producer.
                 receiptDateTime:
@@ -8780,7 +8780,7 @@ paths:
                         - HOUSEHOLD
                         - ONE_OFF
                         - MARINE
-                      description: Why the carrier has no registration number. Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
+                      description: Why there is no registration number. Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
                     meansOfTransport:
                       type: string
                       enum:
@@ -8994,10 +8994,10 @@ paths:
                             items:
                               type: string
                               pattern: ^\d{6}$
-                              description: 'A European Waste Catalogue (EWC) code: six digits, with no spaces. Only the format is checked here; the service also checks the code is one of those served by GET /reference-data/ewc-codes, which is too long a list to inline, and reports an unrecognised code as an InvalidValue error.'
+                              description: 'A European Waste Catalogue (EWC) code: six digits, with no spaces. Only the format is checked here; the service also checks the code is one of those served by `GET /reference-data/ewc-codes`, which is too long a list to inline, and reports an unrecognised code as an InvalidValue error.'
                             minItems: 1
                             maxItems: 5
-                            description: 'The EWC codes that describe the waste: at least one, and up to five to allow for dual and mirror codes. Each must be six digits and a code from GET /reference-data/ewc-codes; the service checks the second.'
+                            description: 'The EWC codes that describe the waste: at least one, and up to five to allow for dual and mirror codes. Each must be six digits and a code from `GET /reference-data/ewc-codes`; the service checks the second.'
                           pops:
                             description: Whether the waste item contains persistent organic pollutants, and if so which. Required, even when there are none.
                             $schema: https://json-schema.org/draft/2020-12/schema
@@ -9086,7 +9086,7 @@ paths:
                                       type: string
                                       minLength: 1
                                       maxLength: 255
-                                      description: The POP's code, from GET /reference-data/pop-names. Only checked for being non-empty here; the service checks it against the reference data and reports an unrecognised code as an InvalidValue error.
+                                      description: The POP's code, from `GET /reference-data/pop-names`. Only checked for being non-empty here; the service checks it against the reference data and reports an unrecognised code as an InvalidValue error.
                                     unit:
                                       type: string
                                       enum:
@@ -9111,7 +9111,7 @@ paths:
                               - isPresent
                             additionalProperties: false
                           hazardous:
-                            description: Whether the waste item has hazardous properties, and if so which. Required, even when there are none. A movement is hazardous when any of its waste items declares hazardous properties.
+                            description: Whether the waste item has hazardous properties, and if so which. Required, even when there are none. A Movement is hazardous when any of its waste items declares hazardous properties.
                             $schema: https://json-schema.org/draft/2020-12/schema
                             title: Hazardous properties
                             examples:
@@ -9397,7 +9397,7 @@ paths:
                           - totalWeight
                         additionalProperties: false
                       treatments:
-                        description: 'Required on every waste item of a receipt: at least one disposal or recovery operation'
+                        description: 'Required on every waste item of a Receipt: at least one disposal or recovery operation'
                         $schema: https://json-schema.org/draft/2020-12/schema
                         title: Treatments
                         examples:
@@ -9489,7 +9489,7 @@ paths:
                       - treatments
                     $schema: https://json-schema.org/draft/2020-12/schema
                     title: Waste item
-                    description: A single item of waste in a movement. classification and physicalDetails are required; treatments is optional.
+                    description: A single item of waste in a Movement. classification and physicalDetails are required; treatments is optional.
                     examples:
                       - classification:
                           wasteDescription: Mixed municipal waste
@@ -9555,7 +9555,7 @@ paths:
                             isEstimate: false
                   minItems: 1
                 brokerOrDealer:
-                  description: Any broker or dealer involved in the movement.
+                  description: Any broker or dealer involved in the Movement.
                   $schema: https://json-schema.org/draft/2020-12/schema
                   title: Broker or dealer involvement
                   examples:
@@ -9591,7 +9591,7 @@ paths:
                   properties:
                     isPresent:
                       type: boolean
-                      description: Whether a broker or dealer was involved in arranging the movement. Absent is equivalent to false.
+                      description: Whether a broker or dealer was involved in arranging the Movement. Absent is equivalent to false.
                     items:
                       type: array
                       minItems: 1
@@ -9647,7 +9647,7 @@ paths:
                             type: string
                             minLength: 1
                             maxLength: 5000
-                            description: Reason no registrationNumber is held. Free text for now — enum values TBC pending BA/policy input. Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
+                            description: Why there is no registration number. Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
                           contactDetails:
                             description: How to contact the broker or dealer.
                             $schema: https://json-schema.org/draft/2020-12/schema
@@ -9707,7 +9707,7 @@ paths:
                       description: The brokers or dealers involved. Required with at least one entry when isPresent is true, and must not be provided otherwise. More than one may be declared.
                   additionalProperties: false
                 supportingReferences:
-                  description: References that help identify the receipt, such as a PO or job number.
+                  description: References that help identify the Receipt, such as a PO or job number.
                   $schema: https://json-schema.org/draft/2020-12/schema
                   title: Supporting references
                   examples:
@@ -9791,7 +9791,7 @@ paths:
                       type: string
                       minLength: 1
                       maxLength: 5000
-                      description: 'Free text: why there is no consignment note code. Required when any waste item declares hazardous properties and ''code'' is not provided; not allowed when ''code'' is provided.'
+                      description: Why there is no consignment note code. Required when any waste item declares hazardous properties and 'code' is not provided; not allowed when 'code' is provided.
                   additionalProperties: false
               required:
                 - reasonForNoDeliveryId
@@ -9802,7 +9802,7 @@ paths:
               additionalProperties: false
             examples:
               withReason:
-                summary: Receipt with no prior delivery, with the reason why, of waste containing POPs
+                summary: Receipt with no prior Delivery, with the reason why, of waste containing POPs
                 value:
                   reasonForNoDeliveryId: No delivery was recorded prior to receipt; waste received directly from the producer.
                   receiptDateTime: '2026-10-14T09:30:00Z'
@@ -9874,7 +9874,7 @@ paths:
               schema:
                 $schema: https://json-schema.org/draft/2020-12/schema
                 title: Record undocumented receipt response
-                description: 'Response returned when a receipt is recorded without a Delivery ID. Same shape as recording a receipt against a delivery: `data.deliveryId` is the new empty Delivery minted for it.'
+                description: 'Response returned when a Receipt is recorded without a Delivery ID. Same shape as recording a Receipt against a Delivery: `data.deliveryId` is the new empty Delivery minted for it.'
                 type: object
                 required:
                   - data
@@ -9882,12 +9882,12 @@ paths:
                 properties:
                   data:
                     type: object
-                    description: The Delivery the receipt is recorded against — echoed from the path on `POST /deliveries/{deliveryId}/receipt`, or a new empty Delivery minted by `POST /receipts`.
+                    description: The Delivery the Receipt is recorded against — echoed from the path on `POST /deliveries/{deliveryId}/receipt`, or a new empty Delivery minted by `POST /receipts`.
                     required:
                       - deliveryId
                     properties:
                       deliveryId:
-                        description: The Delivery ID the receipt was recorded against.
+                        description: The Delivery ID the Receipt was recorded against.
                         $schema: https://json-schema.org/draft/2020-12/schema
                         title: Delivery ID
                         type: string
@@ -9951,7 +9951,7 @@ paths:
                 additionalProperties: false
               examples:
                 withReason:
-                  summary: Receipt with no prior delivery, with the reason why, of waste containing POPs
+                  summary: Receipt with no prior Delivery, with the reason why, of waste containing POPs
                   value:
                     data:
                       deliveryId: 25KMT4Z9
@@ -10218,7 +10218,7 @@ paths:
         schema:
           $schema: https://json-schema.org/draft/2020-12/schema
           title: Delivery ID
-          description: 'Unique identifier for a delivery, returned by `POST /deliveries`. The server mints a new ID for the non-hazardous Delivery; a hazardous Movement''s Delivery reuses its Movement ID. Format: a two-digit year prefix followed by six or seven characters from A–Z and 0–9, 8 or 9 characters in all. Movement IDs and Delivery IDs share this format. Treat it as opaque: don''t parse it.'
+          description: 'Unique identifier for a Delivery, returned by `POST /deliveries`. The server mints a new ID for the non-hazardous Delivery; a hazardous Movement''s Delivery reuses its Movement ID. Format: a two-digit year prefix followed by six or seven characters from A–Z and 0–9, 8 or 9 characters in all. Movement IDs and Delivery IDs share this format. Treat it as opaque: don''t parse it.'
           type: string
           pattern: ^[0-9]{2}[A-Z0-9]{6,7}$
           examples:
@@ -10227,8 +10227,8 @@ paths:
     post:
       tags:
         - Receipt
-      summary: Record receipt of waste against a delivery
-      description: Records receipt of the waste delivered under the given delivery.
+      summary: Record receipt of waste against a Delivery
+      description: Records receipt of the waste delivered under the given Delivery.
       operationId: recordReceipt
       requestBody:
         required: true
@@ -10237,7 +10237,7 @@ paths:
             schema:
               $schema: https://json-schema.org/draft/2020-12/schema
               title: Record receipt request
-              description: Payload for POST /beta-2/deliveries/{deliveryId}/receipt.
+              description: Payload for `POST /deliveries/{deliveryId}/receipt`.
               type: object
               properties:
                 receiptDateTime:
@@ -10336,7 +10336,7 @@ paths:
                         - HOUSEHOLD
                         - ONE_OFF
                         - MARINE
-                      description: Why the carrier has no registration number. Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
+                      description: Why there is no registration number. Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
                     meansOfTransport:
                       type: string
                       enum:
@@ -10692,7 +10692,7 @@ paths:
                       - weight
                     additionalProperties: false
                 brokerOrDealer:
-                  description: Any broker or dealer involved in the movement.
+                  description: Any broker or dealer involved in the Movement.
                   $schema: https://json-schema.org/draft/2020-12/schema
                   title: Broker or dealer involvement
                   examples:
@@ -10728,7 +10728,7 @@ paths:
                   properties:
                     isPresent:
                       type: boolean
-                      description: Whether a broker or dealer was involved in arranging the movement. Absent is equivalent to false.
+                      description: Whether a broker or dealer was involved in arranging the Movement. Absent is equivalent to false.
                     items:
                       type: array
                       minItems: 1
@@ -10784,7 +10784,7 @@ paths:
                             type: string
                             minLength: 1
                             maxLength: 5000
-                            description: Reason no registrationNumber is held. Free text for now — enum values TBC pending BA/policy input. Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
+                            description: Why there is no registration number. Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
                           contactDetails:
                             description: How to contact the broker or dealer.
                             $schema: https://json-schema.org/draft/2020-12/schema
@@ -10844,7 +10844,7 @@ paths:
                       description: The brokers or dealers involved. Required with at least one entry when isPresent is true, and must not be provided otherwise. More than one may be declared.
                   additionalProperties: false
                 supportingReferences:
-                  description: References that help identify the receipt, such as a PO or job number.
+                  description: References that help identify the Receipt, such as a PO or job number.
                   $schema: https://json-schema.org/draft/2020-12/schema
                   title: Supporting references
                   examples:
@@ -10963,7 +10963,7 @@ paths:
                       reference: WB-0042
       responses:
         '201':
-          description: Receipt recorded against the delivery. Body carries the Delivery ID and any validation warnings.
+          description: Receipt recorded against the Delivery. Body carries the Delivery ID and any validation warnings.
           headers:
             x-request-id:
               description: Trace id for this request. Quote it to support if something goes wrong.
@@ -10976,7 +10976,7 @@ paths:
               schema:
                 $schema: https://json-schema.org/draft/2020-12/schema
                 title: Record receipt response
-                description: Response returned when a receipt is recorded.
+                description: Response returned when a Receipt is recorded.
                 type: object
                 required:
                   - data
@@ -10984,12 +10984,12 @@ paths:
                 properties:
                   data:
                     type: object
-                    description: The Delivery the receipt is recorded against — echoed from the path on `POST /deliveries/{deliveryId}/receipt`, or a new empty Delivery minted by `POST /receipts`.
+                    description: The Delivery the Receipt is recorded against — echoed from the path on `POST /deliveries/{deliveryId}/receipt`, or a new empty Delivery minted by `POST /receipts`.
                     required:
                       - deliveryId
                     properties:
                       deliveryId:
-                        description: The Delivery ID the receipt was recorded against.
+                        description: The Delivery ID the Receipt was recorded against.
                         $schema: https://json-schema.org/draft/2020-12/schema
                         title: Delivery ID
                         type: string
@@ -11312,9 +11312,9 @@ paths:
                     description: Field-level problems. Present on 400 responses; omitted otherwise.
                 additionalProperties: false
               example:
-                type: https://waste-tracking.service.gov.uk/problems/delivery-not-found
-                title: Delivery not found
-                detail: No delivery exists with this Delivery ID.
+                type: https://defra.github.io/digital-waste-tracking-api-site/preview/problems/not-found
+                title: Not Found
+                detail: 'No delivery exists with delivery ID: 25KMT4Z9'
                 instance: /deliveries/25KMT4Z9/receipt
                 requestId: 4c6f9e1a-8f2b-4e3d-9a1c-2b7d5e6f0a3c
         '500':
