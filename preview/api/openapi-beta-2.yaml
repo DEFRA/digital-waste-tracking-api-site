@@ -2258,6 +2258,62 @@ components:
             - meansOfTransport
             - contactDetails
           additionalProperties: false
+        deliveryDateTime:
+          type: string
+          format: date-time
+          description: The actual time the waste was delivered, as an ISO 8601 date-time with a timezone.
+        deliverySite:
+          description: The place the waste was delivered to.
+          $schema: https://json-schema.org/draft/2020-12/schema
+          title: Delivery site
+          examples:
+            - organisationName: Hazardous Waste Delivery Site
+              address:
+                fullAddress: 3 Receiver Road, Test City
+                postcode: TE1 3RC
+              rpsNumbers:
+                - 123
+                - 456
+          type: object
+          properties:
+            organisationName:
+              type: string
+              minLength: 1
+              maxLength: 255
+              description: Name of the delivery site.
+            address:
+              description: The address of the delivery site.
+              $schema: https://json-schema.org/draft/2020-12/schema
+              title: Address
+              examples:
+                - fullAddress: 10 Industrial Way, Test City
+                  postcode: TE1 2PQ
+              type: object
+              properties:
+                fullAddress:
+                  type: string
+                  minLength: 1
+                  maxLength: 5000
+                  description: Full address line.
+                postcode:
+                  type: string
+                  pattern: ^\s*(?:(?:(([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z]\d{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y]\d{1,2})|(([A-Za-z]\d[A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y]\d?[A-Za-z])))) \d[A-Za-z]{2})))|(?:(?:[Dd]6[Ww]|[AaC-Fc-fHhKkNnPpRrTtV-Yv-y]\d{2}) ?[0-9AaC-Fc-fHhKkNnPpRrTtV-Yv-y]{4}))\s*$
+                  description: Accepts UK postcodes and Irish Eircodes.
+              required:
+                - postcode
+              additionalProperties: false
+            rpsNumbers:
+              type: array
+              minItems: 1
+              items:
+                type: integer
+                minimum: 1
+                description: A regulatory position statement number, a whole number greater than 0.
+              description: The regulatory position statements the waste was delivered under. Leave out when there are none.
+          required:
+            - organisationName
+            - address
+          additionalProperties: false
         supportingReferences:
           description: References that help identify the Delivery, such as a PO or job number.
           $schema: https://json-schema.org/draft/2020-12/schema
@@ -2319,6 +2375,8 @@ components:
       required:
         - movementIds
         - carrier
+        - deliveryDateTime
+        - deliverySite
       additionalProperties: false
     recordReceiptRequest:
       $schema: https://json-schema.org/draft/2020-12/schema
@@ -8140,6 +8198,62 @@ paths:
                     - meansOfTransport
                     - contactDetails
                   additionalProperties: false
+                deliveryDateTime:
+                  type: string
+                  format: date-time
+                  description: The actual time the waste was delivered, as an ISO 8601 date-time with a timezone.
+                deliverySite:
+                  description: The place the waste was delivered to.
+                  $schema: https://json-schema.org/draft/2020-12/schema
+                  title: Delivery site
+                  examples:
+                    - organisationName: Hazardous Waste Delivery Site
+                      address:
+                        fullAddress: 3 Receiver Road, Test City
+                        postcode: TE1 3RC
+                      rpsNumbers:
+                        - 123
+                        - 456
+                  type: object
+                  properties:
+                    organisationName:
+                      type: string
+                      minLength: 1
+                      maxLength: 255
+                      description: Name of the delivery site.
+                    address:
+                      description: The address of the delivery site.
+                      $schema: https://json-schema.org/draft/2020-12/schema
+                      title: Address
+                      examples:
+                        - fullAddress: 10 Industrial Way, Test City
+                          postcode: TE1 2PQ
+                      type: object
+                      properties:
+                        fullAddress:
+                          type: string
+                          minLength: 1
+                          maxLength: 5000
+                          description: Full address line.
+                        postcode:
+                          type: string
+                          pattern: ^\s*(?:(?:(([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z]\d{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y]\d{1,2})|(([A-Za-z]\d[A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y]\d?[A-Za-z])))) \d[A-Za-z]{2})))|(?:(?:[Dd]6[Ww]|[AaC-Fc-fHhKkNnPpRrTtV-Yv-y]\d{2}) ?[0-9AaC-Fc-fHhKkNnPpRrTtV-Yv-y]{4}))\s*$
+                          description: Accepts UK postcodes and Irish Eircodes.
+                      required:
+                        - postcode
+                      additionalProperties: false
+                    rpsNumbers:
+                      type: array
+                      minItems: 1
+                      items:
+                        type: integer
+                        minimum: 1
+                        description: A regulatory position statement number, a whole number greater than 0.
+                      description: The regulatory position statements the waste was delivered under. Leave out when there are none.
+                  required:
+                    - organisationName
+                    - address
+                  additionalProperties: false
                 supportingReferences:
                   description: References that help identify the Delivery, such as a PO or job number.
                   $schema: https://json-schema.org/draft/2020-12/schema
@@ -8201,6 +8315,8 @@ paths:
               required:
                 - movementIds
                 - carrier
+                - deliveryDateTime
+                - deliverySite
               additionalProperties: false
             examples:
               twoMovements:
@@ -8220,6 +8336,14 @@ paths:
                     address:
                       fullAddress: 4 Carrier Lane, Test City
                       postcode: TE1 4CR
+                  deliveryDateTime: '2026-09-15T13:12:28+01:00'
+                  deliverySite:
+                    organisationName: Receiver Site Ltd
+                    address:
+                      fullAddress: 3 Receiver Road, Test City
+                      postcode: TE1 3RC
+                    rpsNumbers:
+                      - 123
                   supportingReferences:
                     - label: WASTE_TICKET_NUMBER
                       reference: WT-7781
@@ -8241,6 +8365,11 @@ paths:
                     address:
                       fullAddress: 4 Carrier Lane, Test City
                       postcode: TE1 4CR
+                  deliveryDateTime: '2026-01-15T12:12:28Z'
+                  deliverySite:
+                    organisationName: Hazardous Waste Delivery Site
+                    address:
+                      postcode: TE1 3RC
       responses:
         '201':
           description: Delivery recorded. Body carries the recorded Deliveries — the non-hazardous one first, then one per hazardous Movement in the order submitted — and any validation warnings.
