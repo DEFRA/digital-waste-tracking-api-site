@@ -183,6 +183,7 @@ components:
                     organisationName:
                       type: string
                       minLength: 1
+                      maxLength: 255
                       description: Producer organisation name.
                     authorisationNumber:
                       description: Producer environmental permit or exemption number, in a valid UK format. Exactly one of 'authorisationNumber' or 'reasonForNoAuthorisationNumber' is required.
@@ -195,6 +196,7 @@ components:
                     reasonForNoAuthorisationNumber:
                       type: string
                       minLength: 1
+                      maxLength: 5000
                       description: Reason no authorisationNumber is held. Free text for now — enum values TBC pending BA/policy input. Exactly one of 'authorisationNumber' or 'reasonForNoAuthorisationNumber' is required.
                     sicCode:
                       type: string
@@ -213,6 +215,7 @@ components:
                         emailAddress:
                           type: string
                           format: email
+                          maxLength: 254
                           description: Contact email address.
                         phoneNumber:
                           type: string
@@ -242,6 +245,7 @@ components:
                         fullAddress:
                           type: string
                           minLength: 1
+                          maxLength: 5000
                           description: Full address line.
                         postcode:
                           type: string
@@ -309,6 +313,7 @@ components:
                     organisationName:
                       type: string
                       minLength: 1
+                      maxLength: 255
                       description: Producer organisation name.
                     authorisationNumber:
                       description: Producer environmental permit or exemption number, in a valid UK format. Exactly one of 'authorisationNumber' or 'reasonForNoAuthorisationNumber' is required.
@@ -321,6 +326,7 @@ components:
                     reasonForNoAuthorisationNumber:
                       type: string
                       minLength: 1
+                      maxLength: 5000
                       description: Reason no authorisationNumber is held. Free text for now — enum values TBC pending BA/policy input. Exactly one of 'authorisationNumber' or 'reasonForNoAuthorisationNumber' is required.
                     sicCode:
                       type: string
@@ -339,6 +345,7 @@ components:
                         emailAddress:
                           type: string
                           format: email
+                          maxLength: 254
                           description: Contact email address.
                         phoneNumber:
                           type: string
@@ -368,6 +375,7 @@ components:
                         fullAddress:
                           type: string
                           minLength: 1
+                          maxLength: 5000
                           description: Full address line.
                         postcode:
                           type: string
@@ -390,10 +398,10 @@ components:
                   - sicCode
                   - contactDetails
                   - address
-        plannedCollectionDateTime:
+        collectionDateTime:
           type: string
           format: date-time
-          description: The planned collection time, as an ISO 8601 date-time. The actual time is recorded by the Collection event.
+          description: The planned time the waste will be collected, as an ISO 8601 date-time. The actual time is given when the collection is recorded.
         collectionSite:
           description: The place the waste will be collected from.
           $schema: https://json-schema.org/draft/2020-12/schema
@@ -419,6 +427,7 @@ components:
                 fullAddress:
                   type: string
                   minLength: 1
+                  maxLength: 5000
                   description: Full address line.
                 postcode:
                   type: string
@@ -440,6 +449,7 @@ components:
                 emailAddress:
                   type: string
                   format: email
+                  maxLength: 254
                   description: Contact email address.
                 phoneNumber:
                   type: string
@@ -534,6 +544,7 @@ components:
               organisationName:
                 type: string
                 minLength: 1
+                maxLength: 255
                 description: Name of the carrier organisation.
               registrationNumber:
                 description: Waste carrier registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
@@ -565,10 +576,12 @@ components:
               vehicleRegistration:
                 type: string
                 minLength: 1
+                maxLength: 255
                 description: Registration of the vehicle carrying the waste. Required when meansOfTransport is ROAD; forbidden otherwise.
               otherMeansOfTransport:
                 type: string
                 minLength: 1
+                maxLength: 255
                 description: Description of the means of transport. Required when meansOfTransport is OTHER; forbidden otherwise.
               contactDetails:
                 description: How to contact the carrier.
@@ -583,6 +596,7 @@ components:
                   emailAddress:
                     type: string
                     format: email
+                    maxLength: 254
                     description: Contact email address.
                   phoneNumber:
                     type: string
@@ -612,6 +626,7 @@ components:
                   fullAddress:
                     type: string
                     minLength: 1
+                    maxLength: 5000
                     description: Full address line.
                   postcode:
                     type: string
@@ -647,6 +662,7 @@ components:
               siteName:
                 type: string
                 minLength: 1
+                maxLength: 255
                 description: Name of the receiving site.
               authorisationNumber:
                 description: Receiver environmental permit or exemption number, in a valid UK format.
@@ -668,6 +684,7 @@ components:
                   fullAddress:
                     type: string
                     minLength: 1
+                    maxLength: 5000
                     description: Full address line.
                   postcode:
                     type: string
@@ -689,6 +706,7 @@ components:
                   emailAddress:
                     type: string
                     format: email
+                    maxLength: 254
                     description: Contact email address.
                   phoneNumber:
                     type: string
@@ -756,6 +774,7 @@ components:
                   wasteDescription:
                     type: string
                     minLength: 1
+                    maxLength: 5000
                     description: A free-text description of the waste. An empty string is treated as not provided.
                   ewcCodes:
                     type: array
@@ -853,6 +872,7 @@ components:
                             code:
                               type: string
                               minLength: 1
+                              maxLength: 255
                               description: The POP's code, from GET /reference-data/pop-names. Only checked for being non-empty here; the service checks it against the reference data and reports an unrecognised code as an InvalidValue error.
                             unit:
                               type: string
@@ -1032,6 +1052,7 @@ components:
                             name:
                               type: string
                               minLength: 1
+                              maxLength: 255
                               description: The hazardous component's name, as free text. Not checked against any reference data.
                             unit:
                               type: string
@@ -1401,6 +1422,7 @@ components:
                   organisationName:
                     type: string
                     minLength: 1
+                    maxLength: 255
                     description: Name of the broker or dealer organisation who arranged this Movement.
                   registrationNumber:
                     description: Waste carrier, broker or dealer registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
@@ -1413,6 +1435,7 @@ components:
                   reasonForNoRegistrationNumber:
                     type: string
                     minLength: 1
+                    maxLength: 5000
                     description: Reason no registrationNumber is held. Free text for now — enum values TBC pending BA/policy input. Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
                   contactDetails:
                     description: How to contact the broker or dealer.
@@ -1427,6 +1450,7 @@ components:
                       emailAddress:
                         type: string
                         format: email
+                        maxLength: 254
                         description: Contact email address.
                       phoneNumber:
                         type: string
@@ -1456,6 +1480,7 @@ components:
                       fullAddress:
                         type: string
                         minLength: 1
+                        maxLength: 5000
                         description: Full address line.
                       postcode:
                         type: string
@@ -1479,15 +1504,35 @@ components:
                 reference: PO-123456
               - label: JOB_NUMBER
                 reference: CARRIER-JOB-001
+              - label: OTHER
+                otherLabel: Skip hire number
+                reference: SKIP-4471
           type: array
           minItems: 1
           items:
             type: object
+            if:
+              properties:
+                label:
+                  const: OTHER
+              required:
+                - label
+            then:
+              properties:
+                otherLabel: {}
+              required:
+                - otherLabel
+              description: Required when 'label' is 'OTHER'
+            else:
+              properties:
+                otherLabel:
+                  not: {}
+                  description: Not allowed unless 'label' is 'OTHER'
             properties:
               reference:
                 type: string
                 minLength: 1
-                maxLength: 50
+                maxLength: 255
                 description: Reference value — must be supplied together with its label.
               label:
                 type: string
@@ -1499,6 +1544,11 @@ components:
                   - WASTE_TICKET_NUMBER
                   - OTHER
                 description: Label identifying the reference type.
+              otherLabel:
+                type: string
+                minLength: 1
+                maxLength: 255
+                description: What kind of reference it is. Required when label is OTHER; forbidden otherwise.
             required:
               - reference
               - label
@@ -1511,7 +1561,7 @@ components:
             - Handle with care and keep upright.
           type: string
           minLength: 1
-          maxLength: 500
+          maxLength: 5000
         consignmentNote:
           description: The hazardous waste consignment note. Required when any waste item declares hazardous properties. Replaces hazardousWasteConsignmentCode and reasonForNoConsignmentCode.
           $schema: https://json-schema.org/draft/2020-12/schema
@@ -1538,6 +1588,7 @@ components:
             reasonForNoCode:
               type: string
               minLength: 1
+              maxLength: 5000
               description: 'Free text: why there is no consignment note code. Required when any waste item declares hazardous properties and ''code'' is not provided; not allowed when ''code'' is provided.'
           additionalProperties: false
       required:
@@ -1545,7 +1596,7 @@ components:
         - intendedCarriers
         - intendedReceivers
         - wasteItems
-        - plannedCollectionDateTime
+        - collectionDateTime
         - collectionSite
       additionalProperties: false
     recordCollectionRequest:
@@ -1625,6 +1676,7 @@ components:
             organisationName:
               type: string
               minLength: 1
+              maxLength: 255
               description: Name of the carrier organisation.
             registrationNumber:
               description: Waste carrier registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
@@ -1656,10 +1708,12 @@ components:
             vehicleRegistration:
               type: string
               minLength: 1
+              maxLength: 255
               description: Registration of the vehicle carrying the waste. Required when meansOfTransport is ROAD; forbidden otherwise.
             otherMeansOfTransport:
               type: string
               minLength: 1
+              maxLength: 255
               description: Description of the means of transport. Required when meansOfTransport is OTHER; forbidden otherwise.
             contactDetails:
               description: How to contact the carrier.
@@ -1674,6 +1728,7 @@ components:
                 emailAddress:
                   type: string
                   format: email
+                  maxLength: 254
                   description: Contact email address.
                 phoneNumber:
                   type: string
@@ -1703,6 +1758,7 @@ components:
                 fullAddress:
                   type: string
                   minLength: 1
+                  maxLength: 5000
                   description: Full address line.
                 postcode:
                   type: string
@@ -1716,10 +1772,10 @@ components:
             - meansOfTransport
             - contactDetails
           additionalProperties: false
-        actualCollectionDateTime:
+        collectionDateTime:
           type: string
           format: date-time
-          description: The time the waste was collected, as an ISO 8601 date-time.
+          description: The actual time the waste was collected, as an ISO 8601 date-time. The planned time was given when the movement was created.
         collectionSite:
           description: The place the waste was collected from.
           $schema: https://json-schema.org/draft/2020-12/schema
@@ -1745,6 +1801,7 @@ components:
                 fullAddress:
                   type: string
                   minLength: 1
+                  maxLength: 5000
                   description: Full address line.
                 postcode:
                   type: string
@@ -1766,6 +1823,7 @@ components:
                 emailAddress:
                   type: string
                   format: email
+                  maxLength: 254
                   description: Contact email address.
                 phoneNumber:
                   type: string
@@ -1866,6 +1924,7 @@ components:
                   organisationName:
                     type: string
                     minLength: 1
+                    maxLength: 255
                     description: Name of the broker or dealer organisation who arranged this Movement.
                   registrationNumber:
                     description: Waste carrier, broker or dealer registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
@@ -1878,6 +1937,7 @@ components:
                   reasonForNoRegistrationNumber:
                     type: string
                     minLength: 1
+                    maxLength: 5000
                     description: Reason no registrationNumber is held. Free text for now — enum values TBC pending BA/policy input. Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
                   contactDetails:
                     description: How to contact the broker or dealer.
@@ -1892,6 +1952,7 @@ components:
                       emailAddress:
                         type: string
                         format: email
+                        maxLength: 254
                         description: Contact email address.
                       phoneNumber:
                         type: string
@@ -1921,6 +1982,7 @@ components:
                       fullAddress:
                         type: string
                         minLength: 1
+                        maxLength: 5000
                         description: Full address line.
                       postcode:
                         type: string
@@ -1947,15 +2009,35 @@ components:
                 reference: PO-123456
               - label: JOB_NUMBER
                 reference: CARRIER-JOB-001
+              - label: OTHER
+                otherLabel: Skip hire number
+                reference: SKIP-4471
           type: array
           minItems: 1
           items:
             type: object
+            if:
+              properties:
+                label:
+                  const: OTHER
+              required:
+                - label
+            then:
+              properties:
+                otherLabel: {}
+              required:
+                - otherLabel
+              description: Required when 'label' is 'OTHER'
+            else:
+              properties:
+                otherLabel:
+                  not: {}
+                  description: Not allowed unless 'label' is 'OTHER'
             properties:
               reference:
                 type: string
                 minLength: 1
-                maxLength: 50
+                maxLength: 255
                 description: Reference value — must be supplied together with its label.
               label:
                 type: string
@@ -1967,6 +2049,11 @@ components:
                   - WASTE_TICKET_NUMBER
                   - OTHER
                 description: Label identifying the reference type.
+              otherLabel:
+                type: string
+                minLength: 1
+                maxLength: 255
+                description: What kind of reference it is. Required when label is OTHER; forbidden otherwise.
             required:
               - reference
               - label
@@ -1979,11 +2066,11 @@ components:
             - Handle with care and keep upright.
           type: string
           minLength: 1
-          maxLength: 500
+          maxLength: 5000
       required:
         - carrier
         - isDutyOfCareConfirmed
-        - actualCollectionDateTime
+        - collectionDateTime
         - collectionSite
       additionalProperties: false
     recordDeliveryRequest:
@@ -2075,6 +2162,7 @@ components:
             organisationName:
               type: string
               minLength: 1
+              maxLength: 255
               description: Name of the carrier organisation.
             registrationNumber:
               description: Waste carrier registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
@@ -2106,10 +2194,12 @@ components:
             vehicleRegistration:
               type: string
               minLength: 1
+              maxLength: 255
               description: Registration of the vehicle carrying the waste. Required when meansOfTransport is ROAD; forbidden otherwise.
             otherMeansOfTransport:
               type: string
               minLength: 1
+              maxLength: 255
               description: Description of the means of transport. Required when meansOfTransport is OTHER; forbidden otherwise.
             contactDetails:
               description: How to contact the carrier.
@@ -2124,6 +2214,7 @@ components:
                 emailAddress:
                   type: string
                   format: email
+                  maxLength: 254
                   description: Contact email address.
                 phoneNumber:
                   type: string
@@ -2153,6 +2244,7 @@ components:
                 fullAddress:
                   type: string
                   minLength: 1
+                  maxLength: 5000
                   description: Full address line.
                 postcode:
                   type: string
@@ -2175,15 +2267,35 @@ components:
                 reference: PO-123456
               - label: JOB_NUMBER
                 reference: CARRIER-JOB-001
+              - label: OTHER
+                otherLabel: Skip hire number
+                reference: SKIP-4471
           type: array
           minItems: 1
           items:
             type: object
+            if:
+              properties:
+                label:
+                  const: OTHER
+              required:
+                - label
+            then:
+              properties:
+                otherLabel: {}
+              required:
+                - otherLabel
+              description: Required when 'label' is 'OTHER'
+            else:
+              properties:
+                otherLabel:
+                  not: {}
+                  description: Not allowed unless 'label' is 'OTHER'
             properties:
               reference:
                 type: string
                 minLength: 1
-                maxLength: 50
+                maxLength: 255
                 description: Reference value — must be supplied together with its label.
               label:
                 type: string
@@ -2195,6 +2307,11 @@ components:
                   - WASTE_TICKET_NUMBER
                   - OTHER
                 description: Label identifying the reference type.
+              otherLabel:
+                type: string
+                minLength: 1
+                maxLength: 255
+                description: What kind of reference it is. Required when label is OTHER; forbidden otherwise.
             required:
               - reference
               - label
@@ -2288,6 +2405,7 @@ components:
             organisationName:
               type: string
               minLength: 1
+              maxLength: 255
               description: Name of the carrier organisation.
             registrationNumber:
               description: Waste carrier registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
@@ -2319,10 +2437,12 @@ components:
             vehicleRegistration:
               type: string
               minLength: 1
+              maxLength: 255
               description: Registration of the vehicle carrying the waste. Required when meansOfTransport is ROAD; forbidden otherwise.
             otherMeansOfTransport:
               type: string
               minLength: 1
+              maxLength: 255
               description: Description of the means of transport. Required when meansOfTransport is OTHER; forbidden otherwise.
             contactDetails:
               description: How to contact the carrier.
@@ -2337,6 +2457,7 @@ components:
                 emailAddress:
                   type: string
                   format: email
+                  maxLength: 254
                   description: Contact email address.
                 phoneNumber:
                   type: string
@@ -2366,6 +2487,7 @@ components:
                 fullAddress:
                   type: string
                   minLength: 1
+                  maxLength: 5000
                   description: Full address line.
                 postcode:
                   type: string
@@ -2397,6 +2519,7 @@ components:
             siteName:
               type: string
               minLength: 1
+              maxLength: 255
               description: Name of the receiving site.
             authorisationNumber:
               description: Receiver environmental permit or exemption number, in a valid UK format.
@@ -2418,6 +2541,7 @@ components:
                 fullAddress:
                   type: string
                   minLength: 1
+                  maxLength: 5000
                   description: Full address line.
                 postcode:
                   type: string
@@ -2439,6 +2563,7 @@ components:
                 emailAddress:
                   type: string
                   format: email
+                  maxLength: 254
                   description: Contact email address.
                 phoneNumber:
                   type: string
@@ -2731,6 +2856,7 @@ components:
                   organisationName:
                     type: string
                     minLength: 1
+                    maxLength: 255
                     description: Name of the broker or dealer organisation who arranged this Movement.
                   registrationNumber:
                     description: Waste carrier, broker or dealer registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
@@ -2743,6 +2869,7 @@ components:
                   reasonForNoRegistrationNumber:
                     type: string
                     minLength: 1
+                    maxLength: 5000
                     description: Reason no registrationNumber is held. Free text for now — enum values TBC pending BA/policy input. Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
                   contactDetails:
                     description: How to contact the broker or dealer.
@@ -2757,6 +2884,7 @@ components:
                       emailAddress:
                         type: string
                         format: email
+                        maxLength: 254
                         description: Contact email address.
                       phoneNumber:
                         type: string
@@ -2786,6 +2914,7 @@ components:
                       fullAddress:
                         type: string
                         minLength: 1
+                        maxLength: 5000
                         description: Full address line.
                       postcode:
                         type: string
@@ -2809,15 +2938,35 @@ components:
                 reference: PO-123456
               - label: JOB_NUMBER
                 reference: CARRIER-JOB-001
+              - label: OTHER
+                otherLabel: Skip hire number
+                reference: SKIP-4471
           type: array
           minItems: 1
           items:
             type: object
+            if:
+              properties:
+                label:
+                  const: OTHER
+              required:
+                - label
+            then:
+              properties:
+                otherLabel: {}
+              required:
+                - otherLabel
+              description: Required when 'label' is 'OTHER'
+            else:
+              properties:
+                otherLabel:
+                  not: {}
+                  description: Not allowed unless 'label' is 'OTHER'
             properties:
               reference:
                 type: string
                 minLength: 1
-                maxLength: 50
+                maxLength: 255
                 description: Reference value — must be supplied together with its label.
               label:
                 type: string
@@ -2829,6 +2978,11 @@ components:
                   - WASTE_TICKET_NUMBER
                   - OTHER
                 description: Label identifying the reference type.
+              otherLabel:
+                type: string
+                minLength: 1
+                maxLength: 255
+                description: What kind of reference it is. Required when label is OTHER; forbidden otherwise.
             required:
               - reference
               - label
@@ -2849,6 +3003,7 @@ components:
         reasonForNoDeliveryId:
           type: string
           minLength: 1
+          maxLength: 5000
           description: Mandatory explanation for why this receipt is being recorded without a Delivery ID.
           examples:
             - No delivery was recorded prior to receipt; waste received directly from the producer.
@@ -2931,6 +3086,7 @@ components:
             organisationName:
               type: string
               minLength: 1
+              maxLength: 255
               description: Name of the carrier organisation.
             registrationNumber:
               description: Waste carrier registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
@@ -2962,10 +3118,12 @@ components:
             vehicleRegistration:
               type: string
               minLength: 1
+              maxLength: 255
               description: Registration of the vehicle carrying the waste. Required when meansOfTransport is ROAD; forbidden otherwise.
             otherMeansOfTransport:
               type: string
               minLength: 1
+              maxLength: 255
               description: Description of the means of transport. Required when meansOfTransport is OTHER; forbidden otherwise.
             contactDetails:
               description: How to contact the carrier.
@@ -2980,6 +3138,7 @@ components:
                 emailAddress:
                   type: string
                   format: email
+                  maxLength: 254
                   description: Contact email address.
                 phoneNumber:
                   type: string
@@ -3009,6 +3168,7 @@ components:
                 fullAddress:
                   type: string
                   minLength: 1
+                  maxLength: 5000
                   description: Full address line.
                 postcode:
                   type: string
@@ -3040,6 +3200,7 @@ components:
             siteName:
               type: string
               minLength: 1
+              maxLength: 255
               description: Name of the receiving site.
             authorisationNumber:
               description: Receiver environmental permit or exemption number, in a valid UK format.
@@ -3061,6 +3222,7 @@ components:
                 fullAddress:
                   type: string
                   minLength: 1
+                  maxLength: 5000
                   description: Full address line.
                 postcode:
                   type: string
@@ -3082,6 +3244,7 @@ components:
                 emailAddress:
                   type: string
                   format: email
+                  maxLength: 254
                   description: Contact email address.
                 phoneNumber:
                   type: string
@@ -3147,6 +3310,7 @@ components:
                   wasteDescription:
                     type: string
                     minLength: 1
+                    maxLength: 5000
                     description: A free-text description of the waste. An empty string is treated as not provided.
                   ewcCodes:
                     type: array
@@ -3244,6 +3408,7 @@ components:
                             code:
                               type: string
                               minLength: 1
+                              maxLength: 255
                               description: The POP's code, from GET /reference-data/pop-names. Only checked for being non-empty here; the service checks it against the reference data and reports an unrecognised code as an InvalidValue error.
                             unit:
                               type: string
@@ -3423,6 +3588,7 @@ components:
                             name:
                               type: string
                               minLength: 1
+                              maxLength: 255
                               description: The hazardous component's name, as free text. Not checked against any reference data.
                             unit:
                               type: string
@@ -3790,6 +3956,7 @@ components:
                   organisationName:
                     type: string
                     minLength: 1
+                    maxLength: 255
                     description: Name of the broker or dealer organisation who arranged this Movement.
                   registrationNumber:
                     description: Waste carrier, broker or dealer registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
@@ -3802,6 +3969,7 @@ components:
                   reasonForNoRegistrationNumber:
                     type: string
                     minLength: 1
+                    maxLength: 5000
                     description: Reason no registrationNumber is held. Free text for now — enum values TBC pending BA/policy input. Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
                   contactDetails:
                     description: How to contact the broker or dealer.
@@ -3816,6 +3984,7 @@ components:
                       emailAddress:
                         type: string
                         format: email
+                        maxLength: 254
                         description: Contact email address.
                       phoneNumber:
                         type: string
@@ -3845,6 +4014,7 @@ components:
                       fullAddress:
                         type: string
                         minLength: 1
+                        maxLength: 5000
                         description: Full address line.
                       postcode:
                         type: string
@@ -3868,15 +4038,35 @@ components:
                 reference: PO-123456
               - label: JOB_NUMBER
                 reference: CARRIER-JOB-001
+              - label: OTHER
+                otherLabel: Skip hire number
+                reference: SKIP-4471
           type: array
           minItems: 1
           items:
             type: object
+            if:
+              properties:
+                label:
+                  const: OTHER
+              required:
+                - label
+            then:
+              properties:
+                otherLabel: {}
+              required:
+                - otherLabel
+              description: Required when 'label' is 'OTHER'
+            else:
+              properties:
+                otherLabel:
+                  not: {}
+                  description: Not allowed unless 'label' is 'OTHER'
             properties:
               reference:
                 type: string
                 minLength: 1
-                maxLength: 50
+                maxLength: 255
                 description: Reference value — must be supplied together with its label.
               label:
                 type: string
@@ -3888,6 +4078,11 @@ components:
                   - WASTE_TICKET_NUMBER
                   - OTHER
                 description: Label identifying the reference type.
+              otherLabel:
+                type: string
+                minLength: 1
+                maxLength: 255
+                description: What kind of reference it is. Required when label is OTHER; forbidden otherwise.
             required:
               - reference
               - label
@@ -3918,6 +4113,7 @@ components:
             reasonForNoCode:
               type: string
               minLength: 1
+              maxLength: 5000
               description: 'Free text: why there is no consignment note code. Required when any waste item declares hazardous properties and ''code'' is not provided; not allowed when ''code'' is provided.'
           additionalProperties: false
       required:
@@ -4825,6 +5021,7 @@ paths:
                             organisationName:
                               type: string
                               minLength: 1
+                              maxLength: 255
                               description: Producer organisation name.
                             authorisationNumber:
                               description: Producer environmental permit or exemption number, in a valid UK format. Exactly one of 'authorisationNumber' or 'reasonForNoAuthorisationNumber' is required.
@@ -4837,6 +5034,7 @@ paths:
                             reasonForNoAuthorisationNumber:
                               type: string
                               minLength: 1
+                              maxLength: 5000
                               description: Reason no authorisationNumber is held. Free text for now — enum values TBC pending BA/policy input. Exactly one of 'authorisationNumber' or 'reasonForNoAuthorisationNumber' is required.
                             sicCode:
                               type: string
@@ -4855,6 +5053,7 @@ paths:
                                 emailAddress:
                                   type: string
                                   format: email
+                                  maxLength: 254
                                   description: Contact email address.
                                 phoneNumber:
                                   type: string
@@ -4884,6 +5083,7 @@ paths:
                                 fullAddress:
                                   type: string
                                   minLength: 1
+                                  maxLength: 5000
                                   description: Full address line.
                                 postcode:
                                   type: string
@@ -4951,6 +5151,7 @@ paths:
                             organisationName:
                               type: string
                               minLength: 1
+                              maxLength: 255
                               description: Producer organisation name.
                             authorisationNumber:
                               description: Producer environmental permit or exemption number, in a valid UK format. Exactly one of 'authorisationNumber' or 'reasonForNoAuthorisationNumber' is required.
@@ -4963,6 +5164,7 @@ paths:
                             reasonForNoAuthorisationNumber:
                               type: string
                               minLength: 1
+                              maxLength: 5000
                               description: Reason no authorisationNumber is held. Free text for now — enum values TBC pending BA/policy input. Exactly one of 'authorisationNumber' or 'reasonForNoAuthorisationNumber' is required.
                             sicCode:
                               type: string
@@ -4981,6 +5183,7 @@ paths:
                                 emailAddress:
                                   type: string
                                   format: email
+                                  maxLength: 254
                                   description: Contact email address.
                                 phoneNumber:
                                   type: string
@@ -5010,6 +5213,7 @@ paths:
                                 fullAddress:
                                   type: string
                                   minLength: 1
+                                  maxLength: 5000
                                   description: Full address line.
                                 postcode:
                                   type: string
@@ -5032,10 +5236,10 @@ paths:
                           - sicCode
                           - contactDetails
                           - address
-                plannedCollectionDateTime:
+                collectionDateTime:
                   type: string
                   format: date-time
-                  description: The planned collection time, as an ISO 8601 date-time. The actual time is recorded by the Collection event.
+                  description: The planned time the waste will be collected, as an ISO 8601 date-time. The actual time is given when the collection is recorded.
                 collectionSite:
                   description: The place the waste will be collected from.
                   $schema: https://json-schema.org/draft/2020-12/schema
@@ -5061,6 +5265,7 @@ paths:
                         fullAddress:
                           type: string
                           minLength: 1
+                          maxLength: 5000
                           description: Full address line.
                         postcode:
                           type: string
@@ -5082,6 +5287,7 @@ paths:
                         emailAddress:
                           type: string
                           format: email
+                          maxLength: 254
                           description: Contact email address.
                         phoneNumber:
                           type: string
@@ -5176,6 +5382,7 @@ paths:
                       organisationName:
                         type: string
                         minLength: 1
+                        maxLength: 255
                         description: Name of the carrier organisation.
                       registrationNumber:
                         description: Waste carrier registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
@@ -5207,10 +5414,12 @@ paths:
                       vehicleRegistration:
                         type: string
                         minLength: 1
+                        maxLength: 255
                         description: Registration of the vehicle carrying the waste. Required when meansOfTransport is ROAD; forbidden otherwise.
                       otherMeansOfTransport:
                         type: string
                         minLength: 1
+                        maxLength: 255
                         description: Description of the means of transport. Required when meansOfTransport is OTHER; forbidden otherwise.
                       contactDetails:
                         description: How to contact the carrier.
@@ -5225,6 +5434,7 @@ paths:
                           emailAddress:
                             type: string
                             format: email
+                            maxLength: 254
                             description: Contact email address.
                           phoneNumber:
                             type: string
@@ -5254,6 +5464,7 @@ paths:
                           fullAddress:
                             type: string
                             minLength: 1
+                            maxLength: 5000
                             description: Full address line.
                           postcode:
                             type: string
@@ -5289,6 +5500,7 @@ paths:
                       siteName:
                         type: string
                         minLength: 1
+                        maxLength: 255
                         description: Name of the receiving site.
                       authorisationNumber:
                         description: Receiver environmental permit or exemption number, in a valid UK format.
@@ -5310,6 +5522,7 @@ paths:
                           fullAddress:
                             type: string
                             minLength: 1
+                            maxLength: 5000
                             description: Full address line.
                           postcode:
                             type: string
@@ -5331,6 +5544,7 @@ paths:
                           emailAddress:
                             type: string
                             format: email
+                            maxLength: 254
                             description: Contact email address.
                           phoneNumber:
                             type: string
@@ -5398,6 +5612,7 @@ paths:
                           wasteDescription:
                             type: string
                             minLength: 1
+                            maxLength: 5000
                             description: A free-text description of the waste. An empty string is treated as not provided.
                           ewcCodes:
                             type: array
@@ -5495,6 +5710,7 @@ paths:
                                     code:
                                       type: string
                                       minLength: 1
+                                      maxLength: 255
                                       description: The POP's code, from GET /reference-data/pop-names. Only checked for being non-empty here; the service checks it against the reference data and reports an unrecognised code as an InvalidValue error.
                                     unit:
                                       type: string
@@ -5674,6 +5890,7 @@ paths:
                                     name:
                                       type: string
                                       minLength: 1
+                                      maxLength: 255
                                       description: The hazardous component's name, as free text. Not checked against any reference data.
                                     unit:
                                       type: string
@@ -6043,6 +6260,7 @@ paths:
                           organisationName:
                             type: string
                             minLength: 1
+                            maxLength: 255
                             description: Name of the broker or dealer organisation who arranged this Movement.
                           registrationNumber:
                             description: Waste carrier, broker or dealer registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
@@ -6055,6 +6273,7 @@ paths:
                           reasonForNoRegistrationNumber:
                             type: string
                             minLength: 1
+                            maxLength: 5000
                             description: Reason no registrationNumber is held. Free text for now — enum values TBC pending BA/policy input. Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
                           contactDetails:
                             description: How to contact the broker or dealer.
@@ -6069,6 +6288,7 @@ paths:
                               emailAddress:
                                 type: string
                                 format: email
+                                maxLength: 254
                                 description: Contact email address.
                               phoneNumber:
                                 type: string
@@ -6098,6 +6318,7 @@ paths:
                               fullAddress:
                                 type: string
                                 minLength: 1
+                                maxLength: 5000
                                 description: Full address line.
                               postcode:
                                 type: string
@@ -6121,15 +6342,35 @@ paths:
                         reference: PO-123456
                       - label: JOB_NUMBER
                         reference: CARRIER-JOB-001
+                      - label: OTHER
+                        otherLabel: Skip hire number
+                        reference: SKIP-4471
                   type: array
                   minItems: 1
                   items:
                     type: object
+                    if:
+                      properties:
+                        label:
+                          const: OTHER
+                      required:
+                        - label
+                    then:
+                      properties:
+                        otherLabel: {}
+                      required:
+                        - otherLabel
+                      description: Required when 'label' is 'OTHER'
+                    else:
+                      properties:
+                        otherLabel:
+                          not: {}
+                          description: Not allowed unless 'label' is 'OTHER'
                     properties:
                       reference:
                         type: string
                         minLength: 1
-                        maxLength: 50
+                        maxLength: 255
                         description: Reference value — must be supplied together with its label.
                       label:
                         type: string
@@ -6141,6 +6382,11 @@ paths:
                           - WASTE_TICKET_NUMBER
                           - OTHER
                         description: Label identifying the reference type.
+                      otherLabel:
+                        type: string
+                        minLength: 1
+                        maxLength: 255
+                        description: What kind of reference it is. Required when label is OTHER; forbidden otherwise.
                     required:
                       - reference
                       - label
@@ -6153,7 +6399,7 @@ paths:
                     - Handle with care and keep upright.
                   type: string
                   minLength: 1
-                  maxLength: 500
+                  maxLength: 5000
                 consignmentNote:
                   description: The hazardous waste consignment note. Required when any waste item declares hazardous properties. Replaces hazardousWasteConsignmentCode and reasonForNoConsignmentCode.
                   $schema: https://json-schema.org/draft/2020-12/schema
@@ -6180,6 +6426,7 @@ paths:
                     reasonForNoCode:
                       type: string
                       minLength: 1
+                      maxLength: 5000
                       description: 'Free text: why there is no consignment note code. Required when any waste item declares hazardous properties and ''code'' is not provided; not allowed when ''code'' is provided.'
                   additionalProperties: false
               required:
@@ -6187,7 +6434,7 @@ paths:
                 - intendedCarriers
                 - intendedReceivers
                 - wasteItems
-                - plannedCollectionDateTime
+                - collectionDateTime
                 - collectionSite
               additionalProperties: false
             examples:
@@ -6205,7 +6452,7 @@ paths:
                     contactDetails:
                       emailAddress: producer@example.com
                       phoneNumber: '01234567890'
-                  plannedCollectionDateTime: '2026-01-15T09:30:00Z'
+                  collectionDateTime: '2026-01-15T09:30:00Z'
                   collectionSite:
                     address:
                       fullAddress: 10 Industrial Way, Test City
@@ -6285,7 +6532,7 @@ paths:
                 value:
                   producer:
                     wasteSource: HOUSEHOLD
-                  plannedCollectionDateTime: '2026-01-15T09:30:00Z'
+                  collectionDateTime: '2026-01-15T09:30:00Z'
                   collectionSite:
                     address:
                       fullAddress: 10 Industrial Way, Test City
@@ -6801,6 +7048,7 @@ paths:
                     organisationName:
                       type: string
                       minLength: 1
+                      maxLength: 255
                       description: Name of the carrier organisation.
                     registrationNumber:
                       description: Waste carrier registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
@@ -6832,10 +7080,12 @@ paths:
                     vehicleRegistration:
                       type: string
                       minLength: 1
+                      maxLength: 255
                       description: Registration of the vehicle carrying the waste. Required when meansOfTransport is ROAD; forbidden otherwise.
                     otherMeansOfTransport:
                       type: string
                       minLength: 1
+                      maxLength: 255
                       description: Description of the means of transport. Required when meansOfTransport is OTHER; forbidden otherwise.
                     contactDetails:
                       description: How to contact the carrier.
@@ -6850,6 +7100,7 @@ paths:
                         emailAddress:
                           type: string
                           format: email
+                          maxLength: 254
                           description: Contact email address.
                         phoneNumber:
                           type: string
@@ -6879,6 +7130,7 @@ paths:
                         fullAddress:
                           type: string
                           minLength: 1
+                          maxLength: 5000
                           description: Full address line.
                         postcode:
                           type: string
@@ -6892,10 +7144,10 @@ paths:
                     - meansOfTransport
                     - contactDetails
                   additionalProperties: false
-                actualCollectionDateTime:
+                collectionDateTime:
                   type: string
                   format: date-time
-                  description: The time the waste was collected, as an ISO 8601 date-time.
+                  description: The actual time the waste was collected, as an ISO 8601 date-time. The planned time was given when the movement was created.
                 collectionSite:
                   description: The place the waste was collected from.
                   $schema: https://json-schema.org/draft/2020-12/schema
@@ -6921,6 +7173,7 @@ paths:
                         fullAddress:
                           type: string
                           minLength: 1
+                          maxLength: 5000
                           description: Full address line.
                         postcode:
                           type: string
@@ -6942,6 +7195,7 @@ paths:
                         emailAddress:
                           type: string
                           format: email
+                          maxLength: 254
                           description: Contact email address.
                         phoneNumber:
                           type: string
@@ -7042,6 +7296,7 @@ paths:
                           organisationName:
                             type: string
                             minLength: 1
+                            maxLength: 255
                             description: Name of the broker or dealer organisation who arranged this Movement.
                           registrationNumber:
                             description: Waste carrier, broker or dealer registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
@@ -7054,6 +7309,7 @@ paths:
                           reasonForNoRegistrationNumber:
                             type: string
                             minLength: 1
+                            maxLength: 5000
                             description: Reason no registrationNumber is held. Free text for now — enum values TBC pending BA/policy input. Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
                           contactDetails:
                             description: How to contact the broker or dealer.
@@ -7068,6 +7324,7 @@ paths:
                               emailAddress:
                                 type: string
                                 format: email
+                                maxLength: 254
                                 description: Contact email address.
                               phoneNumber:
                                 type: string
@@ -7097,6 +7354,7 @@ paths:
                               fullAddress:
                                 type: string
                                 minLength: 1
+                                maxLength: 5000
                                 description: Full address line.
                               postcode:
                                 type: string
@@ -7123,15 +7381,35 @@ paths:
                         reference: PO-123456
                       - label: JOB_NUMBER
                         reference: CARRIER-JOB-001
+                      - label: OTHER
+                        otherLabel: Skip hire number
+                        reference: SKIP-4471
                   type: array
                   minItems: 1
                   items:
                     type: object
+                    if:
+                      properties:
+                        label:
+                          const: OTHER
+                      required:
+                        - label
+                    then:
+                      properties:
+                        otherLabel: {}
+                      required:
+                        - otherLabel
+                      description: Required when 'label' is 'OTHER'
+                    else:
+                      properties:
+                        otherLabel:
+                          not: {}
+                          description: Not allowed unless 'label' is 'OTHER'
                     properties:
                       reference:
                         type: string
                         minLength: 1
-                        maxLength: 50
+                        maxLength: 255
                         description: Reference value — must be supplied together with its label.
                       label:
                         type: string
@@ -7143,6 +7421,11 @@ paths:
                           - WASTE_TICKET_NUMBER
                           - OTHER
                         description: Label identifying the reference type.
+                      otherLabel:
+                        type: string
+                        minLength: 1
+                        maxLength: 255
+                        description: What kind of reference it is. Required when label is OTHER; forbidden otherwise.
                     required:
                       - reference
                       - label
@@ -7155,11 +7438,11 @@ paths:
                     - Handle with care and keep upright.
                   type: string
                   minLength: 1
-                  maxLength: 500
+                  maxLength: 5000
               required:
                 - carrier
                 - isDutyOfCareConfirmed
-                - actualCollectionDateTime
+                - collectionDateTime
                 - collectionSite
               additionalProperties: false
             examples:
@@ -7177,7 +7460,7 @@ paths:
                     address:
                       fullAddress: 4 Carrier Lane, Test City
                       postcode: TE1 4CR
-                  actualCollectionDateTime: '2026-01-15T09:30:00Z'
+                  collectionDateTime: '2026-01-15T09:30:00Z'
                   collectionSite:
                     address:
                       fullAddress: 10 Industrial Way, Test City
@@ -7217,7 +7500,7 @@ paths:
                     address:
                       fullAddress: 4 Carrier Lane, Test City
                       postcode: TE1 4CR
-                  actualCollectionDateTime: '2026-01-15T09:30:00Z'
+                  collectionDateTime: '2026-01-15T09:30:00Z'
                   collectionSite:
                     address:
                       fullAddress: 10 Industrial Way, Test City
@@ -7761,6 +8044,7 @@ paths:
                     organisationName:
                       type: string
                       minLength: 1
+                      maxLength: 255
                       description: Name of the carrier organisation.
                     registrationNumber:
                       description: Waste carrier registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
@@ -7792,10 +8076,12 @@ paths:
                     vehicleRegistration:
                       type: string
                       minLength: 1
+                      maxLength: 255
                       description: Registration of the vehicle carrying the waste. Required when meansOfTransport is ROAD; forbidden otherwise.
                     otherMeansOfTransport:
                       type: string
                       minLength: 1
+                      maxLength: 255
                       description: Description of the means of transport. Required when meansOfTransport is OTHER; forbidden otherwise.
                     contactDetails:
                       description: How to contact the carrier.
@@ -7810,6 +8096,7 @@ paths:
                         emailAddress:
                           type: string
                           format: email
+                          maxLength: 254
                           description: Contact email address.
                         phoneNumber:
                           type: string
@@ -7839,6 +8126,7 @@ paths:
                         fullAddress:
                           type: string
                           minLength: 1
+                          maxLength: 5000
                           description: Full address line.
                         postcode:
                           type: string
@@ -7861,15 +8149,35 @@ paths:
                         reference: PO-123456
                       - label: JOB_NUMBER
                         reference: CARRIER-JOB-001
+                      - label: OTHER
+                        otherLabel: Skip hire number
+                        reference: SKIP-4471
                   type: array
                   minItems: 1
                   items:
                     type: object
+                    if:
+                      properties:
+                        label:
+                          const: OTHER
+                      required:
+                        - label
+                    then:
+                      properties:
+                        otherLabel: {}
+                      required:
+                        - otherLabel
+                      description: Required when 'label' is 'OTHER'
+                    else:
+                      properties:
+                        otherLabel:
+                          not: {}
+                          description: Not allowed unless 'label' is 'OTHER'
                     properties:
                       reference:
                         type: string
                         minLength: 1
-                        maxLength: 50
+                        maxLength: 255
                         description: Reference value — must be supplied together with its label.
                       label:
                         type: string
@@ -7881,6 +8189,11 @@ paths:
                           - WASTE_TICKET_NUMBER
                           - OTHER
                         description: Label identifying the reference type.
+                      otherLabel:
+                        type: string
+                        minLength: 1
+                        maxLength: 255
+                        description: What kind of reference it is. Required when label is OTHER; forbidden otherwise.
                     required:
                       - reference
                       - label
@@ -8367,6 +8680,7 @@ paths:
                 reasonForNoDeliveryId:
                   type: string
                   minLength: 1
+                  maxLength: 5000
                   description: Mandatory explanation for why this receipt is being recorded without a Delivery ID.
                   examples:
                     - No delivery was recorded prior to receipt; waste received directly from the producer.
@@ -8449,6 +8763,7 @@ paths:
                     organisationName:
                       type: string
                       minLength: 1
+                      maxLength: 255
                       description: Name of the carrier organisation.
                     registrationNumber:
                       description: Waste carrier registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
@@ -8480,10 +8795,12 @@ paths:
                     vehicleRegistration:
                       type: string
                       minLength: 1
+                      maxLength: 255
                       description: Registration of the vehicle carrying the waste. Required when meansOfTransport is ROAD; forbidden otherwise.
                     otherMeansOfTransport:
                       type: string
                       minLength: 1
+                      maxLength: 255
                       description: Description of the means of transport. Required when meansOfTransport is OTHER; forbidden otherwise.
                     contactDetails:
                       description: How to contact the carrier.
@@ -8498,6 +8815,7 @@ paths:
                         emailAddress:
                           type: string
                           format: email
+                          maxLength: 254
                           description: Contact email address.
                         phoneNumber:
                           type: string
@@ -8527,6 +8845,7 @@ paths:
                         fullAddress:
                           type: string
                           minLength: 1
+                          maxLength: 5000
                           description: Full address line.
                         postcode:
                           type: string
@@ -8558,6 +8877,7 @@ paths:
                     siteName:
                       type: string
                       minLength: 1
+                      maxLength: 255
                       description: Name of the receiving site.
                     authorisationNumber:
                       description: Receiver environmental permit or exemption number, in a valid UK format.
@@ -8579,6 +8899,7 @@ paths:
                         fullAddress:
                           type: string
                           minLength: 1
+                          maxLength: 5000
                           description: Full address line.
                         postcode:
                           type: string
@@ -8600,6 +8921,7 @@ paths:
                         emailAddress:
                           type: string
                           format: email
+                          maxLength: 254
                           description: Contact email address.
                         phoneNumber:
                           type: string
@@ -8665,6 +8987,7 @@ paths:
                           wasteDescription:
                             type: string
                             minLength: 1
+                            maxLength: 5000
                             description: A free-text description of the waste. An empty string is treated as not provided.
                           ewcCodes:
                             type: array
@@ -8762,6 +9085,7 @@ paths:
                                     code:
                                       type: string
                                       minLength: 1
+                                      maxLength: 255
                                       description: The POP's code, from GET /reference-data/pop-names. Only checked for being non-empty here; the service checks it against the reference data and reports an unrecognised code as an InvalidValue error.
                                     unit:
                                       type: string
@@ -8941,6 +9265,7 @@ paths:
                                     name:
                                       type: string
                                       minLength: 1
+                                      maxLength: 255
                                       description: The hazardous component's name, as free text. Not checked against any reference data.
                                     unit:
                                       type: string
@@ -9308,6 +9633,7 @@ paths:
                           organisationName:
                             type: string
                             minLength: 1
+                            maxLength: 255
                             description: Name of the broker or dealer organisation who arranged this Movement.
                           registrationNumber:
                             description: Waste carrier, broker or dealer registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
@@ -9320,6 +9646,7 @@ paths:
                           reasonForNoRegistrationNumber:
                             type: string
                             minLength: 1
+                            maxLength: 5000
                             description: Reason no registrationNumber is held. Free text for now — enum values TBC pending BA/policy input. Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
                           contactDetails:
                             description: How to contact the broker or dealer.
@@ -9334,6 +9661,7 @@ paths:
                               emailAddress:
                                 type: string
                                 format: email
+                                maxLength: 254
                                 description: Contact email address.
                               phoneNumber:
                                 type: string
@@ -9363,6 +9691,7 @@ paths:
                               fullAddress:
                                 type: string
                                 minLength: 1
+                                maxLength: 5000
                                 description: Full address line.
                               postcode:
                                 type: string
@@ -9386,15 +9715,35 @@ paths:
                         reference: PO-123456
                       - label: JOB_NUMBER
                         reference: CARRIER-JOB-001
+                      - label: OTHER
+                        otherLabel: Skip hire number
+                        reference: SKIP-4471
                   type: array
                   minItems: 1
                   items:
                     type: object
+                    if:
+                      properties:
+                        label:
+                          const: OTHER
+                      required:
+                        - label
+                    then:
+                      properties:
+                        otherLabel: {}
+                      required:
+                        - otherLabel
+                      description: Required when 'label' is 'OTHER'
+                    else:
+                      properties:
+                        otherLabel:
+                          not: {}
+                          description: Not allowed unless 'label' is 'OTHER'
                     properties:
                       reference:
                         type: string
                         minLength: 1
-                        maxLength: 50
+                        maxLength: 255
                         description: Reference value — must be supplied together with its label.
                       label:
                         type: string
@@ -9406,6 +9755,11 @@ paths:
                           - WASTE_TICKET_NUMBER
                           - OTHER
                         description: Label identifying the reference type.
+                      otherLabel:
+                        type: string
+                        minLength: 1
+                        maxLength: 255
+                        description: What kind of reference it is. Required when label is OTHER; forbidden otherwise.
                     required:
                       - reference
                       - label
@@ -9436,6 +9790,7 @@ paths:
                     reasonForNoCode:
                       type: string
                       minLength: 1
+                      maxLength: 5000
                       description: 'Free text: why there is no consignment note code. Required when any waste item declares hazardous properties and ''code'' is not provided; not allowed when ''code'' is provided.'
                   additionalProperties: false
               required:
@@ -9964,6 +10319,7 @@ paths:
                     organisationName:
                       type: string
                       minLength: 1
+                      maxLength: 255
                       description: Name of the carrier organisation.
                     registrationNumber:
                       description: Waste carrier registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
@@ -9995,10 +10351,12 @@ paths:
                     vehicleRegistration:
                       type: string
                       minLength: 1
+                      maxLength: 255
                       description: Registration of the vehicle carrying the waste. Required when meansOfTransport is ROAD; forbidden otherwise.
                     otherMeansOfTransport:
                       type: string
                       minLength: 1
+                      maxLength: 255
                       description: Description of the means of transport. Required when meansOfTransport is OTHER; forbidden otherwise.
                     contactDetails:
                       description: How to contact the carrier.
@@ -10013,6 +10371,7 @@ paths:
                         emailAddress:
                           type: string
                           format: email
+                          maxLength: 254
                           description: Contact email address.
                         phoneNumber:
                           type: string
@@ -10042,6 +10401,7 @@ paths:
                         fullAddress:
                           type: string
                           minLength: 1
+                          maxLength: 5000
                           description: Full address line.
                         postcode:
                           type: string
@@ -10073,6 +10433,7 @@ paths:
                     siteName:
                       type: string
                       minLength: 1
+                      maxLength: 255
                       description: Name of the receiving site.
                     authorisationNumber:
                       description: Receiver environmental permit or exemption number, in a valid UK format.
@@ -10094,6 +10455,7 @@ paths:
                         fullAddress:
                           type: string
                           minLength: 1
+                          maxLength: 5000
                           description: Full address line.
                         postcode:
                           type: string
@@ -10115,6 +10477,7 @@ paths:
                         emailAddress:
                           type: string
                           format: email
+                          maxLength: 254
                           description: Contact email address.
                         phoneNumber:
                           type: string
@@ -10407,6 +10770,7 @@ paths:
                           organisationName:
                             type: string
                             minLength: 1
+                            maxLength: 255
                             description: Name of the broker or dealer organisation who arranged this Movement.
                           registrationNumber:
                             description: Waste carrier, broker or dealer registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
@@ -10419,6 +10783,7 @@ paths:
                           reasonForNoRegistrationNumber:
                             type: string
                             minLength: 1
+                            maxLength: 5000
                             description: Reason no registrationNumber is held. Free text for now — enum values TBC pending BA/policy input. Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
                           contactDetails:
                             description: How to contact the broker or dealer.
@@ -10433,6 +10798,7 @@ paths:
                               emailAddress:
                                 type: string
                                 format: email
+                                maxLength: 254
                                 description: Contact email address.
                               phoneNumber:
                                 type: string
@@ -10462,6 +10828,7 @@ paths:
                               fullAddress:
                                 type: string
                                 minLength: 1
+                                maxLength: 5000
                                 description: Full address line.
                               postcode:
                                 type: string
@@ -10485,15 +10852,35 @@ paths:
                         reference: PO-123456
                       - label: JOB_NUMBER
                         reference: CARRIER-JOB-001
+                      - label: OTHER
+                        otherLabel: Skip hire number
+                        reference: SKIP-4471
                   type: array
                   minItems: 1
                   items:
                     type: object
+                    if:
+                      properties:
+                        label:
+                          const: OTHER
+                      required:
+                        - label
+                    then:
+                      properties:
+                        otherLabel: {}
+                      required:
+                        - otherLabel
+                      description: Required when 'label' is 'OTHER'
+                    else:
+                      properties:
+                        otherLabel:
+                          not: {}
+                          description: Not allowed unless 'label' is 'OTHER'
                     properties:
                       reference:
                         type: string
                         minLength: 1
-                        maxLength: 50
+                        maxLength: 255
                         description: Reference value — must be supplied together with its label.
                       label:
                         type: string
@@ -10505,6 +10892,11 @@ paths:
                           - WASTE_TICKET_NUMBER
                           - OTHER
                         description: Label identifying the reference type.
+                      otherLabel:
+                        type: string
+                        minLength: 1
+                        maxLength: 255
+                        description: What kind of reference it is. Required when label is OTHER; forbidden otherwise.
                     required:
                       - reference
                       - label
