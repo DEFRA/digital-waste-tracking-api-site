@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Broker or dealer",
-  "description": "A single broker or dealer who arranged the transfer. organisationName and contactDetails are required, and exactly one of registrationNumber or reasonForNoRegistrationNumber must be provided. address is optional.",
+  "description": "A single broker or dealer who arranged the Movement. organisationName and contactDetails are required, and exactly one of registrationNumber or reasonForNoRegistrationNumber must be provided. address is optional.",
   "examples": [
     {
       "organisationName": "Broker Demo Ltd",
@@ -45,22 +45,26 @@
     "organisationName": {
       "type": "string",
       "minLength": 1,
-      "description": "Name of the broker or dealer organisation who arranged this transfer."
+      "maxLength": 255,
+      "description": "Name of the broker or dealer organisation who arranged this Movement."
     },
     "registrationNumber": {
       "$ref": "../registration-number.schema.json",
-      "description": "Waste carrier, broker or dealer registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Mutually exclusive with reasonForNoRegistrationNumber — exactly one of the two is required."
+      "description": "Waste carrier, broker or dealer registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required."
     },
     "reasonForNoRegistrationNumber": {
       "type": "string",
       "minLength": 1,
-      "description": "Reason no registrationNumber is held. Free text for now — enum values TBC pending BA/policy input. Mutually exclusive with registrationNumber — exactly one of the two is required."
+      "maxLength": 5000,
+      "description": "Why there is no registration number. Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required."
     },
     "contactDetails": {
-      "$ref": "../contact-details.schema.json"
+      "$ref": "../contact-details.schema.json",
+      "description": "How to contact the broker or dealer."
     },
     "address": {
-      "$ref": "../address.schema.json"
+      "$ref": "../address.schema.json",
+      "description": "The broker or dealer's address."
     }
   },
   "required": ["organisationName", "contactDetails"],

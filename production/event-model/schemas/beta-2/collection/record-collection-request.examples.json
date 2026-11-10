@@ -5,7 +5,7 @@
       "carrier": {
         "organisationName": "Carrier Demo Ltd",
         "registrationNumber": "CBDU123456",
-        "meansOfTransport": "Road",
+        "meansOfTransport": "ROAD",
         "vehicleRegistration": "AB12 CDE",
         "contactDetails": {
           "emailAddress": "carrier@example.com",
@@ -16,7 +16,7 @@
           "postcode": "TE1 4CR"
         }
       },
-      "actualCollectionDateTime": "2026-01-15T09:30:00Z",
+      "collectionDateTime": "2026-01-15T09:30:00Z",
       "collectionSite": {
         "address": {
           "fullAddress": "10 Industrial Way, Test City",
@@ -27,7 +27,7 @@
           "phoneNumber": "01234567890"
         }
       },
-      "dutyOfCareConfirmed": true,
+      "isDutyOfCareConfirmed": true,
       "brokerOrDealer": {
         "isPresent": true,
         "items": [
@@ -47,11 +47,11 @@
       },
       "supportingReferences": [
         {
-          "label": "PO Number",
+          "label": "PO_NUMBER",
           "reference": "PO-123456"
         },
         {
-          "label": "Job Number",
+          "label": "JOB_NUMBER",
           "reference": "CARRIER-JOB-001"
         }
       ],
@@ -64,7 +64,7 @@
       "carrier": {
         "organisationName": "Carrier Demo Ltd",
         "registrationNumber": "CBDU123456",
-        "meansOfTransport": "Road",
+        "meansOfTransport": "ROAD",
         "vehicleRegistration": "AB12 CDE",
         "contactDetails": {
           "emailAddress": "carrier@example.com",
@@ -75,7 +75,7 @@
           "postcode": "TE1 4CR"
         }
       },
-      "actualCollectionDateTime": "2026-01-15T09:30:00Z",
+      "collectionDateTime": "2026-01-15T09:30:00Z",
       "collectionSite": {
         "address": {
           "fullAddress": "10 Industrial Way, Test City",
@@ -86,7 +86,7 @@
           "phoneNumber": "01234567890"
         }
       },
-      "dutyOfCareConfirmed": true
+      "isDutyOfCareConfirmed": true
     }
   }
 }
