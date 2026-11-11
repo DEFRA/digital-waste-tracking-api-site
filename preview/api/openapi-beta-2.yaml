@@ -547,13 +547,14 @@ components:
                 maxLength: 255
                 description: Name of the carrier organisation.
               registrationNumber:
-                description: Waste carrier registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
+                description: Waste carrier registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA EAS/R, WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
                 $schema: https://json-schema.org/draft/2020-12/schema
                 title: Registration number
                 examples:
+                  - EAS/R/1234567
                   - CBDU123456
                 type: string
-                pattern: ^\s*(?:[Cc][Bb][Dd][LlUu]\d{3,}|[Ww][Cc][Rr]/[Rr]/\d{7}|(?:[Ss][Cc][Oo]|[Ss][Ee][Aa]|[Ss][Nn][Oo]|[Ss][Ww][Ee]|[Ww][Cc][Rr])/\d{6}|[Pp][Cc][Tt]-[A-Za-z]-\d{3,7}|[Rr][Oo][Cc]\W*[UuLl][Tt]\W*\d{1,5})\s*$
+                pattern: ^\s*(?:[Cc][Bb][Dd][LlUu]\d{3,}|[Ee][Aa][Ss]/[Rr]/\d{6,7}|[Ww][Cc][Rr]/[Rr]/\d{7}|[Ww][Cc][Rr]/[A-Za-z0-9]{6}|(?:[Ss][Cc][Oo]|[Ss][Ee][Aa]|[Ss][Nn][Oo]|[Ss][Ww][Ee])/\d{6}(?:/[Cc][Bb])?|[Ss][Cc][Oo]/\d{6}/[Bb]|[Pp][Cc][Tt]-[A-Za-z]-\d{3,7}|[Rr][Oo][Cc]\W*[UuLl][Tt]\W*\d{1,5})\s*$
               reasonForNoRegistrationNumber:
                 type: string
                 enum:
@@ -1425,13 +1426,14 @@ components:
                     maxLength: 255
                     description: Name of the broker or dealer organisation who arranged this Movement.
                   registrationNumber:
-                    description: Waste carrier, broker or dealer registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
+                    description: Waste carrier, broker or dealer registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA EAS/R, WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
                     $schema: https://json-schema.org/draft/2020-12/schema
                     title: Registration number
                     examples:
+                      - EAS/R/1234567
                       - CBDU123456
                     type: string
-                    pattern: ^\s*(?:[Cc][Bb][Dd][LlUu]\d{3,}|[Ww][Cc][Rr]/[Rr]/\d{7}|(?:[Ss][Cc][Oo]|[Ss][Ee][Aa]|[Ss][Nn][Oo]|[Ss][Ww][Ee]|[Ww][Cc][Rr])/\d{6}|[Pp][Cc][Tt]-[A-Za-z]-\d{3,7}|[Rr][Oo][Cc]\W*[UuLl][Tt]\W*\d{1,5})\s*$
+                    pattern: ^\s*(?:[Cc][Bb][Dd][LlUu]\d{3,}|[Ee][Aa][Ss]/[Rr]/\d{6,7}|[Ww][Cc][Rr]/[Rr]/\d{7}|[Ww][Cc][Rr]/[A-Za-z0-9]{6}|(?:[Ss][Cc][Oo]|[Ss][Ee][Aa]|[Ss][Nn][Oo]|[Ss][Ww][Ee])/\d{6}(?:/[Cc][Bb])?|[Ss][Cc][Oo]/\d{6}/[Bb]|[Pp][Cc][Tt]-[A-Za-z]-\d{3,7}|[Rr][Oo][Cc]\W*[UuLl][Tt]\W*\d{1,5})\s*$
                   reasonForNoRegistrationNumber:
                     type: string
                     minLength: 1
@@ -1679,13 +1681,14 @@ components:
               maxLength: 255
               description: Name of the carrier organisation.
             registrationNumber:
-              description: Waste carrier registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
+              description: Waste carrier registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA EAS/R, WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
               $schema: https://json-schema.org/draft/2020-12/schema
               title: Registration number
               examples:
+                - EAS/R/1234567
                 - CBDU123456
               type: string
-              pattern: ^\s*(?:[Cc][Bb][Dd][LlUu]\d{3,}|[Ww][Cc][Rr]/[Rr]/\d{7}|(?:[Ss][Cc][Oo]|[Ss][Ee][Aa]|[Ss][Nn][Oo]|[Ss][Ww][Ee]|[Ww][Cc][Rr])/\d{6}|[Pp][Cc][Tt]-[A-Za-z]-\d{3,7}|[Rr][Oo][Cc]\W*[UuLl][Tt]\W*\d{1,5})\s*$
+              pattern: ^\s*(?:[Cc][Bb][Dd][LlUu]\d{3,}|[Ee][Aa][Ss]/[Rr]/\d{6,7}|[Ww][Cc][Rr]/[Rr]/\d{7}|[Ww][Cc][Rr]/[A-Za-z0-9]{6}|(?:[Ss][Cc][Oo]|[Ss][Ee][Aa]|[Ss][Nn][Oo]|[Ss][Ww][Ee])/\d{6}(?:/[Cc][Bb])?|[Ss][Cc][Oo]/\d{6}/[Bb]|[Pp][Cc][Tt]-[A-Za-z]-\d{3,7}|[Rr][Oo][Cc]\W*[UuLl][Tt]\W*\d{1,5})\s*$
             reasonForNoRegistrationNumber:
               type: string
               enum:
@@ -1927,13 +1930,14 @@ components:
                     maxLength: 255
                     description: Name of the broker or dealer organisation who arranged this Movement.
                   registrationNumber:
-                    description: Waste carrier, broker or dealer registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
+                    description: Waste carrier, broker or dealer registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA EAS/R, WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
                     $schema: https://json-schema.org/draft/2020-12/schema
                     title: Registration number
                     examples:
+                      - EAS/R/1234567
                       - CBDU123456
                     type: string
-                    pattern: ^\s*(?:[Cc][Bb][Dd][LlUu]\d{3,}|[Ww][Cc][Rr]/[Rr]/\d{7}|(?:[Ss][Cc][Oo]|[Ss][Ee][Aa]|[Ss][Nn][Oo]|[Ss][Ww][Ee]|[Ww][Cc][Rr])/\d{6}|[Pp][Cc][Tt]-[A-Za-z]-\d{3,7}|[Rr][Oo][Cc]\W*[UuLl][Tt]\W*\d{1,5})\s*$
+                    pattern: ^\s*(?:[Cc][Bb][Dd][LlUu]\d{3,}|[Ee][Aa][Ss]/[Rr]/\d{6,7}|[Ww][Cc][Rr]/[Rr]/\d{7}|[Ww][Cc][Rr]/[A-Za-z0-9]{6}|(?:[Ss][Cc][Oo]|[Ss][Ee][Aa]|[Ss][Nn][Oo]|[Ss][Ww][Ee])/\d{6}(?:/[Cc][Bb])?|[Ss][Cc][Oo]/\d{6}/[Bb]|[Pp][Cc][Tt]-[A-Za-z]-\d{3,7}|[Rr][Oo][Cc]\W*[UuLl][Tt]\W*\d{1,5})\s*$
                   reasonForNoRegistrationNumber:
                     type: string
                     minLength: 1
@@ -2165,13 +2169,14 @@ components:
               maxLength: 255
               description: Name of the carrier organisation.
             registrationNumber:
-              description: Waste carrier registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
+              description: Waste carrier registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA EAS/R, WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
               $schema: https://json-schema.org/draft/2020-12/schema
               title: Registration number
               examples:
+                - EAS/R/1234567
                 - CBDU123456
               type: string
-              pattern: ^\s*(?:[Cc][Bb][Dd][LlUu]\d{3,}|[Ww][Cc][Rr]/[Rr]/\d{7}|(?:[Ss][Cc][Oo]|[Ss][Ee][Aa]|[Ss][Nn][Oo]|[Ss][Ww][Ee]|[Ww][Cc][Rr])/\d{6}|[Pp][Cc][Tt]-[A-Za-z]-\d{3,7}|[Rr][Oo][Cc]\W*[UuLl][Tt]\W*\d{1,5})\s*$
+              pattern: ^\s*(?:[Cc][Bb][Dd][LlUu]\d{3,}|[Ee][Aa][Ss]/[Rr]/\d{6,7}|[Ww][Cc][Rr]/[Rr]/\d{7}|[Ww][Cc][Rr]/[A-Za-z0-9]{6}|(?:[Ss][Cc][Oo]|[Ss][Ee][Aa]|[Ss][Nn][Oo]|[Ss][Ww][Ee])/\d{6}(?:/[Cc][Bb])?|[Ss][Cc][Oo]/\d{6}/[Bb]|[Pp][Cc][Tt]-[A-Za-z]-\d{3,7}|[Rr][Oo][Cc]\W*[UuLl][Tt]\W*\d{1,5})\s*$
             reasonForNoRegistrationNumber:
               type: string
               enum:
@@ -2466,13 +2471,14 @@ components:
               maxLength: 255
               description: Name of the carrier organisation.
             registrationNumber:
-              description: Waste carrier registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
+              description: Waste carrier registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA EAS/R, WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
               $schema: https://json-schema.org/draft/2020-12/schema
               title: Registration number
               examples:
+                - EAS/R/1234567
                 - CBDU123456
               type: string
-              pattern: ^\s*(?:[Cc][Bb][Dd][LlUu]\d{3,}|[Ww][Cc][Rr]/[Rr]/\d{7}|(?:[Ss][Cc][Oo]|[Ss][Ee][Aa]|[Ss][Nn][Oo]|[Ss][Ww][Ee]|[Ww][Cc][Rr])/\d{6}|[Pp][Cc][Tt]-[A-Za-z]-\d{3,7}|[Rr][Oo][Cc]\W*[UuLl][Tt]\W*\d{1,5})\s*$
+              pattern: ^\s*(?:[Cc][Bb][Dd][LlUu]\d{3,}|[Ee][Aa][Ss]/[Rr]/\d{6,7}|[Ww][Cc][Rr]/[Rr]/\d{7}|[Ww][Cc][Rr]/[A-Za-z0-9]{6}|(?:[Ss][Cc][Oo]|[Ss][Ee][Aa]|[Ss][Nn][Oo]|[Ss][Ww][Ee])/\d{6}(?:/[Cc][Bb])?|[Ss][Cc][Oo]/\d{6}/[Bb]|[Pp][Cc][Tt]-[A-Za-z]-\d{3,7}|[Rr][Oo][Cc]\W*[UuLl][Tt]\W*\d{1,5})\s*$
             reasonForNoRegistrationNumber:
               type: string
               enum:
@@ -2917,13 +2923,14 @@ components:
                     maxLength: 255
                     description: Name of the broker or dealer organisation who arranged this Movement.
                   registrationNumber:
-                    description: Waste carrier, broker or dealer registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
+                    description: Waste carrier, broker or dealer registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA EAS/R, WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
                     $schema: https://json-schema.org/draft/2020-12/schema
                     title: Registration number
                     examples:
+                      - EAS/R/1234567
                       - CBDU123456
                     type: string
-                    pattern: ^\s*(?:[Cc][Bb][Dd][LlUu]\d{3,}|[Ww][Cc][Rr]/[Rr]/\d{7}|(?:[Ss][Cc][Oo]|[Ss][Ee][Aa]|[Ss][Nn][Oo]|[Ss][Ww][Ee]|[Ww][Cc][Rr])/\d{6}|[Pp][Cc][Tt]-[A-Za-z]-\d{3,7}|[Rr][Oo][Cc]\W*[UuLl][Tt]\W*\d{1,5})\s*$
+                    pattern: ^\s*(?:[Cc][Bb][Dd][LlUu]\d{3,}|[Ee][Aa][Ss]/[Rr]/\d{6,7}|[Ww][Cc][Rr]/[Rr]/\d{7}|[Ww][Cc][Rr]/[A-Za-z0-9]{6}|(?:[Ss][Cc][Oo]|[Ss][Ee][Aa]|[Ss][Nn][Oo]|[Ss][Ww][Ee])/\d{6}(?:/[Cc][Bb])?|[Ss][Cc][Oo]/\d{6}/[Bb]|[Pp][Cc][Tt]-[A-Za-z]-\d{3,7}|[Rr][Oo][Cc]\W*[UuLl][Tt]\W*\d{1,5})\s*$
                   reasonForNoRegistrationNumber:
                     type: string
                     minLength: 1
@@ -3147,13 +3154,14 @@ components:
               maxLength: 255
               description: Name of the carrier organisation.
             registrationNumber:
-              description: Waste carrier registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
+              description: Waste carrier registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA EAS/R, WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
               $schema: https://json-schema.org/draft/2020-12/schema
               title: Registration number
               examples:
+                - EAS/R/1234567
                 - CBDU123456
               type: string
-              pattern: ^\s*(?:[Cc][Bb][Dd][LlUu]\d{3,}|[Ww][Cc][Rr]/[Rr]/\d{7}|(?:[Ss][Cc][Oo]|[Ss][Ee][Aa]|[Ss][Nn][Oo]|[Ss][Ww][Ee]|[Ww][Cc][Rr])/\d{6}|[Pp][Cc][Tt]-[A-Za-z]-\d{3,7}|[Rr][Oo][Cc]\W*[UuLl][Tt]\W*\d{1,5})\s*$
+              pattern: ^\s*(?:[Cc][Bb][Dd][LlUu]\d{3,}|[Ee][Aa][Ss]/[Rr]/\d{6,7}|[Ww][Cc][Rr]/[Rr]/\d{7}|[Ww][Cc][Rr]/[A-Za-z0-9]{6}|(?:[Ss][Cc][Oo]|[Ss][Ee][Aa]|[Ss][Nn][Oo]|[Ss][Ww][Ee])/\d{6}(?:/[Cc][Bb])?|[Ss][Cc][Oo]/\d{6}/[Bb]|[Pp][Cc][Tt]-[A-Za-z]-\d{3,7}|[Rr][Oo][Cc]\W*[UuLl][Tt]\W*\d{1,5})\s*$
             reasonForNoRegistrationNumber:
               type: string
               enum:
@@ -4017,13 +4025,14 @@ components:
                     maxLength: 255
                     description: Name of the broker or dealer organisation who arranged this Movement.
                   registrationNumber:
-                    description: Waste carrier, broker or dealer registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
+                    description: Waste carrier, broker or dealer registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA EAS/R, WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
                     $schema: https://json-schema.org/draft/2020-12/schema
                     title: Registration number
                     examples:
+                      - EAS/R/1234567
                       - CBDU123456
                     type: string
-                    pattern: ^\s*(?:[Cc][Bb][Dd][LlUu]\d{3,}|[Ww][Cc][Rr]/[Rr]/\d{7}|(?:[Ss][Cc][Oo]|[Ss][Ee][Aa]|[Ss][Nn][Oo]|[Ss][Ww][Ee]|[Ww][Cc][Rr])/\d{6}|[Pp][Cc][Tt]-[A-Za-z]-\d{3,7}|[Rr][Oo][Cc]\W*[UuLl][Tt]\W*\d{1,5})\s*$
+                    pattern: ^\s*(?:[Cc][Bb][Dd][LlUu]\d{3,}|[Ee][Aa][Ss]/[Rr]/\d{6,7}|[Ww][Cc][Rr]/[Rr]/\d{7}|[Ww][Cc][Rr]/[A-Za-z0-9]{6}|(?:[Ss][Cc][Oo]|[Ss][Ee][Aa]|[Ss][Nn][Oo]|[Ss][Ww][Ee])/\d{6}(?:/[Cc][Bb])?|[Ss][Cc][Oo]/\d{6}/[Bb]|[Pp][Cc][Tt]-[A-Za-z]-\d{3,7}|[Rr][Oo][Cc]\W*[UuLl][Tt]\W*\d{1,5})\s*$
                   reasonForNoRegistrationNumber:
                     type: string
                     minLength: 1
@@ -5443,13 +5452,14 @@ paths:
                         maxLength: 255
                         description: Name of the carrier organisation.
                       registrationNumber:
-                        description: Waste carrier registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
+                        description: Waste carrier registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA EAS/R, WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
                         $schema: https://json-schema.org/draft/2020-12/schema
                         title: Registration number
                         examples:
+                          - EAS/R/1234567
                           - CBDU123456
                         type: string
-                        pattern: ^\s*(?:[Cc][Bb][Dd][LlUu]\d{3,}|[Ww][Cc][Rr]/[Rr]/\d{7}|(?:[Ss][Cc][Oo]|[Ss][Ee][Aa]|[Ss][Nn][Oo]|[Ss][Ww][Ee]|[Ww][Cc][Rr])/\d{6}|[Pp][Cc][Tt]-[A-Za-z]-\d{3,7}|[Rr][Oo][Cc]\W*[UuLl][Tt]\W*\d{1,5})\s*$
+                        pattern: ^\s*(?:[Cc][Bb][Dd][LlUu]\d{3,}|[Ee][Aa][Ss]/[Rr]/\d{6,7}|[Ww][Cc][Rr]/[Rr]/\d{7}|[Ww][Cc][Rr]/[A-Za-z0-9]{6}|(?:[Ss][Cc][Oo]|[Ss][Ee][Aa]|[Ss][Nn][Oo]|[Ss][Ww][Ee])/\d{6}(?:/[Cc][Bb])?|[Ss][Cc][Oo]/\d{6}/[Bb]|[Pp][Cc][Tt]-[A-Za-z]-\d{3,7}|[Rr][Oo][Cc]\W*[UuLl][Tt]\W*\d{1,5})\s*$
                       reasonForNoRegistrationNumber:
                         type: string
                         enum:
@@ -6321,13 +6331,14 @@ paths:
                             maxLength: 255
                             description: Name of the broker or dealer organisation who arranged this Movement.
                           registrationNumber:
-                            description: Waste carrier, broker or dealer registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
+                            description: Waste carrier, broker or dealer registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA EAS/R, WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
                             $schema: https://json-schema.org/draft/2020-12/schema
                             title: Registration number
                             examples:
+                              - EAS/R/1234567
                               - CBDU123456
                             type: string
-                            pattern: ^\s*(?:[Cc][Bb][Dd][LlUu]\d{3,}|[Ww][Cc][Rr]/[Rr]/\d{7}|(?:[Ss][Cc][Oo]|[Ss][Ee][Aa]|[Ss][Nn][Oo]|[Ss][Ww][Ee]|[Ww][Cc][Rr])/\d{6}|[Pp][Cc][Tt]-[A-Za-z]-\d{3,7}|[Rr][Oo][Cc]\W*[UuLl][Tt]\W*\d{1,5})\s*$
+                            pattern: ^\s*(?:[Cc][Bb][Dd][LlUu]\d{3,}|[Ee][Aa][Ss]/[Rr]/\d{6,7}|[Ww][Cc][Rr]/[Rr]/\d{7}|[Ww][Cc][Rr]/[A-Za-z0-9]{6}|(?:[Ss][Cc][Oo]|[Ss][Ee][Aa]|[Ss][Nn][Oo]|[Ss][Ww][Ee])/\d{6}(?:/[Cc][Bb])?|[Ss][Cc][Oo]/\d{6}/[Bb]|[Pp][Cc][Tt]-[A-Za-z]-\d{3,7}|[Rr][Oo][Cc]\W*[UuLl][Tt]\W*\d{1,5})\s*$
                           reasonForNoRegistrationNumber:
                             type: string
                             minLength: 1
@@ -7109,13 +7120,14 @@ paths:
                       maxLength: 255
                       description: Name of the carrier organisation.
                     registrationNumber:
-                      description: Waste carrier registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
+                      description: Waste carrier registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA EAS/R, WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
                       $schema: https://json-schema.org/draft/2020-12/schema
                       title: Registration number
                       examples:
+                        - EAS/R/1234567
                         - CBDU123456
                       type: string
-                      pattern: ^\s*(?:[Cc][Bb][Dd][LlUu]\d{3,}|[Ww][Cc][Rr]/[Rr]/\d{7}|(?:[Ss][Cc][Oo]|[Ss][Ee][Aa]|[Ss][Nn][Oo]|[Ss][Ww][Ee]|[Ww][Cc][Rr])/\d{6}|[Pp][Cc][Tt]-[A-Za-z]-\d{3,7}|[Rr][Oo][Cc]\W*[UuLl][Tt]\W*\d{1,5})\s*$
+                      pattern: ^\s*(?:[Cc][Bb][Dd][LlUu]\d{3,}|[Ee][Aa][Ss]/[Rr]/\d{6,7}|[Ww][Cc][Rr]/[Rr]/\d{7}|[Ww][Cc][Rr]/[A-Za-z0-9]{6}|(?:[Ss][Cc][Oo]|[Ss][Ee][Aa]|[Ss][Nn][Oo]|[Ss][Ww][Ee])/\d{6}(?:/[Cc][Bb])?|[Ss][Cc][Oo]/\d{6}/[Bb]|[Pp][Cc][Tt]-[A-Za-z]-\d{3,7}|[Rr][Oo][Cc]\W*[UuLl][Tt]\W*\d{1,5})\s*$
                     reasonForNoRegistrationNumber:
                       type: string
                       enum:
@@ -7357,13 +7369,14 @@ paths:
                             maxLength: 255
                             description: Name of the broker or dealer organisation who arranged this Movement.
                           registrationNumber:
-                            description: Waste carrier, broker or dealer registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
+                            description: Waste carrier, broker or dealer registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA EAS/R, WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
                             $schema: https://json-schema.org/draft/2020-12/schema
                             title: Registration number
                             examples:
+                              - EAS/R/1234567
                               - CBDU123456
                             type: string
-                            pattern: ^\s*(?:[Cc][Bb][Dd][LlUu]\d{3,}|[Ww][Cc][Rr]/[Rr]/\d{7}|(?:[Ss][Cc][Oo]|[Ss][Ee][Aa]|[Ss][Nn][Oo]|[Ss][Ww][Ee]|[Ww][Cc][Rr])/\d{6}|[Pp][Cc][Tt]-[A-Za-z]-\d{3,7}|[Rr][Oo][Cc]\W*[UuLl][Tt]\W*\d{1,5})\s*$
+                            pattern: ^\s*(?:[Cc][Bb][Dd][LlUu]\d{3,}|[Ee][Aa][Ss]/[Rr]/\d{6,7}|[Ww][Cc][Rr]/[Rr]/\d{7}|[Ww][Cc][Rr]/[A-Za-z0-9]{6}|(?:[Ss][Cc][Oo]|[Ss][Ee][Aa]|[Ss][Nn][Oo]|[Ss][Ww][Ee])/\d{6}(?:/[Cc][Bb])?|[Ss][Cc][Oo]/\d{6}/[Bb]|[Pp][Cc][Tt]-[A-Za-z]-\d{3,7}|[Rr][Oo][Cc]\W*[UuLl][Tt]\W*\d{1,5})\s*$
                           reasonForNoRegistrationNumber:
                             type: string
                             minLength: 1
@@ -8105,13 +8118,14 @@ paths:
                       maxLength: 255
                       description: Name of the carrier organisation.
                     registrationNumber:
-                      description: Waste carrier registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
+                      description: Waste carrier registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA EAS/R, WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
                       $schema: https://json-schema.org/draft/2020-12/schema
                       title: Registration number
                       examples:
+                        - EAS/R/1234567
                         - CBDU123456
                       type: string
-                      pattern: ^\s*(?:[Cc][Bb][Dd][LlUu]\d{3,}|[Ww][Cc][Rr]/[Rr]/\d{7}|(?:[Ss][Cc][Oo]|[Ss][Ee][Aa]|[Ss][Nn][Oo]|[Ss][Ww][Ee]|[Ww][Cc][Rr])/\d{6}|[Pp][Cc][Tt]-[A-Za-z]-\d{3,7}|[Rr][Oo][Cc]\W*[UuLl][Tt]\W*\d{1,5})\s*$
+                      pattern: ^\s*(?:[Cc][Bb][Dd][LlUu]\d{3,}|[Ee][Aa][Ss]/[Rr]/\d{6,7}|[Ww][Cc][Rr]/[Rr]/\d{7}|[Ww][Cc][Rr]/[A-Za-z0-9]{6}|(?:[Ss][Cc][Oo]|[Ss][Ee][Aa]|[Ss][Nn][Oo]|[Ss][Ww][Ee])/\d{6}(?:/[Cc][Bb])?|[Ss][Cc][Oo]/\d{6}/[Bb]|[Pp][Cc][Tt]-[A-Za-z]-\d{3,7}|[Rr][Oo][Cc]\W*[UuLl][Tt]\W*\d{1,5})\s*$
                     reasonForNoRegistrationNumber:
                       type: string
                       enum:
@@ -8895,13 +8909,14 @@ paths:
                       maxLength: 255
                       description: Name of the carrier organisation.
                     registrationNumber:
-                      description: Waste carrier registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
+                      description: Waste carrier registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA EAS/R, WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
                       $schema: https://json-schema.org/draft/2020-12/schema
                       title: Registration number
                       examples:
+                        - EAS/R/1234567
                         - CBDU123456
                       type: string
-                      pattern: ^\s*(?:[Cc][Bb][Dd][LlUu]\d{3,}|[Ww][Cc][Rr]/[Rr]/\d{7}|(?:[Ss][Cc][Oo]|[Ss][Ee][Aa]|[Ss][Nn][Oo]|[Ss][Ww][Ee]|[Ww][Cc][Rr])/\d{6}|[Pp][Cc][Tt]-[A-Za-z]-\d{3,7}|[Rr][Oo][Cc]\W*[UuLl][Tt]\W*\d{1,5})\s*$
+                      pattern: ^\s*(?:[Cc][Bb][Dd][LlUu]\d{3,}|[Ee][Aa][Ss]/[Rr]/\d{6,7}|[Ww][Cc][Rr]/[Rr]/\d{7}|[Ww][Cc][Rr]/[A-Za-z0-9]{6}|(?:[Ss][Cc][Oo]|[Ss][Ee][Aa]|[Ss][Nn][Oo]|[Ss][Ww][Ee])/\d{6}(?:/[Cc][Bb])?|[Ss][Cc][Oo]/\d{6}/[Bb]|[Pp][Cc][Tt]-[A-Za-z]-\d{3,7}|[Rr][Oo][Cc]\W*[UuLl][Tt]\W*\d{1,5})\s*$
                     reasonForNoRegistrationNumber:
                       type: string
                       enum:
@@ -9765,13 +9780,14 @@ paths:
                             maxLength: 255
                             description: Name of the broker or dealer organisation who arranged this Movement.
                           registrationNumber:
-                            description: Waste carrier, broker or dealer registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
+                            description: Waste carrier, broker or dealer registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA EAS/R, WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
                             $schema: https://json-schema.org/draft/2020-12/schema
                             title: Registration number
                             examples:
+                              - EAS/R/1234567
                               - CBDU123456
                             type: string
-                            pattern: ^\s*(?:[Cc][Bb][Dd][LlUu]\d{3,}|[Ww][Cc][Rr]/[Rr]/\d{7}|(?:[Ss][Cc][Oo]|[Ss][Ee][Aa]|[Ss][Nn][Oo]|[Ss][Ww][Ee]|[Ww][Cc][Rr])/\d{6}|[Pp][Cc][Tt]-[A-Za-z]-\d{3,7}|[Rr][Oo][Cc]\W*[UuLl][Tt]\W*\d{1,5})\s*$
+                            pattern: ^\s*(?:[Cc][Bb][Dd][LlUu]\d{3,}|[Ee][Aa][Ss]/[Rr]/\d{6,7}|[Ww][Cc][Rr]/[Rr]/\d{7}|[Ww][Cc][Rr]/[A-Za-z0-9]{6}|(?:[Ss][Cc][Oo]|[Ss][Ee][Aa]|[Ss][Nn][Oo]|[Ss][Ww][Ee])/\d{6}(?:/[Cc][Bb])?|[Ss][Cc][Oo]/\d{6}/[Bb]|[Pp][Cc][Tt]-[A-Za-z]-\d{3,7}|[Rr][Oo][Cc]\W*[UuLl][Tt]\W*\d{1,5})\s*$
                           reasonForNoRegistrationNumber:
                             type: string
                             minLength: 1
@@ -10451,13 +10467,14 @@ paths:
                       maxLength: 255
                       description: Name of the carrier organisation.
                     registrationNumber:
-                      description: Waste carrier registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
+                      description: Waste carrier registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA EAS/R, WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
                       $schema: https://json-schema.org/draft/2020-12/schema
                       title: Registration number
                       examples:
+                        - EAS/R/1234567
                         - CBDU123456
                       type: string
-                      pattern: ^\s*(?:[Cc][Bb][Dd][LlUu]\d{3,}|[Ww][Cc][Rr]/[Rr]/\d{7}|(?:[Ss][Cc][Oo]|[Ss][Ee][Aa]|[Ss][Nn][Oo]|[Ss][Ww][Ee]|[Ww][Cc][Rr])/\d{6}|[Pp][Cc][Tt]-[A-Za-z]-\d{3,7}|[Rr][Oo][Cc]\W*[UuLl][Tt]\W*\d{1,5})\s*$
+                      pattern: ^\s*(?:[Cc][Bb][Dd][LlUu]\d{3,}|[Ee][Aa][Ss]/[Rr]/\d{6,7}|[Ww][Cc][Rr]/[Rr]/\d{7}|[Ww][Cc][Rr]/[A-Za-z0-9]{6}|(?:[Ss][Cc][Oo]|[Ss][Ee][Aa]|[Ss][Nn][Oo]|[Ss][Ww][Ee])/\d{6}(?:/[Cc][Bb])?|[Ss][Cc][Oo]/\d{6}/[Bb]|[Pp][Cc][Tt]-[A-Za-z]-\d{3,7}|[Rr][Oo][Cc]\W*[UuLl][Tt]\W*\d{1,5})\s*$
                     reasonForNoRegistrationNumber:
                       type: string
                       enum:
@@ -10902,13 +10919,14 @@ paths:
                             maxLength: 255
                             description: Name of the broker or dealer organisation who arranged this Movement.
                           registrationNumber:
-                            description: Waste carrier, broker or dealer registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
+                            description: Waste carrier, broker or dealer registration number, in a valid UK home-nation format (England and NRW CBDU/CBDL, SEPA EAS/R, WCR/SCO/SEA/SNO/SWE and PCT, NI ROC UT/LT). Exactly one of 'registrationNumber' or 'reasonForNoRegistrationNumber' is required.
                             $schema: https://json-schema.org/draft/2020-12/schema
                             title: Registration number
                             examples:
+                              - EAS/R/1234567
                               - CBDU123456
                             type: string
-                            pattern: ^\s*(?:[Cc][Bb][Dd][LlUu]\d{3,}|[Ww][Cc][Rr]/[Rr]/\d{7}|(?:[Ss][Cc][Oo]|[Ss][Ee][Aa]|[Ss][Nn][Oo]|[Ss][Ww][Ee]|[Ww][Cc][Rr])/\d{6}|[Pp][Cc][Tt]-[A-Za-z]-\d{3,7}|[Rr][Oo][Cc]\W*[UuLl][Tt]\W*\d{1,5})\s*$
+                            pattern: ^\s*(?:[Cc][Bb][Dd][LlUu]\d{3,}|[Ee][Aa][Ss]/[Rr]/\d{6,7}|[Ww][Cc][Rr]/[Rr]/\d{7}|[Ww][Cc][Rr]/[A-Za-z0-9]{6}|(?:[Ss][Cc][Oo]|[Ss][Ee][Aa]|[Ss][Nn][Oo]|[Ss][Ww][Ee])/\d{6}(?:/[Cc][Bb])?|[Ss][Cc][Oo]/\d{6}/[Bb]|[Pp][Cc][Tt]-[A-Za-z]-\d{3,7}|[Rr][Oo][Cc]\W*[UuLl][Tt]\W*\d{1,5})\s*$
                           reasonForNoRegistrationNumber:
                             type: string
                             minLength: 1
