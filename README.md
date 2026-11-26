@@ -20,6 +20,7 @@ mkdocs serve
 | Command | What it does |
 | --- | --- |
 | `npm run schemas:sync` | Copies the JSON Schemas and OpenAPI specs from `waste-movement-backend` into `docs/event-model/schemas/` |
+| `npm run schema-explorer:build` | Builds the schema explorer from `waste-movement-backend` (`main` by default) into `docs/schema-explorer/` (gitignored) |
 | `npm run specs:bundle` | Bundles and validates each `beta-*` spec into `docs/api/` |
 | `npm run format` / `format:check` | Prettier |
 
@@ -29,6 +30,19 @@ Versions are managed with [mike](https://github.com/jimporter/mike) on the `gh-p
 
 - **preview**: deployed on every push to `main` (`docs-preview.yml`)
 - **test** / **production**: deployed manually with the _Deploy Release Docs_ workflow (`docs-release.yml`)
+
+Each deploy also builds the schema explorer (`schema-explorer.yml`) and publishes it in that version, e.g. `/preview/schema-explorer/`. It's built from the backend's `main` at deploy time, the source `npm run schemas:sync` copies from. After a schema change in the backend, run _Deploy Preview Docs_ by hand to update preview. Both workflows can build it from another backend branch, tag or SHA. A build is reused from the cache until the backend commit or the explorer's code changes. If the explorer fails to build, its job goes red and the version keeps the explorer it already has.
+
+## Schema explorer
+
+An interactive page per API version, drawing each request and response as a block diagram with a **Try it** view that validates JSON the way the API does. The generator is in `scripts/schema-explorer/` (see its README). It is built in a clone of `waste-movement-backend`, from its `src/schemas/`, because it runs the API's own validation code.
+
+```bash
+npm run schema-explorer:build
+open docs/schema-explorer/index.html
+```
+
+The nav links to it, so `mkdocs build --strict` fails until it has been built.
 
 `docs-bootstrap.yml` initialises `gh-pages` once, for a new repo.
 
