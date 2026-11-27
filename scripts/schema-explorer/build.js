@@ -1,0 +1,244 @@
+#!/usr/bin/env node
+// Builds the schema explorer: a static HTML page per API version that draws
+// every request and response schema in its OpenAPI document as a block diagram,
+// with $ref fragments resolved and oneOf / anyOf / if-then-else turned into
+// plain rules. The model itself is built by model.js.
+//
+// Usage: node scripts/schema-explorer/build.js [schemas] [outDir] [--standalone] [--legacy]
+//   schemas       a folder of versions (its beta-N subfolders, e.g.
+//                 docs/event-model/schemas/beta-1 and …/beta-2), or one
+//                 version's folder (default src/schemas). Each version's
+//                 openapi.json gives its top-level schemas: the request and
+//                 response bodies of its routes.
+//   outDir        where to write (default .schema-explorer). Each version is
+//                 written to <outDir>/<version>/index.html, and
+//                 <outDir>/index.html sends visitors to the latest version.
+//   --standalone  write complete HTML documents (for GitHub Pages); without it
+//                 each page is a body for hosts that add their own <head>
+//   --legacy      also add a "legacy" version, before the others, for the
+//                 Joi-validated receive and bulk-receive routes (legacy/)
+
+import fs from 'node:fs'
+import path from 'node:path'
+import { createHash } from 'node:crypto'
+import { createRequire } from 'node:module'
+import { fileURLToPath } from 'node:url'
+import { buildModel } from './model.js'
+import { buildValidators } from './validators.js'
+import { buildLegacyBundle } from './legacy/bundle.js'
+import { ROOT_NAMES, VERSION_NAMES } from './labels.js'
+import { buildLegacyModel } from './legacy/joi-model.js'
+import { testExamples } from './test-examples/index.js'
+
+const here = path.dirname(fileURLToPath(import.meta.url))
+const args = process.argv.slice(2)
+const standalone = args.includes('--standalone')
+const legacy = args.includes('--legacy')
+const [schemasArg = 'src/schemas', outArg = '.schema-explorer'] = args.filter(
+  (a) => !a.startsWith('--')
+)
+const schemasRoot = path.resolve(schemasArg)
+const outDir = path.resolve(outArg)
+
+// Versions are the beta-N subfolders (the same rule as the docs repo's schema
+// sync); a folder without any is taken to be one version itself. Sorted with
+// numeric awareness so beta-10 comes after beta-9; the last is the latest.
+const VERSION_FOLDER = /^beta-\d+$/
+const subfolders = fs
+  .readdirSync(schemasRoot, { withFileTypes: true })
+  .filter((e) => e.isDirectory() && VERSION_FOLDER.test(e.name))
+  .map((e) => path.join(schemasRoot, e.name))
+  .sort((a, b) =>
+    path.basename(a).localeCompare(path.basename(b), 'en', { numeric: true })
+  )
+const versionDirs = subfolders.length ? subfolders : [schemasRoot]
+
+// Each version is published under its folder name, e.g. beta-2/. Fragments
+// also get examples from the backend's schema tests (test-examples/), kept
+// only where they're valid against the schemas drawn here, which may be a
+// different commit's.
+const fromTests = testExamples()
+const versions = versionDirs.map((dir) => {
+  const slug = path.basename(dir)
+  const validators = buildValidators(dir)
+  const isValid = (file, value) => {
+    try {
+      return !validators.check(file, value)
+    } catch {
+      return false
+    }
+  }
+  const extraExamples = Object.fromEntries(
+    Object.entries(fromTests[slug] ?? {}).map(([file, values]) => [
+      file,
+      values.filter((value) => isValid(file, value))
+    ])
+  )
+  const model = buildModel(dir, { extraExamples, isValid })
+  return { dir, slug, validators, model }
+})
+// The legacy (Joi) routes come first, as the oldest. Their "Try it" runs the
+// routes' own Joi schemas, bundled for the browser.
+if (legacy) {
+  const model = buildLegacyModel()
+  versions.unshift({
+    slug: 'legacy',
+    model,
+    bundle: await buildLegacyBundle(model.fragments.map((f) => f.file))
+  })
+}
+
+// Names from labels.js; anything not listed keeps the backend's.
+const rootKey = (r) => r.id.replace(/-(request|response)$/, '')
+const rootOrder = (r) => {
+  const i = Object.keys(ROOT_NAMES).indexOf(rootKey(r))
+  return i === -1 ? Infinity : i
+}
+
+const nameRoots = (model) => {
+  for (const r of model.roots) {
+    const name = ROOT_NAMES[rootKey(r)]
+    if (name) r.title = r.label = name
+  }
+  // Stable, so schemas not listed keep their order.
+  model.roots.sort((a, b) => rootOrder(a) - rootOrder(b))
+}
+for (const { slug, model } of versions) {
+  if (VERSION_NAMES[slug]) model.api.version = VERSION_NAMES[slug]
+  nameRoots(model)
+}
+const latest = versions.at(-1)
+
+// The order versions are listed in: beta-N newest first, then anything else
+// (the legacy ReceiptOfWaste routes) last.
+const betaNumber = (v) => Number(/^beta-(\d+)$/.exec(v.slug)?.[1] ?? -1)
+const listed = [...versions].sort((a, b) => betaNumber(b) - betaNumber(a))
+
+const toDocument = (body, head = '') => {
+  if (!standalone) return body
+  // Everything before the page shell (title, fonts, styles) belongs in <head>.
+  const split = body.indexOf('<div class="shell">')
+  return `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+${head}${split > 0 ? body.slice(0, split).trim() : ''}
+</head>
+<body>
+${split > 0 ? body.slice(split) : body}
+</body>
+</html>
+`
+}
+
+const template = fs.readFileSync(path.join(here, 'template.html'), 'utf8')
+
+// ajv's standalone code is CommonJS and needs a few runtime modules; give it
+// both in the browser. ucs2length is ajv's string length in Unicode code
+// points. Function formats such as date-time are read from ajv-formats' own
+// formats module, which has no imports, so it is embedded as it is.
+const require = createRequire(import.meta.url)
+const commonJsModule = (name) => `(() => {
+    const exports = {}
+    ${fs.readFileSync(require.resolve(name), 'utf8')}
+    return exports
+  })()`
+const RUNTIME = {
+  'ajv-formats/dist/formats': commonJsModule('ajv-formats/dist/formats'),
+  'ajv/dist/runtime/ucs2length': `{ default: (str) => {
+    let length = 0
+    for (let pos = 0; pos < str.length; length++) {
+      const value = str.charCodeAt(pos++)
+      if (value >= 0xd800 && value <= 0xdbff && pos < str.length && (str.charCodeAt(pos) & 0xfc00) === 0xdc00) pos++
+    }
+    return length
+  } }`
+}
+const browserValidators = (code) => {
+  const needed = [
+    ...new Set([...code.matchAll(/require\("([^"]+)"\)/g)].map((m) => m[1]))
+  ]
+  const missing = needed.filter((name) => !RUNTIME[name])
+  if (missing.length) {
+    throw new Error(
+      `Validators need runtime modules the page doesn't provide: ${missing.join(', ')}`
+    )
+  }
+  return `window.schemaValidators = (() => {
+  const runtime = { ${needed.map((name) => `${JSON.stringify(name)}: ${RUNTIME[name]}`).join(',\n')} }
+  const require = (name) => runtime[name]
+  const exports = {}
+  ${code}
+  return exports
+})()`
+}
+
+// errors.js turns ajv's errors into the page's error list. It's a plain module
+// (so errors.test.js can import it); the page gets it as window.schemaErrors.
+const errorsSource = fs.readFileSync(path.join(here, 'errors.js'), 'utf8')
+const errorsExports = [...errorsSource.matchAll(/^export const (\w+)/gm)].map(
+  (m) => m[1]
+)
+if (
+  (errorsSource.match(/^export /gm) || []).length !== errorsExports.length ||
+  /^import /m.test(errorsSource)
+) {
+  throw new Error('errors.js must have no imports and export only consts')
+}
+const browserErrors = `window.schemaErrors = (() => {
+${errorsSource.replace(/^export const/gm, 'const')}
+  return { ${errorsExports.join(', ')} }
+})()`
+
+for (const { slug, model, validators, bundle } of versions) {
+  const dir = path.join(outDir, slug)
+  fs.mkdirSync(dir, { recursive: true })
+
+  // Lets the page switch between versions; links are relative to this page.
+  model.versions = listed.map((v) => ({
+    version: v.model.api.version ?? v.slug,
+    href: `../${v.slug}/index.html`,
+    current: v.slug === slug
+  }))
+
+  // The "Try it" view validates with the same compiled schemas as the API, or
+  // for legacy, the same Joi schemas.
+  if (validators) model.validators = validators.ids
+
+  // Everything "Try it" needs is a file of its own (over half of a version's
+  // code), which the page loads the first time it's opened. The ?v= hash makes
+  // a browser fetch the new file when it changes. Legacy has its Joi bundle.
+  const tryIt =
+    bundle || [browserValidators(validators.code), browserErrors].join('\n')
+  fs.writeFileSync(path.join(dir, 'try-it.js'), tryIt)
+  model.tryIt = `try-it.js?v=${createHash('sha256').update(tryIt).digest('hex').slice(0, 10)}`
+
+  const page = template
+    .split('__MODEL__')
+    .join(JSON.stringify(model).replace(/</g, '\\u003c'))
+  const file = path.join(dir, 'index.html')
+  fs.writeFileSync(file, toDocument(page))
+  console.log(
+    `Schema explorer (${slug}): ${model.roots.length} roots, ${model.fragments.length} fragments -> ${path.relative(process.cwd(), file)}`
+  )
+}
+
+// The site root sends visitors to the latest version, keeping any #deep-link.
+const target = `${latest.slug}/index.html`
+fs.writeFileSync(
+  path.join(outDir, 'index.html'),
+  toDocument(
+    `<p>Opening <a href="${target}">${latest.model.api.version ?? latest.slug}</a>. All versions: ${listed
+      .map(
+        (v) =>
+          `<a href="${v.slug}/index.html">${v.model.api.version ?? v.slug}</a>`
+      )
+      .join(', ')}.</p>
+<script>location.replace(${JSON.stringify(target)} + location.hash)</script>`,
+    `<title>Schema Explorer</title>\n<meta http-equiv="refresh" content="0; url=${target}">\n`
+  )
+)
+console.log(
+  `Schema explorer index -> ${path.relative(process.cwd(), path.join(outDir, 'index.html'))} (opens ${latest.slug})`
+)

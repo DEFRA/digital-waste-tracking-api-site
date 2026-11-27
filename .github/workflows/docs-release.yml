@@ -14,12 +14,27 @@ on:
         options:
           - test
           - production
+      backend_ref:
+        description: 'waste-movement-backend branch, tag or SHA to build the schema explorer from'
+        required: true
+        default: main
+        type: string
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
+  schema-explorer:
+    uses: ./.github/workflows/schema-explorer.yml
+    with:
+      ref: ${{ github.event.inputs.ref }}
+      backend_ref: ${{ github.event.inputs.backend_ref }}
+
   deploy:
+    needs: schema-explorer
+    if: ${{ !cancelled() }}
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -68,6 +83,27 @@ jobs:
 
       - name: Bundle OpenAPI specs
         run: npm run specs:bundle
+
+      - name: Add the schema explorer
+        if: needs.schema-explorer.result == 'success'
+        uses: actions/download-artifact@v4
+        with:
+          name: schema-explorer
+          path: docs/schema-explorer
+
+      # A backend change that breaks the explorer fails its job, but doesn't hold
+      # up the docs: they go out with the explorer this version already has.
+      - name: Keep the published schema explorer
+        if: needs.schema-explorer.result != 'success'
+        env:
+          VERSION: ${{ github.event.inputs.environment }}
+        run: |
+          echo "::warning title=Schema explorer not updated::Its build failed, so $VERSION keeps the explorer it has."
+          git fetch --no-tags origin gh-pages
+          # Not there until the explorer has been published once.
+          if git cat-file -e "FETCH_HEAD:$VERSION/schema-explorer" 2>/dev/null; then
+            git archive FETCH_HEAD "$VERSION/schema-explorer" | tar -x --strip-components=1 -C docs
+          fi
 
       - name: Deploy to ${{ github.event.inputs.environment }}
         run: |

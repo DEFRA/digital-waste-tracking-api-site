@@ -1,0 +1,80 @@
+name: Schema Explorer
+
+# Builds the schema explorer (scripts/schema-explorer) and attaches it to the run
+# as the schema-explorer artifact, for the deploy workflows to put in the site
+# under schema-explorer/. Called by docs-preview.yml and docs-release.yml.
+#
+# A job of its own, so waste-movement-backend's code and dependencies run
+# without write access to this repo.
+#
+# The beta-N pages are built from docs/event-model/schemas/ as committed at the
+# ref being deployed, the same snapshot the deploy bundles the API
+# spec pages from, so the two always agree. The backend clone is for the
+# legacy page, the drift test and the test-derived examples.
+#
+# A build is reused from the cache until the schemas, the backend commit or
+# the explorer's code changes.
+
+on:
+  workflow_call:
+    inputs:
+      ref:
+        description: Ref of this repo to build the explorer's code from (default the triggering commit)
+        type: string
+        default: ''
+      backend_ref:
+        description: waste-movement-backend branch, tag or SHA to build from
+        type: string
+        default: main
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build schema explorer
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
+          persist-credentials: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+
+      # The commit backend_ref is now, which the cache is keyed on and the
+      # build uses, so they agree even if the branch moves in between. A tag
+      # gives the commit it points at; a SHA isn't a ref, so it's used as it is.
+      - name: Resolve backend_ref
+        id: backend
+        env:
+          BACKEND_REF: ${{ inputs.backend_ref }}
+        run: |
+          sha="$(git ls-remote https://github.com/DEFRA/waste-movement-backend.git "$BACKEND_REF" |
+            awk -v ref="$BACKEND_REF" '
+              $2 == "refs/tags/" ref "^{}" { peeled = $1 }
+              $2 == "refs/heads/" ref || $2 == "refs/tags/" ref { exact = exact ? exact : $1 }
+              END { print peeled ? peeled : exact }')"
+          echo "sha=${sha:-$BACKEND_REF}" >> "$GITHUB_OUTPUT"
+
+      - name: Reuse an earlier build
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: docs/schema-explorer
+          key: schema-explorer-${{ steps.backend.outputs.sha }}-${{ hashFiles('docs/event-model/schemas/**', 'scripts/schema-explorer/**', 'scripts/build-schema-explorer.sh', '.nvmrc') }}
+
+      - name: Build schema explorer
+        if: steps.cache.outputs.cache-hit != 'true'
+        env:
+          SCHEMA_SOURCE_REF: ${{ steps.backend.outputs.sha }}
+        run: npm run schema-explorer:build
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: schema-explorer
+          path: docs/schema-explorer
+          if-no-files-found: error
+          retention-days: 14

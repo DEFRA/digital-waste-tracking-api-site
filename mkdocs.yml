@@ -33,8 +33,10 @@ nav:
       - Development roadmap: roadmap.md
       - Integration guidance: software-provider-integration-guidance.md
       - Journey scenarios (beta-2): journey-scenarios-beta-2.md
+      - API spec (beta-3): api/openapi-beta-3.md
       - API spec (beta-2): api/openapi-beta-2.md
       - API spec (beta-1): api/openapi-beta-1.md
+      - Schema explorer: schema-explorer/index.html
       - Problem types: problems/index.md
 edit_uri: edit/main/docs/
 plugins:
