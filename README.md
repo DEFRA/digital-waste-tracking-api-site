@@ -19,7 +19,7 @@ mkdocs serve
 
 | Command | What it does |
 | --- | --- |
-| `npm run schemas:sync` | Copies the JSON Schemas and OpenAPI specs from `waste-movement-backend` into `docs/event-model/schemas/` |
+| `npm run schemas:sync` | Copies the JSON Schemas and OpenAPI specs from `waste-movement-backend` (beta-1, beta-2) and `waste-movement-api` (beta-3 on) into `docs/event-model/schemas/` |
 | `npm run schema-explorer:build` | Builds the schema explorer from `docs/event-model/schemas/` (and a `waste-movement-backend` clone for the legacy page) into `docs/schema-explorer/` (gitignored); run `schemas:sync` first to update the schemas |
 | `npm run specs:bundle` | Bundles and validates each `beta-*` spec into `docs/api/` |
 | `npm run format` / `format:check` | Prettier |
