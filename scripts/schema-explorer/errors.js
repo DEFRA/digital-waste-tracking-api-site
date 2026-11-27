@@ -69,8 +69,8 @@ const toMessage = (e) => {
 }
 
 /**
- * The errors as hapi-validator.js reports them, before any of the route's
- * payload checks (checks/checks.js) run.
+ * The errors as hapi-validator.js reports them for the schema (a route's
+ * checks after it aren't run here).
  * @param {object[]} ajvErrors errors from a validator compiled with `verbose`
  * @returns {{ message: string, path: string[], type: string }[]}
  */

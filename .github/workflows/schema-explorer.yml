@@ -7,8 +7,13 @@ name: Schema Explorer
 # A job of its own, so waste-movement-backend's code and dependencies run
 # without write access to this repo.
 #
-# A build is reused from the cache until the backend commit or the explorer's
-# code changes.
+# The beta-N pages are built from docs/event-model/schemas/ as committed at the
+# ref being deployed, the same snapshot the deploy bundles the API
+# spec pages from, so the two always agree. The backend clone is for the
+# legacy page, the drift test and the test-derived examples.
+#
+# A build is reused from the cache until the schemas, the backend commit or
+# the explorer's code changes.
 
 on:
   workflow_call:
@@ -59,7 +64,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: docs/schema-explorer
-          key: schema-explorer-${{ steps.backend.outputs.sha }}-${{ hashFiles('scripts/schema-explorer/**', 'scripts/build-schema-explorer.sh', '.nvmrc') }}
+          key: schema-explorer-${{ steps.backend.outputs.sha }}-${{ hashFiles('docs/event-model/schemas/**', 'scripts/schema-explorer/**', 'scripts/build-schema-explorer.sh', '.nvmrc') }}
 
       - name: Build schema explorer
         if: steps.cache.outputs.cache-hit != 'true'

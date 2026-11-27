@@ -6,10 +6,10 @@
 //
 // Usage: node scripts/schema-explorer/build.js [schemas] [outDir] [--standalone] [--legacy]
 //   schemas       a folder of versions (its beta-N subfolders, e.g.
-//                 src/schemas/beta-1 and src/schemas/beta-2), or one version's
-//                 folder (default src/schemas). Within a version, every
-//                 *-request.schema.json and *-response.schema.json is a
-//                 top-level schema; no OpenAPI spec is needed.
+//                 docs/event-model/schemas/beta-1 and …/beta-2), or one
+//                 version's folder (default src/schemas). Each version's
+//                 openapi.json gives its top-level schemas: the request and
+//                 response bodies of its routes.
 //   outDir        where to write (default .schema-explorer). Each version is
 //                 written to <outDir>/<version>/index.html, and
 //                 <outDir>/index.html sends visitors to the latest version.
@@ -26,8 +26,6 @@ import { fileURLToPath } from 'node:url'
 import { buildModel } from './model.js'
 import { buildValidators } from './validators.js'
 import { buildLegacyBundle } from './legacy/bundle.js'
-import { buildChecksBundle } from './checks/bundle.js'
-import { checkedFiles } from './checks/checks.js'
 import { ROOT_NAMES, VERSION_NAMES } from './labels.js'
 import { buildLegacyModel } from './legacy/joi-model.js'
 import { testExamples } from './test-examples/index.js'
@@ -56,21 +54,27 @@ const subfolders = fs
 const versionDirs = subfolders.length ? subfolders : [schemasRoot]
 
 // Each version is published under its folder name, e.g. beta-2/. Fragments
-// also get examples from the backend's schema tests (test-examples/).
+// also get examples from the backend's schema tests (test-examples/), kept
+// only where they're valid against the schemas drawn here, which may be a
+// different commit's.
 const fromTests = testExamples()
 const versions = versionDirs.map((dir) => {
   const slug = path.basename(dir)
   const validators = buildValidators(dir)
-  const model = buildModel(dir, {
-    extraExamples: fromTests[slug] ?? {},
-    isValid: (file, value) => {
-      try {
-        return !validators.check(file, value)
-      } catch {
-        return false
-      }
+  const isValid = (file, value) => {
+    try {
+      return !validators.check(file, value)
+    } catch {
+      return false
     }
-  })
+  }
+  const extraExamples = Object.fromEntries(
+    Object.entries(fromTests[slug] ?? {}).map(([file, values]) => [
+      file,
+      values.filter((value) => isValid(file, value))
+    ])
+  )
+  const model = buildModel(dir, { extraExamples, isValid })
   return { dir, slug, validators, model }
 })
 // The legacy (Joi) routes come first, as the oldest. Their "Try it" runs the
@@ -109,12 +113,6 @@ const latest = versions.at(-1)
 // (the legacy ReceiptOfWaste routes) last.
 const betaNumber = (v) => Number(/^beta-(\d+)$/.exec(v.slug)?.[1] ?? -1)
 const listed = [...versions].sort((a, b) => betaNumber(b) - betaNumber(a))
-
-// The checks some routes run after the schema (checks/checks.js), bundled once
-// and embedded only in the versions that have any.
-const checksBundle = versions.some((v) => checkedFiles(v.slug).length)
-  ? await buildChecksBundle()
-  : ''
 
 const toDocument = (body, head = '') => {
   if (!standalone) return body
@@ -207,17 +205,12 @@ for (const { slug, model, validators, bundle } of versions) {
   // The "Try it" view validates with the same compiled schemas as the API, or
   // for legacy, the same Joi schemas.
   if (validators) model.validators = validators.ids
-  const checks = checkedFiles(slug).length ? checksBundle : ''
-  if (checks) model.checks = { version: slug, files: checkedFiles(slug) }
 
   // Everything "Try it" needs is a file of its own (over half of a version's
   // code), which the page loads the first time it's opened. The ?v= hash makes
   // a browser fetch the new file when it changes. Legacy has its Joi bundle.
   const tryIt =
-    bundle ||
-    [browserValidators(validators.code), browserErrors, checks]
-      .filter(Boolean)
-      .join('\n')
+    bundle || [browserValidators(validators.code), browserErrors].join('\n')
   fs.writeFileSync(path.join(dir, 'try-it.js'), tryIt)
   model.tryIt = `try-it.js?v=${createHash('sha256').update(tryIt).digest('hex').slice(0, 10)}`
 

@@ -1,6 +1,6 @@
 // Reads one version's JSON Schemas (e.g. src/schemas/beta-2) and builds the
-// explorer's model of it: every top-level request and response schema
-// (*-request / *-response.schema.json) as a normalised tree, with $ref fragments
+// explorer's model of it: every top-level request and response schema (the
+// bodies its openapi.json's routes take and return) as a normalised tree, with $ref fragments
 // resolved, oneOf / anyOf / if-then-else turned into plain rules, and an index
 // of where each shared fragment is used.
 
@@ -428,27 +428,68 @@ export const buildModel = (schemaDir, { extraExamples = {}, isValid } = {}) => {
   // ---------------------------------------------------------------------------
   // Roots, usage index and fragment catalogue
 
-  // The top-level schemas are found from the files themselves, not from an
-  // OpenAPI spec: every *-request.schema.json and *-response.schema.json is a
-  // whole body; everything they reference is a fragment. Each is known by its
-  // file name ("create-movement-request"), which is also its page's #link.
-  const collectSchemaFiles = (dir) =>
-    fs
-      .readdirSync(path.join(schemaDir, dir), { withFileTypes: true })
-      .flatMap((entry) => {
-        const rel = dir ? `${dir}/${entry.name}` : entry.name
-        if (entry.isDirectory()) return collectSchemaFiles(rel)
-        return entry.name.endsWith('.schema.json') ? [rel] : []
-      })
-  const roots = collectSchemaFiles('')
-    .filter((file) => /-(request|response)\.schema\.json$/.test(file))
-    .sort()
-    .map((file) => ({
+  // The top-level schemas are the bodies the version's routes take and return,
+  // from its openapi.json: each operation's request body and responses, by
+  // their $ref (through components) to a schema file. A body defined inline
+  // in the spec, such as problem details, isn't a schema file, so it isn't
+  // one. Everything they reference is a fragment. Each is known by its file
+  // name ("create-movement-request"), which is also its page's #link. Listed
+  // in the order the spec has them; a file used more than once is listed once.
+  const specFile = path.join(schemaDir, 'openapi.json')
+  if (!fs.existsSync(specFile)) {
+    throw new Error(`${schemaDir} has no openapi.json to find its routes in`)
+  }
+  const spec = JSON.parse(fs.readFileSync(specFile, 'utf8'))
+  const resolve = (value, prefix) => {
+    const seen = new Set()
+    while (value?.$ref?.startsWith(prefix) && !seen.has(value.$ref)) {
+      seen.add(value.$ref)
+      value = value.$ref
+        .slice(2)
+        .split('/')
+        .reduce((node, key) => node?.[key], spec)
+    }
+    return value
+  }
+  const fileOf = (content) => {
+    const ref = resolve(
+      content?.['application/json']?.schema,
+      '#/components/schemas/'
+    )?.$ref
+    return ref && !ref.startsWith('#')
+      ? posix.normalize(ref.replace(/^\.\//, ''))
+      : null
+  }
+  const bodies = new Map()
+  const add = (kind, file) => {
+    if (file && !bodies.has(file)) bodies.set(file, kind)
+  }
+  for (const operations of Object.values(spec.paths ?? {})) {
+    for (const op of Object.values(operations ?? {})) {
+      if (!op || typeof op !== 'object' || Array.isArray(op)) continue
+      add(
+        'request',
+        fileOf(resolve(op.requestBody, '#/components/requestBodies/')?.content)
+      )
+      for (const response of Object.values(op.responses ?? {})) {
+        add(
+          'response',
+          fileOf(resolve(response, '#/components/responses/')?.content)
+        )
+      }
+    }
+  }
+  const roots = [...bodies].map(([file, kind]) => {
+    if (!fs.existsSync(path.join(schemaDir, file))) {
+      throw new Error(`${specFile} refers to ${file}, which isn't there`)
+    }
+    return {
       id: fragmentId(file),
-      kind: file.endsWith('-request.schema.json') ? 'request' : 'response',
+      kind,
       file,
       label: load(file).title ?? fragmentId(file)
-    }))
+    }
+  })
   const ids = roots.map((r) => r.id)
   if (new Set(ids).size !== ids.length) {
     throw new Error(

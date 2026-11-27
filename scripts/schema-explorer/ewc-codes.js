@@ -1,8 +1,8 @@
 // The utils package's EWC code module (constants/ewc-codes.js) holds every
-// code with its chapter, sub-chapter and description, about 250 KB. The
-// checks the pages run only ask whether a code exists and whether it's
-// hazardous, so the bundles (checks/bundle.js, legacy/bundle.js) get this
-// smaller module in its place: the same two functions over the same codes,
+// code with its chapter, sub-chapter and description, about 250 KB. The legacy
+// page's Joi schemas only ask whether a code exists and whether it's
+// hazardous, so its bundle (legacy/bundle.js) gets this smaller module in its
+// place: the same two functions over the same codes,
 // read from the real module when the page is built, without the text.
 // ewc-codes.test.js checks it answers exactly as the real one does.
 
