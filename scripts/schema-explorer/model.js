@@ -125,16 +125,26 @@ const addNote = (notes, k, t) => {
   notes[k] = [...(notes[k] ?? []), t]
 }
 
-const ifRule = (part) => {
+// outer: the condition this rule sits inside, when it's nested in another
+// rule's then / else, e.g. hazardous's components rules inside "isPresent is
+// true".
+const ifRule = (part, outer) => {
   const cond = summarise(part.if)
-  const when = conditionText(cond)
+  const when = [outer, conditionText(cond)].filter(Boolean).join(' and ')
   const thenM = effectsByProp(summarise(part.then))
   const elseM = effectsByProp(summarise(part.else))
   const notes = {}
   for (const [k, ts] of thenM) {
     addNote(notes, k, `${cap(list(ts))} when ${when}.`)
   }
-  for (const [k, ts] of elseM) addNote(notes, k, `${cap(list(ts))} otherwise.`)
+  // "Otherwise" only reads right after the field's own "when" note.
+  for (const [k, ts] of elseM) {
+    addNote(
+      notes,
+      k,
+      `${cap(list(ts))} ${thenM.has(k) ? 'otherwise' : `unless ${when}`}.`
+    )
+  }
   const cases = [{ when: `When ${when}`, effects: effectsText(thenM) }]
   if (elseM.size) cases.push({ when: 'Otherwise', effects: effectsText(elseM) })
   return {
@@ -144,6 +154,22 @@ const ifRule = (part) => {
     notes,
     condReq: requiredIn(thenM, elseM)
   }
+}
+
+// The if / then / else rules inside a rule's then / else (directly, or as parts
+// of its allOf), each with the conditions it's under spelled out, however deep.
+const nestedIfRules = (part, outer) => {
+  const when = [outer, conditionText(summarise(part.if))]
+    .filter(Boolean)
+    .join(' and ')
+  return ['then', 'else'].flatMap((key) => {
+    const branch = part[key]
+    if (!branch) return []
+    const scope = key === 'then' ? when : `it isn't the case that ${when}`
+    return [branch, ...(branch.allOf ?? [])]
+      .filter((p) => p.if)
+      .flatMap((p) => [ifRule(p, scope), ...nestedIfRules(p, scope)])
+  })
 }
 
 const oneOfRule = (branches) => {
@@ -332,7 +358,7 @@ export const buildModel = (schemaDir, { extraExamples = {}, isValid } = {}) => {
         // if-only part has no fields, so it just adds its rule).
       } else collectObject(part, file, acc)
     }
-    if (schema.if) acc.rules.push(ifRule(schema))
+    if (schema.if) acc.rules.push(ifRule(schema), ...nestedIfRules(schema))
     if (schema.oneOf) acc.rules.push(oneOfRule(schema.oneOf))
     if (schema.anyOf) acc.rules.push(anyOfRule(schema.anyOf))
   }
@@ -646,7 +672,11 @@ export const buildModel = (schemaDir, { extraExamples = {}, isValid } = {}) => {
     api: { version: path.basename(schemaDir) },
     generatedAt: new Date().toISOString(),
     commit: git('rev-parse --short HEAD'),
-    schemaDir: path.relative(process.cwd(), schemaDir) || '.',
+    // Where the schemas are in their repo, e.g. docs/event-model/schemas/beta-2,
+    // not where this build happened to read them from.
+    schemaDir:
+      git('rev-parse --show-prefix')?.replace(/\/$/, '') ||
+      path.basename(schemaDir),
     roots,
     fragments
   }
